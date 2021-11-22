@@ -1,7 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
-const { toObjectId, isValidName, isValidPassword, userFieldChecker } = require("./userUtils"); 
-const deep_equal = require('deep-equal');
+const { toObjectId, isValidName, isValidPassword, userFieldChecker } = require("../dataUtils"); 
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 
