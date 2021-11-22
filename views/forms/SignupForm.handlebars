@@ -1,0 +1,18 @@
+<h1>IT'S TIME TO SIGN UP!</h1>
+  {{#if error}}
+    <h2 id="error">{{error}}</h2>
+  {{/if}}
+  <form method="POST" id="signup-form" action="/signup">
+    <label id="username">Username:
+      <input type = "text" name="username" placeholder="Enter your username"/>
+    </label>
+    <br>
+    <label id="password">Password:
+      <input type = "password" name="password" placeholder="Enter your password"/>
+    </label>
+    <br>
+    <label id="submit">Submit:
+      <input type="submit"/>
+    </label>
+</form>
+<a href="/login">Already have an account? Click here to log in</a>
