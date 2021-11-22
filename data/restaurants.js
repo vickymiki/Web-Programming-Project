@@ -5,7 +5,7 @@ const users = mongoCollections.users;
 const managers = mongoCollections.managers;
 const restaurants = mongoCollections.restaurants;
 
-function validateParameters(name, address, city, state, zip, priceRange, foodTypes, menuItems, ordersPlaced, rating, reviews){
+function validateParameters(name, address, city, state, zip, priceRange, foodTypes){
     //TODO add validation
 
     return ({restaurantName: name, 
@@ -15,11 +15,62 @@ function validateParameters(name, address, city, state, zip, priceRange, foodTyp
         zip: zip,
         priceRange: priceRange,
         foodTypes: foodTypes,
-        menuItems: menuItems,
-        ordersPlaced: ordersPlaced,
-        rating: rating,
-        reviews: reviews})
+        menuItems: [],
+        ordersPlaced: [],
+        rating: 0,
+        reviews: []})
 }
-async function addRestaurant(name, address, city, state, zip, priceRange, foodTypes, menuItems, ordersPlaced, rating, reviews){
-    let restaurant
+
+function validateObjectId(id){
+    if( typeof id !== 'string' && !ObjectId.isValid(id) ) throw `id must be of type string or ObjectId: ${id}`
+    if( typeof id === 'string' && id.length === id.split(' ').length - 1) throw `id as string must not be empty: ${id}`
+    if( typeof id === 'string' ){
+        try{
+            id = ObjectId(id)    
+        }catch(e){
+            throw `Provided id not a valid ObjectId: ${id}`
+        }
+    }
+    return id
 }
+
+async function addRestaurant(name, address, city, state, zip, priceRange, foodTypes){
+    let restaurantObj = validateParameters(name, address, city, state, zip, priceRange, foodTypes)
+    
+    const restaurantCollection = await restaurants()
+    const insert = await restaurantCollection.insertOne(restaurantObj)
+
+    if ( insert.insertedCount === 0 ) throw "Restaurant insert failed"
+    return {restaurantInserted: true}
+}
+
+async function getRestaurantIdFromName(name){
+    const restaurantCollection = await restaurants()
+    const restQuery = await restaurantCollection.findOne({restaurantName: name})
+    if ( restQuery === null ) throw `Failed to find restaurant with id: ${id}`
+
+    return restQuery._id.toString()
+}
+
+async function removeRestaurant(restaurant_id){
+    restaurant_id = validateObjectId(restaurant_id)
+    const restaurantCollection = await restaurants()
+    let deleteRest = await restaurantCollection.deleteOne({_id: restaurant_id})
+    if (deleteRest.deletedCount === 0) throw `Failed to delete restaurant with id: ${id}`
+    return {restaurantDeleted: true}
+}
+
+async function addFood_Items(restaurant_id, foodItems){
+    // TODO
+    //foodObj = validateFoodObject(foodItems)
+    restaurant_id = validateObjectId(restaurant_id)
+    const restaurantCollection = await restaurants()
+    for (const item of foodItems) {
+        let update = await restaurantCollection.updateOne({_id: restaurant_id}, {$push: {menuItems: item}})
+        if(update.matchedCount === 0) throw `Failed to add food item: ${item}`    
+    }
+
+    return {restaurantFoodUpdated: true}
+}
+
+module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Items}
