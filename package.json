@@ -4,6 +4,7 @@
   "description": "Group 1 Final Project",
   "main": "app.js",
   "scripts": {
+    "seed": "node ./seed/seedAll.js",
     "start": "node app.js"
   },
   "repository": {
