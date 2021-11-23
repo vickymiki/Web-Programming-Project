@@ -1,1 +1,10 @@
 <h1>{{page_function}}</h1>
+{{#if restaurantArray.length}}
+    <ul>
+    {{#each restaurantArray}}  
+      <li>
+        <a href="/restaurants/{{_id}}">{{restaurantName}}</a>
+      </li>
+    {{/each}}
+    </ul>
+{{/if}}

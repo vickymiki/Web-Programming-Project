@@ -47,9 +47,26 @@ async function addRestaurant(name, address, city, state, zip, priceRange, foodTy
 async function getRestaurantIdFromName(name){
     const restaurantCollection = await restaurants()
     const restQuery = await restaurantCollection.findOne({restaurantName: name})
-    if ( restQuery === null ) throw `Failed to find restaurant with id: ${id}`
+    if ( restQuery === null ) throw `Failed to find restaurant with name: ${name}`
 
     return restQuery._id.toString()
+}
+
+async function getRestaurantFromId(id){
+    id = validateObjectId(id)
+    const restaurantCollection = await restaurants()
+    const restQuery = await restaurantCollection.findOne({_id: id})
+    if ( restQuery === null ) throw `Failed to find restaurant with id: ${id}`
+
+    restQuery._id = restQuery._id.toString()
+    return restQuery
+}
+
+async function getAllResaurants(){
+    const restaurantCollection = await restaurants()
+    const restQuery = await restaurantCollection.find({}).toArray()
+    restQuery.forEach(x => x._id = x._id.toString())
+    return restQuery
 }
 
 async function removeRestaurant(restaurant_id){
@@ -73,4 +90,4 @@ async function addFood_Items(restaurant_id, foodItems){
     return {restaurantFoodUpdated: true}
 }
 
-module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Items}
+module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Items, getAllResaurants, getRestaurantFromId}
