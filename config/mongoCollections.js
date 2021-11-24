@@ -13,8 +13,7 @@ const getCollectionFn = (collection) => {
   };
 };
 
-/* List collections here: */
-//Adding everything we might need now. Need to uncomment as we use them 
+/* List collections here: */ 
 module.exports = {
   users: getCollectionFn('users'),
   managers: getCollectionFn('managers'),
@@ -22,5 +21,5 @@ module.exports = {
   food_items: getCollectionFn('food_items'),
   reviews: getCollectionFn('reviews'),
   replies: getCollectionFn('replies'),
-  orders_placed: getCollectionFn('orders_placed'),
+  orders: getCollectionFn('orders'),
 };
