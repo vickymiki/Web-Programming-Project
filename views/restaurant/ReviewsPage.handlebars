@@ -1,0 +1,39 @@
+<h1>{{page_function}}</h1>
+{{#if reviewData.length}}
+    <body>
+    {{#each reviewData}}  
+      <div>
+        <p>Review: {{review}}</p>
+        <p>Rating: {{rating}}</p>
+        <p>Likes: {{likes}}
+          <form method="POST" id="Like_Button">
+            <input type="hidden" name="like" value={{_id}}>
+            <button type="submit">Like</button>
+          </form>
+          <form method="POST" id="Remove_Like_Button">
+            <input type="hidden" name="remove_like" value={{_id}}>
+            <button type="submit">Remove Like</button>
+          </form>
+        </p>
+        <p>Dislikes: {{dislikes}}
+          <form method="POST" id="Dislike_Button">
+            <input type="hidden" name="dislike" value={{_id}}>
+            <button type="submit">Dislike</button>
+          </form>
+          <form method="POST" id="Remove_Dislike_Button">
+            <input type="hidden" name="remove_dislike" value={{_id}}>
+            <button type="submit">Remove Dislike</button>
+          </form>
+        </p>
+        {{#if replies.length}}
+          <div>
+            {{#each replies}}
+            <p>{{reply}}</p>
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+      <br>
+    {{/each}}
+    </body>
+{{/if}}
