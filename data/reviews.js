@@ -4,8 +4,7 @@ const reviews = mongoCollections.reviews;
 const users = mongoCollections.users;
 const managers = mongoCollections.managers;
 const restaurants = mongoCollections.restaurants;
-//const restaurantFuncs = require('./restaurants');
-//const userFuncs = require('./users');
+const repliesData = require('./replies');
 
 //Function to check if input is only spaces 
 const isSpaces = function isSpaces(input) {
@@ -60,6 +59,33 @@ async function create(restaurantId, userId, review, rating, isManager) {
   const dislikes = 0;
   const replies = [];
   const date = new Date();
+  //Format date 
+  const month = date.getMonth();
+  const day = date.getDate();
+  const year = date.getFullYear();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  if (minutes < 10) minutes = `0${minutes}`;
+  let period = "AM";
+  if (hours > 12) {
+    hours -= 12;
+    period = "PM";
+  }
+  if (hours == 0) hours = 12;
+  const timestamp = `${month}/${day}/${year} ${hours}:${minutes} ${period}`;
+  //Pull userName
+  let myUser = null;
+  if (isManager) {
+    const managerCollection = await managers();
+    myUser = await managerCollection.findOne({ _id: ObjectId(userId) });
+    if (!myUser) throw 'User naot found';
+  } else {
+    const userCollection = await users();
+    myUser = await userCollection.findOne({ _id: ObjectId(userId) });
+    if (!myUser) throw 'User not found';
+  }
+
+  const userName = myUser.userName;
 
   const reviewsCollection = await reviews();
 
@@ -67,13 +93,14 @@ async function create(restaurantId, userId, review, rating, isManager) {
   const newReview = {
     restaurantId: restaurantId,
     userId: userId,
+    userName: userName,
     review: review,
     rating: rating,
     likes: likes,
     isManager: isManager, //We can use this paramater to display manager reviews differently
     dislikes: dislikes,
     replies: replies,
-    date: date
+    date: timestamp
   };
 
   //Add review to the correct restaurant
@@ -228,8 +255,18 @@ async function remove(reviewId) {
   const restaurant_id = target.restaurantId;
   const user_id = target.userId;
   const managerStatus = target.isManager;
+  let replies = target.replies;
 
-  //Delete the review first 
+  //Check if there are replies and delete those first 
+  if (replies.length !== 0) {
+    for(let i = 0; i < replies.length; i++){
+      let replyId = replies[i]._id.toString();
+      let deletion = await repliesData.remove(reviewId, replyId);
+      if (!deletion.deletedReply) throw 'Could not reomve a reply - can not remove revew';
+    }
+  }
+
+  //Now delete review 
   const deletionInfo = await reviewCollection.deleteOne({ _id: ObjectId(reviewId) });
 
   if (deletionInfo.deletedCount == 0) {
