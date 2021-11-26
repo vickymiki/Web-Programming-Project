@@ -292,13 +292,14 @@ async function remove(reviewId) {
 
   let sum = 0;
   let count = 0;
+  let avg = 0;
   for (let i = 0; i < allReviews.length; i++){
     let itemReview = await reviewCollection.findOne(ObjectId(allReviews[i]));
     sum += itemReview.rating;
     count += 1;
   };
 
-  const avg = sum / count;
+  if (count !== 0) avg = sum / count;
   await restaurantCollection.updateOne({ _id: ObjectId(restaurant_id) }, { $set: { rating: avg }});
 
 
