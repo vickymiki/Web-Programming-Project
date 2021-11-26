@@ -47,15 +47,44 @@ async function create(reviewId, userId, reply, isManager) {
   if (!validId(userId)) throw 'User Id must be a string of 24 hex characters';
   if (isSpaces(reply)) throw 'Reply can not be only spaces';
 
+  //Format date 
   const date = new Date();
-  const newId = new ObjectId();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const year = date.getFullYear();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  if (minutes < 10) minutes = `0${minutes}`;
+  let period = "AM";
+  if (hours > 12) {
+    hours -= 12;
+    period = "PM";
+  }
+  if (hours == 0) hours = 12;
+  const timestamp = `${month}/${day}/${year} ${hours}:${minutes} ${period}`;
 
-  //Create the new review
+  const newId = new ObjectId();
+  //Pull userName
+  let myUser = null;
+  if (isManager) {
+    const managerCollection = await managers();
+    myUser = await managerCollection.findOne({ _id: ObjectId(userId) });
+    if (!myUser) throw 'User not found';
+  } else {
+    const userCollection = await users();
+    myUser = await userCollection.findOne({ _id: ObjectId(userId) });
+    if (!myUser) throw 'User not found';
+  }
+
+  const userName = myUser.userName;
+
+  //Create the new reply
   const newReply = {
     _id: newId,
     userId: userId,
+    userName: userName,
     reply: reply,
-    date: date,
+    date: timestamp,
     isManager: isManager
   };
 
