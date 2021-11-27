@@ -1,39 +1,69 @@
 <h1>{{page_function}}</h1>
-{{#if reviewData.length}}
-    <body>
+<body>
+  <form method="POST" id="New_Review">
+    <input type="hidden" name="postType" value="new_review">
+    <label for="review">New Review:</label>
+    <input type="text" name="review">
+    <label for="rating">Rating (1-5):</label>
+    <input type="number" name="rating" min="1" max="5">
+    <input type="hidden" name="restaurantId" value={{restaurantId}}>
+    <input type="hidden" name="userId" value={{userId}}>
+    <input type="hidden" name="isManager" value={{isManager}}>
+    <button type="submit">Submit Review</button>
+  </form>
+  {{#if reviewData.length}}
     {{#each reviewData}}  
       <div>
-        <p>Review: {{review}}</p>
+        <h3>Review:</h3>
+        <p>Username: {{userName}} </p>
+        <p>Review: {{review}} </p>
+        <p>Date: {{date}}</p>
         <p>Rating: {{rating}}</p>
         <p>Likes: {{likes}}
           <form method="POST" id="Like_Button">
-            <input type="hidden" name="like" value={{_id}}>
+            <input type="hidden" name="postType" value="add_like">
+            <input type="hidden" name="likeId" value={{_id}}>
             <button type="submit">Like</button>
           </form>
           <form method="POST" id="Remove_Like_Button">
-            <input type="hidden" name="remove_like" value={{_id}}>
+            <input type="hidden" name="postType" value="remove_like">
+            <input type="hidden" name="removeLikeId" value={{_id}}>
             <button type="submit">Remove Like</button>
           </form>
         </p>
         <p>Dislikes: {{dislikes}}
           <form method="POST" id="Dislike_Button">
-            <input type="hidden" name="dislike" value={{_id}}>
+            <input type="hidden" name="postType" value="add_dislike">
+            <input type="hidden" name="dislikeId" value={{_id}}>
             <button type="submit">Dislike</button>
           </form>
           <form method="POST" id="Remove_Dislike_Button">
-            <input type="hidden" name="remove_dislike" value={{_id}}>
+            <input type="hidden" name="postType" value="remove_dislike">
+            <input type="hidden" name="removeDislikeId" value={{_id}}>
             <button type="submit">Remove Dislike</button>
           </form>
         </p>
         {{#if replies.length}}
           <div>
+            <h4>Replies:</h4>
             {{#each replies}}
-            <p>{{reply}}</p>
+            <p>Username: {{userName}}</p>
+            <p>Reply: {{reply}}</p>
+            <p>Date: {{date}}</p>
             {{/each}}
           </div>
         {{/if}}
+        <form method="POST" id="New_Reply">
+          <label for="reply">Reply:</label>
+          <input type="hidden" name="postType" value="new_reply">
+          <input type="text" name="reply">
+          <input type="hidden" name="reviewId" value={{_id}}>
+          <input type="hidden" name="userId" value={{userId}}>
+          <input type="hidden" name="isManager" value={{isManager}}>
+          <button type="submit">Submit Reply</button>
+        </form>
       </div>
       <br>
     {{/each}}
-    </body>
-{{/if}}
+  {{/if}}
+</body>

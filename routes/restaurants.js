@@ -21,44 +21,75 @@ router.get('/:id', async (req, res) => {
 
 router.get('/:id/reviews', async (req, res) => {
   const id = req.params.id
-  const restaurant = await restaurants_DAL.getRestaurantFromId(id);
-  const reviewData = await reviews_DAL.getAllByRestuarant(id);
-  res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, reviewData: reviewData });
+  let restaunt = null;
+  let reviewData = null;
+  try {
+    restaurant = await restaurants_DAL.getRestaurantFromId(id);
+  } catch (e) {
+    res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+  }
+  try {
+    reviewData = await reviews_DAL.getAllByRestuarant(id);
+  } catch (e) {
+    res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+  }
+  
+  //TODO
+  //Get the userId value from cookie
+  const userId = null;
+  //Get the isManager value from cookie
+  //maybe create a new specific input thats hidden and specific to each type of request
+  const isManager = null;
+
+  if (reviewData.length == 0) {
+    res.render('restaurant/NoReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, restaurantId: id, userId: userId, isManager: isManager });
+  } else {
+    res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, reviewData: reviewData, restaurantId: id, userId: userId, isManager: isManager });
+  }
 });
 
 router.post('/:id/reviews', async (req, res) => {
-  if (req.body.like) {
+  //console.log(req.body.like);
+  if (req.body.postType == "add_like") {
     try {
-      await reviews_DAL.addLike(req.body.like);
+      await reviews_DAL.addLike(req.body.likeId);
       res.redirect(`/restaurants/${req.params.id}/reviews`);
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
     }
-  } else if (req.body.remove_like) {
+  } else if (req.body.postType == "remove_like") {
     try {
-      await reviews_DAL.removeLike(req.body.remove_like);
+      await reviews_DAL.removeLike(req.body.removeLikeId);
       res.redirect(`/restaurants/${req.params.id}/reviews`);
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
-  } else if (req.body.dislike) {
+  } else if (req.body.postType == "add_dislike") {
     try {
-      await reviews_DAL.addDislike(req.body.dislike);
+      await reviews_DAL.addDislike(req.body.dislikeId);
       res.redirect(`/restaurants/${req.params.id}/reviews`);
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
-  } else if (req.body.remove_dislike) {
+  } else if (req.body.postType == "remove_dislike") {
     try {
-      await reviews_DAL.removeDislike(req.body.remove_dislike);
+      await reviews_DAL.removeDislike(req.body.removeDislikeId);
       res.redirect(`/restaurants/${req.params.id}/reviews`);
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
+  } else if (req.body.postType == "new_review") {
+    //TODO
+    console.log("New review");
+    res.redirect(`/restaurants/${req.params.id}/reviews`)
+  } else if (req.body.postType == "new_reply") {
+    //TODO
+    console.log("New Reply");
+    res.redirect(`/restaurants/${req.params.id}/reviews`)
   } else {
     res.status(500);
     res.render('error/error', { error: "Internal Error" , title: "Error", page_function: "Error Display"});
