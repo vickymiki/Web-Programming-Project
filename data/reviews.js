@@ -164,12 +164,12 @@ async function getAllByRestuarant(restaurantId) {
   //const restaurant = await restaurantFuncs.get(restaurantId);
   //Now pull the review ids
   const reviewIds = restaurant.reviews;
-  if (reviewIds.length == 0) throw "No reviews found";
+  if (reviewIds.length == 0) return [];
 
   const restaurantReviews = [];
 
   const myReviews = await this.getAll();
-  if (myReviews.length == 0) throw 'No reviews found'; //Redundant, but good practice
+  if (myReviews.length == 0) throw 'Internal error'; //Redundant, but good practice
 
   reviewIds.forEach(id => {
     for (let i = 0; i < myReviews.length; i++) {
