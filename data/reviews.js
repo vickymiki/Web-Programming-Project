@@ -277,14 +277,20 @@ async function remove(reviewId) {
   const restaurantCollection = await restaurants();
   await restaurantCollection.updateOne({ _id: ObjectId(restaurant_id) }, { $pull: { reviews: ObjectId(reviewId) } });
 
+  const managerCollection = await managers();
+  const userCollection = await users();
   //Now remove from either the user or manager collection as well
   if (managerStatus) {
-    const managerCollection = await managers();
     await managerCollection.updateOne({ _id: ObjectId(user_id) }, { $pull: { review_id: ObjectId(reviewId) } });
   } else {
-    const userCollection = await users();
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $pull: { review_id: ObjectId(reviewId) } });
   }
+
+  //Now we need to go through likes/dislikes and remove reviewId if it exists
+  await managerCollection.updateMany({}, { $pull: { 'review_feedback.likes': reviewId } });
+  await managerCollection.updateMany({}, { $pull: { 'review_feedback.dislikes': reviewId } });
+  await userCollection.updateMany({}, { $pull: { 'review_feedback.likes': reviewId } });
+  await userCollection.updateMany({}, { $pull: { 'review_feedback.dislikes': reviewId } });
 
   //Now we also need to update the overall rating
   const myRestaurant = await restaurantCollection.findOne(ObjectId(restaurant_id));
@@ -323,6 +329,7 @@ async function addLike(reviewId) {
     throw "That review doesn't exist";
   }
   //pull the needed info 
+  //TODO I think i will also need to pass userId and is Manager as function argument -all of these actually 
   const user_id = target.userId;
   const managerStatus = target.isManager;
   
