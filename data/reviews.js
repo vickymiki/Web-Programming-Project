@@ -1,3 +1,4 @@
+//This is a comment
 const mongoCollections = require('../config/mongoCollections');
 const ObjectId = require('mongodb').ObjectId;
 const reviews = mongoCollections.reviews;
