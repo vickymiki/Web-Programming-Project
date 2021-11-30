@@ -5,7 +5,6 @@ const path = require('path');
 
 router.get('/', async (req, res) => {
     if (req.session.user){
-        //TODO decide where to redirect if user is logged in
         return res.redirect('/restaurants')
     }
 

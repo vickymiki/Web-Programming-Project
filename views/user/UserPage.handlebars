@@ -1,0 +1,15 @@
+<h1>{{page_function}}</h1>
+{{#if isManager}}
+<h1>Manage Restaurants</h1>
+{{#if restaurants.length}}
+    {{#each restaurants}}  
+      <li>{{restaurant.name}}</li>
+    {{/each}}
+{{/if}}
+{{/if}}
+
+{{#if isManager}}
+<a href="/restaurants/create">Need to add a restaurant? Click here!</a>
+{{else}}
+<a href="/restaurants">Ready to order? Click here to find some food!</a>
+{{/if}}

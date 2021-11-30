@@ -2,6 +2,7 @@
 const restaurantsRoutes = require('./restaurants');
 const signupRoutes = require('./signup');
 const loginRoutes = require('./login');
+const profileRoutes = require('./profile');
 
 const constructorMethod = (app) => {
   //Default page as restaurant list
@@ -12,6 +13,7 @@ const constructorMethod = (app) => {
   app.use('/restaurants', restaurantsRoutes);
   app.use('/signup', signupRoutes);
   app.use('/login', loginRoutes);
+  app.use('/profile', profileRoutes);
 
   app.use('*', (req, res) => {
     res.sendStatus(404);

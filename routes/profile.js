@@ -4,11 +4,20 @@ const user_DAL = require('../data/users');
 const path = require('path');
 
 router.get('/', async (req, res) => {
-    if (req.session.user){
-        return res.redirect('/restaurants')
+    if (!req.session.user){
+        return res.redirect('/login')
+    }
+
+    if(req.session.user.accountType === 'manager'){
+        res.render('user/UserPage', {title: "Profile", page_function: "Your Profile", isManager: true})
+    }
+    else if(req.session.user.accountType === 'user'){
+        res.render('user/UserPage', {title: "Profile", page_function: "Your Profile"})
+    }
+    else{
+        res.status(400).redirect('/login')
     }
     
-    res.render('forms/LoginForm', {title: "Login", page_function: "Log into an account NOW"})
 });
 
 router.post('/', async (req, res) => {
