@@ -6,7 +6,7 @@ const path = require('path');
 router.get('/', async (req, res) => {
     if (req.session.user){
         //TODO decide where to redirect if user is logged in
-        //return res.redirect('/restaurants')
+        return res.redirect('/restaurants')
     }
 
     res.render('forms/SignupForm', {title: "Signup", page_function: "Sign up for an account NOW"})

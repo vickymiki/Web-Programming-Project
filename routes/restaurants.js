@@ -7,7 +7,8 @@ const path = require('path');
 
 router.get('/', async (req, res) => {
     if (req.session.user){
-        return res.redirect('/private')
+        let x = req.session.user.accountType
+        //return res.redirect('/private')
     }
     const allResaurants = await restaurants_DAL.getAllResaurants()
     res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "View available restaurants!", restaurantArray: allResaurants})

@@ -44,7 +44,7 @@ module.exports = {
 
         let result = await bcrypt.compare(password, user.password);
         if(!result)    throw "Username and password don't mactch";
-        return { authenticated: true };
+        return { authenticated: true, accountType: user.accountType };
 
     },
 
