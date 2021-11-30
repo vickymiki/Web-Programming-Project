@@ -164,6 +164,10 @@ function userFieldChecker(params, update = false) {
         isValidReviewFeedback(params.review_feedback);
         isValidPassword(params.password);
     }
+
+    if(params.accountType !== 'user' && params.accountType !== 'manager'){
+        throw `Account Type not recognized: ${params.accountType}`
+    }
 }
 
 function managerFieldChecker(params) {
