@@ -22,7 +22,7 @@ function isValidName(name) {
     var letterRegex = /^[a-zA-Z0-9_]{4,}$/;
     const valid = letterRegex.test(name);
     if(!valid) {
-        throw `${name} is not valid for a username`;
+        throw `${name} is not valid for a username, minimum 4 characters!`;
     }
 }
 

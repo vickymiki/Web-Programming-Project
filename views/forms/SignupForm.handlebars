@@ -4,11 +4,43 @@
   {{/if}}
   <form method="POST" id="signup-form" action="/signup">
     <label id="username">Username:
-      <input type = "text" name="username" placeholder="Enter your username"/>
+      <input type = "text" name="username" placeholder="Username"/>
     </label>
     <br>
     <label id="password">Password:
-      <input type = "password" name="password" placeholder="Enter your password"/>
+      <input type = "password" name="password" placeholder="Password"/>
+    </label>
+    <br>
+    <label id="streetAddress">Street Address:
+      <input type = "text" name="streetAddress" placeholder="Street Address"/>
+    </label>
+    <br>
+    <label id="city">City:
+      <input type = "text" name="city" placeholder="City"/>
+    </label>
+    <br>
+    <!--TODO: change to dropdown -->
+    <label id="state">State:
+      <input type = "text" name="state" placeholder="State"/>
+    </label>
+    <br>
+    <label id="zip">Zip:
+      <input type = "text" name="zip" placeholder="Zip"/>
+    </label>
+    <br>
+    <label id="email">Email:
+      <input type = "text" name="email" placeholder="Email"/>
+    </label>
+    <br>
+    <label id="phone">Phone:
+      <input type = "text" name="phone" placeholder="Phone"/>
+    </label>
+    <br>
+    <label id="user">User
+      <input type = "radio" name="accountType" value="user"/>
+    </label>
+    <label id="manager">Manager
+      <input type = "radio" name="accountType" value="manager"/>
     </label>
     <br>
     <label id="submit">Submit:

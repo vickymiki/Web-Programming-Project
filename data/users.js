@@ -5,11 +5,11 @@ const bcrypt = require('bcrypt');
 const saltRounds = 16;
 
 module.exports = {
-    async createUser(userName, streetAddress, city, state, zip, 
-        email, phone, favorites, review_id, reply_id, review_feedback, password) {
-        
+    async createUser(userName, password, streetAddress, city, state, zip, 
+        email, phone, accountType) {
+        const test = {userName, streetAddress}
         const newUser = { userName, streetAddress, city, state, zip, 
-            email, phone, favorites, review_id, reply_id, review_feedback, password };
+            email, phone, favorites: [], review_id: [], reply_id: [], review_feedback: [], password };
         userFieldChecker(newUser, update = false);
         
         userName = userName.toLowerCase();
