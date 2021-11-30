@@ -6,12 +6,16 @@ const replies_DAL = require('../data/replies');
 const path = require('path');
 
 router.get('/', async (req, res) => {
-    if (req.session.user){
-        let x = req.session.user.accountType
-        //return res.redirect('/private')
-    }
     const allResaurants = await restaurants_DAL.getAllResaurants()
     res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "View available restaurants!", restaurantArray: allResaurants})
+});
+
+router.get('/create', async (req, res) => {
+  if (!req.session?.user.accountType === 'manager'){
+      res.sendStatus(403).redirect('/restaurants')
+  }
+  
+  res.render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!"})
 });
 
 router.get('/:id', async (req, res) => {

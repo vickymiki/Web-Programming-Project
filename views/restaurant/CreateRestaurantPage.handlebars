@@ -1,14 +1,10 @@
-<h1>IT'S TIME TO SIGN UP!</h1>
+<h1>{{page_function}}</h1>
   {{#if error}}
     <h2 id="error">{{error}}</h2>
   {{/if}}
   <form method="POST" id="signup-form" action="/signup">
-    <label id="username">Username:
-      <input type = "text" name="username" placeholder="Username"/>
-    </label>
-    <br>
-    <label id="password">Password:
-      <input type = "password" name="password" placeholder="Password"/>
+    <label id="name">Restaurant name:
+      <input type = "text" name="username" placeholder="Restaurant name"/>
     </label>
     <br>
     <label id="streetAddress">Street Address:
@@ -36,15 +32,8 @@
       <input type = "text" name="phone" placeholder="123-456-7890"/>
     </label>
     <br>
-    <label id="user">User
-      <input type = "radio" name="accountType" value="user"/>
-    </label>
-    <label id="manager">Manager
-      <input type = "radio" name="accountType" value="manager"/>
-    </label>
-    <br>
+
     <label id="submit">Submit:
       <input type="submit"/>
     </label>
 </form>
-<a href="/login">Already have an account? Click here to log in</a>
