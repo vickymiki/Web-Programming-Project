@@ -79,7 +79,7 @@ async function create(restaurantId, userId, review, rating, isManager) {
   if (isManager) {
     const managerCollection = await managers();
     myUser = await managerCollection.findOne({ _id: ObjectId(userId) });
-    if (!myUser) throw 'User naot found';
+    if (!myUser) throw 'User not found';
   } else {
     const userCollection = await users();
     myUser = await userCollection.findOne({ _id: ObjectId(userId) });
@@ -330,7 +330,6 @@ async function addLike(reviewId) {
     throw "That review doesn't exist";
   }
   //pull the needed info 
-  //TODO I think i will also need to pass userId and is Manager as function argument -all of these actually 
   const user_id = target.userId;
   const managerStatus = target.isManager;
   
