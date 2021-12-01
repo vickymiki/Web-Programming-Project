@@ -3,6 +3,8 @@ const router = express.Router();
 const restaurants_DAL = require('../data/restaurants');
 const reviews_DAL = require('../data/reviews');
 const replies_DAL = require('../data/replies');
+const user_DAL = require('../data/users');
+const manager_DAL = require('../data/managers');
 const path = require('path');
 
 router.get('/', async (req, res) => {
@@ -39,22 +41,31 @@ router.get('/:id/reviews', async (req, res) => {
     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
   }
   
-  //TODO
-  //Get the userId value from cookie
-  const userId = null;
-  //Get the isManager value from cookie
-  //maybe create a new specific input thats hidden and specific to each type of request
-  const isManager = null;
+  //Get userId and manager status from session cookie
+  let userId = null;
+  let isManager = null;
+  if (!req.session.user) {
+    res.redirect('/login', 404, { title: "Login", page_function: "Log into an account NOW", error: "Need to log in" })
+    return
+  } else {
+    if (req.session.user.accountType == "manager") {
+      isManager = true;
+      userId = await manager_DAL.getManagerIdByName(req.session.user.username);
+    }
+    else {
+      isManager = false;
+      userId = await user_DAL.getUserIdByName(req.session.user.username);
+    }
+  }
 
   if (reviewData.length == 0) {
     res.render('restaurant/NoReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, restaurantId: id, userId: userId, isManager: isManager });
   } else {
-    res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, reviewData: reviewData, restaurantId: id, userId: userId, isManager: isManager });
+    res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, reviewData: reviewData, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
   }
 });
 
 router.post('/:id/reviews', async (req, res) => {
-  //console.log(req.body.like);
   if (req.body.postType == "add_like") {
     try {
       await reviews_DAL.addLike(req.body.likeId);
@@ -88,13 +99,32 @@ router.post('/:id/reviews', async (req, res) => {
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "new_review") {
-    //TODO
-    console.log("New review");
-    res.redirect(`/restaurants/${req.params.id}/reviews`)
+    try {
+      let myBool = false;
+      if (req.body.isManager === 'true') myBool = true;
+      await reviews_DAL.create(req.body.restaurantId, req.body.userId, req.body.review, Number(req.body.rating), myBool);
+      res.redirect(`/restaurants/${req.params.id}/reviews`);
+    } catch (e) {
+      res.status(500);
+      res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
   } else if (req.body.postType == "new_reply") {
-    //TODO
-    console.log("New Reply");
-    res.redirect(`/restaurants/${req.params.id}/reviews`)
+    try {
+      let myBool = null;
+      let myId = null;
+      if (req.session.user.accountType == "manager") {
+        myBool = true;
+        myId = await manager_DAL.getManagerIdByName(req.session.user.username);
+      } else {
+        myBool = false;
+        myId = await user_DAL.getUserIdByName(req.session.user.username);
+      }
+      await replies_DAL.create(req.body.reviewId, myId, req.body.reply, myBool);
+      res.redirect(`/restaurants/${req.params.id}/reviews`);
+    } catch (e) {
+      res.status(500);
+      res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
   } else {
     res.status(500);
     res.render('error/error', { error: "Internal Error" , title: "Error", page_function: "Error Display"});
