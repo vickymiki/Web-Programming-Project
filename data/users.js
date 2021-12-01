@@ -8,7 +8,7 @@ module.exports = {
     async createUser(userName, password, streetAddress, city, state, zip, 
         email, phone, accountType) {
         const newUser = { userName, streetAddress, city, state, zip, 
-            email, phone, favorites: [], review_id: [], reply_id: [], review_feedback: [], password, accountType };
+          email, phone, favorites: [], review_id: [], reply_id: [], review_feedback: {likes:[], dislikes:[]}, password, accountType };
         userFieldChecker(newUser, update = false);
         
         userName = userName.toLowerCase();
@@ -66,6 +66,12 @@ module.exports = {
             throw 'could not update user profile successfully';
         }
         return {updated: true};
+  },
+  async getUserIdByName(username) {
+    const userCollection = await users();
+    const user = await userCollection.findOne({ userName: username });
+    return user._id.toString();
     }
+    
 }
 

@@ -6,7 +6,7 @@ const { isValidName, isValidPassword, managerFieldChecker } = require('../dataUt
 
 module.exports = {
     async createManager(userName, review_id, reply_id, password) {
-        let newManager = { userName, review_id, reply_id, password };
+    let newManager = { userName, review_id, reply_id, review_feedback: {likes: [], dislikes:[]}, password };
         managerFieldChecker(newManager);
 
         userName = userName.toLowerCase();
@@ -42,5 +42,10 @@ module.exports = {
         let result = await bcrypt.compare(password, manager.password);
         if(!result)    throw "Username and password don't mactch";
         return { authenticated: true };
+  },
+    async getManagerIdByName(username) {
+    const managerCollection = await managers();
+    const manager = await managerCollection.findOne({ userName: username });
+    return manager._id.toString();
     }
 }
