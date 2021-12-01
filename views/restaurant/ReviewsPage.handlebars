@@ -7,8 +7,8 @@
     <label for="rating">Rating (1-5):</label>
     <input type="number" name="rating" min="1" max="5">
     <input type="hidden" name="restaurantId" value={{restaurantId}}>
-    <input type="hidden" name="userId" value={{userId}}>
-    <input type="hidden" name="isManager" value={{isManager}}>
+    <input type="hidden" name="userId" value={{loggedUserId}}>
+    <input type="hidden" name="isManager" value={{loggedIsManager}}>
     <button type="submit">Submit Review</button>
   </form>
   {{#if reviewData.length}}
@@ -58,8 +58,9 @@
           <input type="hidden" name="postType" value="new_reply">
           <input type="text" name="reply">
           <input type="hidden" name="reviewId" value={{_id}}>
-          <input type="hidden" name="userId" value={{userId}}>
-          <input type="hidden" name="isManager" value={{isManager}}>
+          <!-- Had to go about this a different way = was pulling the id of the og review user-->
+          <!--<input type="hidden" name="userId" value={{loggedUserId}}>
+          <input type="hidden" name="isManager" value={{loggedisManager}}>-->
           <button type="submit">Submit Reply</button>
         </form>
       </div>
