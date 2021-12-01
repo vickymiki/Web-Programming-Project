@@ -2,7 +2,7 @@
   {{#if error}}
     <h2 id="error">{{error}}</h2>
   {{/if}}
-  <form method="POST" id="signup-form" action="/signup">
+  <form method="POST" id="restaurant-form" action="/restaurants/create">
     <label id="name">Restaurant name:
       <input type = "text" name="username" placeholder="Restaurant name"/>
     </label>
@@ -30,6 +30,29 @@
     <br>
     <label id="phone">Phone:
       <input type = "text" name="phone" placeholder="123-456-7890"/>
+    </label>
+    <br>
+
+    <label for="priceRange">Choose a price range:</label>
+    <select name="priceRange" id="priceRange">
+      <option value="$">$</option>
+      <option value="$$">$$</option>
+      <option value="$$$">$$$</option>
+      <option value="$$$$">$$$$</option>
+    </select>
+    <br>
+
+    <p>Select Restaurant Food Categories:</p>
+    <label id="asian">Asian:
+      <input type = "checkbox" name="asian"/>
+    </label>
+    <br>
+    <label id="american">American:
+      <input type = "checkbox" name="american"/>
+    </label>
+    <br>
+    <label id="Italian">Italian:
+      <input type = "checkbox" name="italian"/>
     </label>
     <br>
 

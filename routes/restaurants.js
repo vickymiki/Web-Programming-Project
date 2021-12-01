@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/create', async (req, res) => {
-  if (!req.session?.user.accountType === 'manager'){
-      res.sendStatus(403).redirect('/restaurants')
+  if (!(req.session.user && req.session.user.accountType === 'manager')){
+      return res.status(403).redirect('/restaurants')
   }
   
   res.render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!"})
@@ -99,6 +99,75 @@ router.post('/:id/reviews', async (req, res) => {
     res.status(500);
     res.render('error/error', { error: "Internal Error" , title: "Error", page_function: "Error Display"});
   }
+});
+
+router.post('/create', async (req, res) => {
+  const form = req.body
+
+  if(!form.name){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Name invalid!"})    
+      return
+  }
+
+  if(!form.streetAddress){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Street Address invalid!"})    
+      return
+  }
+
+  if(!form.city){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "City invalid!"})    
+      return
+  }
+
+  if(!form.state){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "State invalid!"})    
+      return
+  }
+
+  if(!form.zip){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Zip invalid!"})    
+      return
+  }
+
+  if(!form.email){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Email invalid!"})    
+      return
+  }
+
+  if(!form.phone){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Phone invalid!"})    
+      return
+  }
+
+  if(!form.priceRange){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Accoun Type invalid!"})    
+      return
+  }
+
+  if(!form.foodTypes){
+    res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Accoun Type invalid!"})    
+    return
+  }
+
+
+  try{
+      await restaurants_DAL.addRestaurant(form.name,
+          form.streetAddress, 
+          form.city, 
+          form.state, 
+          form.zip, 
+          form.priceRange,
+          form.foodTypes,
+          form.email,
+          form.phone)
+  }
+  catch(e){
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: e})
+      return
+  }
+  
+  res.redirect('/profile')
+  return
 });
 
 module.exports = router;
