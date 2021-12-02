@@ -125,9 +125,6 @@ function userFieldChecker(params, update = false) {
     'email', 'phone', 'favorites'];
     if(!update) {
         // check whether all params exist or not
-        allParams.push('review_id');
-        allParams.push('reply_id');
-        allParams.push('review_feedback');
         allParams.push('password');
     }
     
@@ -145,15 +142,8 @@ function userFieldChecker(params, update = false) {
 
     // validate array of strings
     let strArray = ['favorites'];
-    if(!update) {
-        strArray.push('review_id');
-        strArray.push('reply_id');
-
-    }
-    for(let key of strArray) {
-        if(!isArrayOfStr(params[key])) {
-            throw `${key} is not an array of string`;
-        }
+    if(!isArrayOfStr(params[key])) {
+        throw `${key} is not an array of string`;
     }
 
     isValidName(params.userName);
@@ -161,27 +151,15 @@ function userFieldChecker(params, update = false) {
     isValidEmail(params.email);
     isValidPhone(params.phone);
     if(!update) { 
-        isValidReviewFeedback(params.review_feedback);
         isValidPassword(params.password);
-    }
-
-    if(params.accountType !== 'user' && params.accountType !== 'manager'){
-        throw `Account Type not recognized: ${params.accountType}`
     }
 }
 
 function managerFieldChecker(params) {
-    let allParams = ['userName', 'review_id', 'reply_id', 'password'];  
+    let allParams = ['userName', 'password'];  
     
     for(let key of allParams) {
         isFieldExistChecker(params[key], key);
-    }
-    
-    let strArray = ['review_id', 'reply_id'];
-    for(let key of strArray) {
-        if(!isArrayOfStr(params[key])) {
-            throw `${key} is not an array of string`;
-        }
     }
     
     isValidName(params.userName);
