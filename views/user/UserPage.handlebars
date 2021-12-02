@@ -1,11 +1,12 @@
 <h1>{{page_function}}</h1>
+
 {{#if isManager}}
 <h1>Manage Restaurants</h1>
-{{#if restaurants.length}}
+  {{#if restaurants.length}}
     {{#each restaurants}}  
-      <li>{{restaurant.name}}</li>
+    <h1>{{restaurantName}}</h1>
     {{/each}}
-{{/if}}
+  {{/if}}
 {{/if}}
 
 {{#if isManager}}

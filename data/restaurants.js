@@ -84,6 +84,16 @@ async function getAllResaurants(){
     return restQuery
 }
 
+async function getRestaurantsManagedByUser(username){
+    if(!await user_DAL.isManager(username)){
+        return []
+    }
+
+    const restaurantCollection = await restaurants()
+    const restQuery = await restaurantCollection.find({}, { managerUsername: username }).toArray();
+    return restQuery
+}
+
 async function removeRestaurant(restaurant_id){
     restaurant_id = validateObjectId(restaurant_id)
     const restaurantCollection = await restaurants()
@@ -105,4 +115,4 @@ async function addFood_Items(restaurant_id, foodItems){
     return {restaurantFoodUpdated: true}
 }
 
-module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Items, getAllResaurants, getRestaurantFromId}
+module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Items, getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser}

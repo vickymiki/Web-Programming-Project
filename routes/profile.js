@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const user_DAL = require('../data/users');
+const restaurants_DAL = require('../data/restaurants');
 const path = require('path');
 
 router.get('/', async (req, res) => {
@@ -9,7 +10,8 @@ router.get('/', async (req, res) => {
     }
 
     if(req.session.user.accountType === 'manager'){
-        res.render('user/UserPage', {title: "Profile", page_function: "Your Profile", isManager: true})
+        const restaurants = await restaurants_DAL.getRestaurantsManagedByUser(req.session.user.username)
+        res.render('user/UserPage', {title: "Profile", page_function: "Your Profile", isManager: true, restaurants})
     }
     else if(req.session.user.accountType === 'user'){
         res.render('user/UserPage', {title: "Profile", page_function: "Your Profile"})
