@@ -1,4 +1,3 @@
-//This is a comment
 const mongoCollections = require('../config/mongoCollections');
 const ObjectId = require('mongodb').ObjectId;
 const reviews = mongoCollections.reviews;
@@ -35,22 +34,25 @@ const validId = function validId(id) {
 }
 
 //Create an original review 
-async function create(restaurantId, userId, review, rating, isManager) {
+async function create(restaurantId, userId, review, rating, isManager, imgname) {
   //Error checking
   if (!restaurantId || restaurantId == null) throw 'All fields need to have valid values';
   if (!userId || userId == null) throw 'All fields need to have valid values';
   if (!review || review == null) throw 'All fields need to have valid values';
   if (!rating || rating == null) throw 'All fields need to have valid values';
   if (isManager == null) throw 'All fields need to have valid values';
+  if(!imgname || imgname == null) throw 'All fields need to have valid values'
   //More error checking
   if (typeof restaurantId !== 'string') throw 'Restaurant id must be a string';
   if (typeof userId !== 'string') throw 'User id must be a string';
   if (typeof review !== 'string') throw 'Review must be a string';
   if (typeof rating !== 'number') throw 'Rating must be a number';
   if (typeof isManager !== 'boolean') throw 'isManager status must be a boolean value';
+  if (typeof imgname !== 'string') throw 'Image name must be a string';
   
   //More error checking
-  if (isSpaces(review)) throw 'Reviewer not be only spaces';
+  if (isSpaces(review)) throw 'Reviewer can not be only spaces';
+  if (isSpaces(imgname)) throw 'Image name can not be only spaces';
   if (rating > 5 || rating < 1) throw 'Rating must be in the range [1-5]';
   //Check for valid ID's
   if (!validId(restaurantId)) throw "Restaurant Id must be a string of 24 hex characters";
@@ -86,6 +88,10 @@ async function create(restaurantId, userId, review, rating, isManager) {
     if (!myUser) throw 'User not found';
   }
 
+  //TODO
+  //here we are going to first upload the photo it its own collection - photos, and then store its id as "photoId" in the reviews collection
+
+
   const userName = myUser.userName;
 
   const reviewsCollection = await reviews();
@@ -101,7 +107,8 @@ async function create(restaurantId, userId, review, rating, isManager) {
     isManager: isManager, //We can use this paramater to display manager reviews differently
     dislikes: dislikes,
     replies: replies,
-    date: timestamp
+    date: timestamp,
+    imageName: imgname
   };
 
   //Add review to the correct restaurant
@@ -244,6 +251,8 @@ async function remove(reviewId) {
   if (typeof reviewId !== 'string') throw 'Review id must be a string';
   if (isSpaces(reviewId)) throw 'Review id can not be only spaces';
   if (!validId(reviewId)) throw "Review Id must be a string of 24 hex characters";
+
+  //TODO will need to remove photo from photo collection once thats done
 
   const reviewCollection = await reviews();
 

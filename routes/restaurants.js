@@ -7,6 +7,10 @@ const user_DAL = require('../data/users');
 const manager_DAL = require('../data/managers');
 const path = require('path');
 const session = require('express-session');
+const fs = require('fs');
+const multer = require('multer');
+
+const upload = multer({ dest: '/uploads/'});
 
 router.get('/', async (req, res) => {
     const allResaurants = await restaurants_DAL.getAllResaurants()
@@ -43,6 +47,7 @@ router.get('/:id/reviews', async (req, res) => {
   }
   
   //Get userId and manager status from session cookie
+  //TODO should make this a middleware function
   let userId = null;
   let isManager = null;
   if (!req.session.user) {
@@ -99,7 +104,10 @@ router.post('/:id/reviews', async (req, res) => {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
-  } else if (req.body.postType == "new_review") {
+  }
+  //No longer needed, but keeping just in case
+    //TODO cleanup before submitting
+  /*else if (req.body.postType == "new_review") {
     try {
       let myBool = false;
       if (req.body.isManager === 'true') myBool = true;
@@ -109,7 +117,7 @@ router.post('/:id/reviews', async (req, res) => {
       res.status(500);
       res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
     }
-  } else if (req.body.postType == "new_reply") {
+  } */else if (req.body.postType == "new_reply") {
     try {
       let myBool = null;
       let myId = null;
@@ -130,6 +138,42 @@ router.post('/:id/reviews', async (req, res) => {
     res.status(500);
     res.render('error/error', { error: "Internal Error" , title: "Error", page_function: "Error Display"});
   }
+});
+
+router.post('/:id/upload', upload.single("photo"), async (req, res) => {
+  //Make the image name a timestamp, this way it will be a unique identifier
+  let imgname = new Date().getTime().toString();
+  const id = req.params.id;
+  try {
+    if (!req.file) imgname = "no_image.jpeg";
+    else {
+      const tempPath = req.file.path;
+      const targetPath = path.join(__dirname, `../public/images/${imgname}`);
+
+      if (path.extname(req.file.originalname).toLowerCase() === ".png" ||
+        path.extname(req.file.originalname).toLowerCase() === ".jpg" || 
+        path.extname(req.file.originalname).toLowerCase() === ".jpeg") {
+        fs.rename(tempPath, targetPath, err => {
+          if (err) res.render('error/error', { error: "Internal Error", title: "Error", page_function: "Error Display" });
+        })
+      } else {
+        res.status(403);
+        res.render('error/error', { error: "Only png or jpg/jpeg allowed", title: "Error", page_function: "Error Display" });
+        return;
+      }
+    }
+
+    let myBool = false;
+    if (req.body.isManager === 'true') myBool = true;
+
+    await reviews_DAL.create(req.body.restaurantId, req.body.userId, req.body.review, Number(req.body.rating), myBool, imgname);
+    res.redirect(`/restaurants/${req.params.id}/reviews`);
+
+  } catch (e) {
+    //TODO set status code
+    res.render('error/error', { error: "Inernal error", title: "Error", page_function: "Error Display" });
+  }
+  
 });
 
 router.post('/create', async (req, res) => {
