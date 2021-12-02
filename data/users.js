@@ -11,13 +11,14 @@ async function createUser(userName, streetAddress, city, state, zip,
     const newUser = { userName, streetAddress, city, state, zip, 
         email, phone, favorites, password};
     userFieldChecker(newUser, update = false);
-    : [], review_id: [], reply_id: [], review_feedback: {likes:[], dislikes:[]},
+    
     newUser.review_id = [];
     newUser.reply_id = [];
     newUser.review_feedback = {
         likes: [], 
         dislikes: []
     }
+
     newUser.accountType = "user";
     userName = userName.toLowerCase();
     newUser.userName = userName;
@@ -93,4 +94,4 @@ async function getUserIdByName(userName) {
     return user._id.toString();
 }
 
-module.exports = {createUser, checkUser, updateUserProfile, getUserIdByName, addRestaurantToManager}
+module.exports = {createUser, checkUser, updateUserProfile, getUserIdByName}
