@@ -6,6 +6,7 @@ const replies_DAL = require('../data/replies');
 const user_DAL = require('../data/users');
 const manager_DAL = require('../data/managers');
 const path = require('path');
+const session = require('express-session');
 
 router.get('/', async (req, res) => {
     const allResaurants = await restaurants_DAL.getAllResaurants()
@@ -132,6 +133,9 @@ router.post('/:id/reviews', async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
+  if (!(req.session.user && req.session.user.accountType === 'manager')){
+    return res.status(403).redirect('/restaurants')
+  }
   const form = req.body
 
   if(!form.name){
@@ -170,15 +174,19 @@ router.post('/create', async (req, res) => {
   }
 
   if(!form.priceRange){
-      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Accoun Type invalid!"})    
+      res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Price range invalid!"})    
       return
   }
 
-  if(!form.foodTypes){
-    res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Accoun Type invalid!"})    
+  if(!(form.asian || form.american || form.italian)){
+    res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: "Food category invalid!"})    
     return
   }
 
+  foodTypes = []
+  if(form.asian) foodTypes.push("Asian")
+  if(form.american) foodTypes.push("American")
+  if(form.italian) foodTypes.push("Italian")
 
   try{
       await restaurants_DAL.addRestaurant(form.name,
@@ -187,9 +195,10 @@ router.post('/create', async (req, res) => {
           form.state, 
           form.zip, 
           form.priceRange,
-          form.foodTypes,
+          foodTypes,
           form.email,
-          form.phone)
+          form.phone,
+          req.session.user.username)
   }
   catch(e){
       res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!", error: e})

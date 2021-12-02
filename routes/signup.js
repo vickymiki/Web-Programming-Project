@@ -59,8 +59,6 @@ router.post('/', async (req, res) => {
         return
     }
 
-
-
     try{
         await user_DAL.createUser(form.username, 
             form.password, 

@@ -1,12 +1,13 @@
 const mongoCollections = require('../config/mongoCollections');
 const ObjectId = require('mongodb').ObjectId;
-const reviews = mongoCollections.reviews;
-const users = mongoCollections.users;
-const managers = mongoCollections.managers;
+const user_DAL = require('./users');
 const restaurants = mongoCollections.restaurants;
 
-function validateParameters(name, address, city, state, zip, priceRange, foodTypes){
+async function validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
     //TODO add validation
+
+    //There is allowed to be multiple restaurants with the same name, but not with the same address
+    if(await checkIfAddressExists(address, city, state, zip)) throw 'A restaurant with that address already exists'
 
     return ({restaurantName: name, 
         streetAddress: address,
@@ -18,7 +19,8 @@ function validateParameters(name, address, city, state, zip, priceRange, foodTyp
         menuItems: [],
         ordersPlaced: [],
         rating: 0,
-        reviews: []})
+        reviews: [],
+        managerUsername})
 }
 
 function validateObjectId(id){
@@ -34,14 +36,27 @@ function validateObjectId(id){
     return id
 }
 
-async function addRestaurant(name, address, city, state, zip, priceRange, foodTypes){
-    let restaurantObj = validateParameters(name, address, city, state, zip, priceRange, foodTypes)
+async function addRestaurant(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
+    let restaurantObj = await validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername)
     
     const restaurantCollection = await restaurants()
     const insert = await restaurantCollection.insertOne(restaurantObj)
 
     if ( insert.insertedCount === 0 ) throw "Restaurant insert failed"
+    
+    restaurantId = insert.insertedId.toString()
+    await user_DAL.addRestaurantToManager(restaurantId, managerUsername)
     return {restaurantInserted: true}
+}
+
+async function checkIfAddressExists(address, city, state, zip){
+    const restaurantCollection = await restaurants()
+    const restQuery = await restaurantCollection.findOne({streetAddress: address, city, state, zip})
+    if ( restQuery === null ){
+        return false
+    }else{
+        return true
+    }
 }
 
 async function getRestaurantIdFromName(name){
