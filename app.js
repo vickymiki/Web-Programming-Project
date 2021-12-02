@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const static = express.static(__dirname + '/public');
 
+app.use(express.static(__dirname + '/public/')); //Need this to access static images
 app.use('/public', static);
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
