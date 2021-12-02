@@ -5,10 +5,19 @@ const saltRounds = 16;
 const { isValidName, isValidPassword, managerFieldChecker } = require('../dataUtils');
 
 module.exports = {
-    async createManager(userName, review_id, reply_id, password) {
-    let newManager = { userName, review_id, reply_id, review_feedback: {likes: [], dislikes:[]}, password };
+    async createManager(userName, email, password) {
+    let newManager = { userName, email, password };
         managerFieldChecker(newManager);
-
+        
+        newManager.restaurants = [];
+        newManager.review_id = [];
+        newManager.reply_id = [];
+        newManager.review_feedback = {
+            likes: [],
+            dislikes: []
+        };
+        newManager.accoutType = "manager";
+        
         userName = userName.toLowerCase();
         newManager.userName = userName;
         const managerCollection = await managers();
@@ -44,8 +53,35 @@ module.exports = {
         return { authenticated: true };
   },
     async getManagerIdByName(username) {
-    const managerCollection = await managers();
-    const manager = await managerCollection.findOne({ userName: username });
-    return manager._id.toString();
+        isValidName(managerName);
+        const managerCollection = await managers();
+        const manager = await managerCollection.findOne({ userName: username });
+        if(manager === null) {
+            throw "manager not found";
+        }
+        return manager._id.toString();
+    }, 
+    async getManagerByName(managerName) {
+        isValidName(managerName);
+        const managerCollection = await managers();
+        const manager = await managerCollection.findOne({managerName: managerName});
+        if(manager === null) {
+            throw "manager not found";
+        }
+        manager._id = manager._id.toString();
+        return manager;
+    },
+    async addRestaurantToManager(restaurantId, managerName){
+        isValidName(managerName);
+        const manager = await getManagerByName(managerName);
+        if(manager === null) {
+            throw "manager not found";
+        }
+        let restaurants = manager.restaurants;
+        restaurants.push(restaurantId);
+
+        let updateInfo = await userCollection.updateOne({managerName: managerName}, {$push: {restaurants: restaurants}});
+        if(updateInfo.matchedCount === 0) throw `Failed to add restaurant to manager: ${username}.`
+        return { addRestaurant: true};
     }
 }
