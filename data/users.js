@@ -6,12 +6,19 @@ const { use } = require('../routes/restaurants');
 const saltRounds = 16;
 
 
-async function createUser(userName, password, streetAddress, city, state, zip, 
-    email, phone, accountType) {
+async function createUser(userName, streetAddress, city, state, zip, 
+    email, phone, password) {
     const newUser = { userName, streetAddress, city, state, zip, 
-        email, phone, favorites: [], review_id: [], reply_id: [], review_feedback: {likes:[], dislikes:[]}, password, accountType };
+        email, phone, favorites, password};
     userFieldChecker(newUser, update = false);
-    
+    : [], review_id: [], reply_id: [], review_feedback: {likes:[], dislikes:[]},
+    newUser.review_id = [];
+    newUser.reply_id = [];
+    newUser.review_feedback = {
+        likes: [], 
+        dislikes: []
+    }
+    newUser.accountType = "user";
     userName = userName.toLowerCase();
     newUser.userName = userName;
     const userCollection = await users();
@@ -69,44 +76,21 @@ async function updateUserProfile(id, userName, streetAddress, city, state, zip,
     return {updated: true};
 }
 
-async function getUserProfileByName(username){
+async function getUserProfileByName(userName){
+    isValidName(userName);
     const userCollection = await users();
-    const user = await userCollection.findOne({ userName: username });
-    if(user === null) throw `Unable to find user: ${username}`
-    return user
+    const user = await userCollection.findOne({ userName: userName });
+    if(user === null) throw `Unable to find user: ${userName}`;
+    user._id = user._id.toString();
+    return user;
 }
 
-async function getUserIdByName(username) {
+async function getUserIdByName(userName) {
+    isValidName(userName);
     const userCollection = await users();
-    const user = await userCollection.findOne({ userName: username });
-    if(user === null) throw `Unable to find user: ${username}`
-    return user._id
+    const user = await userCollection.findOne({ userName: userName });
+    if(user === null) throw `Unable to find user: ${userName}`;
+    return user._id.toString();
 }
-
-async function addRestaurantToManager(restaurantObjectId, username){
-    //check that the user is a manager then append it to the array
-    if(!await isManager(username)) throw `User is not a manager: ${username}`
-    const managerId = await getUserIdByName(username)
-    const userCollection = await users();
-    let update = await userCollection.updateOne({_id: managerId}, {$push: {managedRestaurants: restaurantObjectId}})
-    if(update.matchedCount === 0) throw `Failed to add restaurant to manager: ${username}.`
-}
-
-async function isManager(username){
-    let manager = null
-    try{
-        //throws if user does not exist
-        manager = await getUserProfileByName(username)
-    }catch(e){
-        return false
-    }
-    if(manager.accountType === 'manager'){
-        return true
-    }
-    else{
-        return false
-    }
-}
-    
 
 module.exports = {createUser, checkUser, updateUserProfile, getUserIdByName, addRestaurantToManager}
