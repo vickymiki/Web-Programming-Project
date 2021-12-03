@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const user_DAL = require('../data/users');
+const manager_DAL = require('../data/managers');
 const path = require('path');
 
 router.get('/', async (req, res) => {
@@ -60,15 +61,26 @@ router.post('/', async (req, res) => {
     }
 
     try{
-        await user_DAL.createUser(form.username, 
-            form.password, 
-            form.streetAddress, 
-            form.city, 
-            form.state, 
-            form.zip, 
-            form.email, 
-            form.phone, 
-            form.accountType)
+        if(form.accountType === "manager"){
+            await manager_DAL.createManager(form.username, 
+                form.streetAddress, 
+                form.city, 
+                form.state, 
+                form.zip, 
+                form.email, 
+                form.phone, 
+                form.password)
+        }
+        else{
+            await user_DAL.createUser(form.username, 
+                form.streetAddress, 
+                form.city, 
+                form.state, 
+                form.zip, 
+                form.email, 
+                form.phone, 
+                form.password)
+        }
     }
     catch(e){
         res.status(400).render('forms/SignupForm', {title: "Signup", page_function: "Sign up for an account NOW", error: e})

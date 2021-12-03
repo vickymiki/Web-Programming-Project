@@ -1,12 +1,17 @@
 const mongoCollections = require('../config/mongoCollections');
 const managers = mongoCollections.managers;
+const users = mongoCollections.users;
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { isValidName, isValidPassword, managerFieldChecker } = require('../dataUtils');
 
 module.exports = {
-    async createManager(userName, email, password) {
-    let newManager = { userName, email, password };
+    async createManager(userName, streetAddress, city, state, zip, 
+        email, phone, password) {
+
+        let newManager = { userName, streetAddress, city, state, zip, 
+            email, phone, password};
+
         managerFieldChecker(newManager);
         
         newManager.restaurants = [];
@@ -16,6 +21,7 @@ module.exports = {
             likes: [],
             dislikes: []
         };
+
         newManager.accoutType = "manager";
         
         userName = userName.toLowerCase();
@@ -25,8 +31,14 @@ module.exports = {
         if(manager !== null) {
             throw `${userName} is occupied, try a different one`;
         }
-        newManager.password = await bcrypt.hash(password, saltRounds);
 
+        const userCollection = await users();
+        const user = await userCollection.findOne({userName: userName});
+        if(user !== null) {
+            throw `${userName} is occupied, try a different one`;
+        }
+        newManager.password = await bcrypt.hash(password, saltRounds);
+        newManager.managedRestaurants = []
         const insertInfo = await managerCollection.insertOne(newManager);
         if(insertInfo.insertedCount === 0)  { 
             throw 'creating new user failed'; 

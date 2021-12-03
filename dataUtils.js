@@ -122,7 +122,7 @@ function isFieldExistChecker(param, paramName) {
 
 function userFieldChecker(params, update = false) {
     let allParams = ['userName', 'streetAddress', 'city', 'state', 'zip', 
-    'email', 'phone', 'favorites'];
+    'email', 'phone'];
     if(!update) {
         // check whether all params exist or not
         allParams.push('password');
@@ -138,12 +138,6 @@ function userFieldChecker(params, update = false) {
         if(!isStringParam(params[key])) {
             throw `The type of ${key} is not a string`;
         }
-    }
-
-    // validate array of strings
-    let strArray = ['favorites'];
-    if(!isArrayOfStr(params[key])) {
-        throw `${key} is not an array of string`;
     }
 
     isValidName(params.userName);
