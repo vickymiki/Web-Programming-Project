@@ -94,4 +94,19 @@ async function getUserIdByName(userName) {
     return user._id.toString();
 }
 
-module.exports = {createUser, checkUser, updateUserProfile, getUserIdByName}
+async function changePassword(userId, oldPwd, newPwd) {
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({userName: toObjectId(userId)});
+    if(user === null)   throw `Unable to find user with id: ${userId}`;
+    let result = await bcrypt.compare(oldPwd, user.password);
+    if(!result)    throw "Username and password don't mactch";
+    user.password = await bcrypt.hash(newPwd, saltRounds);
+    const updatedInfo = await userCollection.updateOne({_id: toObjectId(id)}, {$push: {password: user.password}});
+    if(updatedInfo.modifiedCount === 0) {
+        throw "could not change password successfully";
+    }
+    return { updatePwd: true };
+}
+
+module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, changePassword}
