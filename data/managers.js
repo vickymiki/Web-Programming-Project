@@ -58,11 +58,11 @@ module.exports = {
         const managerCollection = await managers();
         const manager = await managerCollection.findOne({userName: userName});
         if(manager === null) {
-            throw 'manager not found';
+            return false;
         }
         let result = await bcrypt.compare(password, manager.password);
-        if(!result)    throw "Username and password don't mactch";
-        return { authenticated: true };
+        if(!result) return false
+        return true;
   },
     async getManagerIdByName(username) {
         isValidName(managerName);

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const user_DAL = require('../data/users');
+const manager_DAL = require('../data/managers');
 const path = require('path');
 
 router.get('/', async (req, res) => {
@@ -12,7 +13,6 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    //TODO process login form
     const loginForm = req.body
     if (!loginForm.username 
         || loginForm.username.includes(' ') 
@@ -27,23 +27,21 @@ router.post('/', async (req, res) => {
         return
     }
 
-    let dbResponse = null
-    try{
-        dbResponse = await user_DAL.checkUser(loginForm.username, loginForm.password)
-    }
-    catch(e){
-        res.status(400).render('login', {title: "Login", page_function: "Log into an account NOW", error: e})
-        return
-    }
-
-    if(dbResponse && dbResponse.authenticated){
-        req.session.user = { username: loginForm.username, accountType: dbResponse.accountType };
+    
+    if(await user_DAL.checkUser(loginForm.username, loginForm.password)){
+        req.session.user = { username: loginForm.username, accountType: 'user' };
         res.redirect('/restaurants')
         return
     }
-    else{
-        res.status(500).render('/login', {title: "Login", page_function: "Log into an account NOW", error: 'Internal Server Error'})
+    else if(await manager_DAL.checkManager(loginForm.username, loginForm.password)){
+        req.session.user = { username: loginForm.username, accountType: 'manager' };
+        res.redirect('/restaurants')
+        return
     }
+    
+    res.status(500).render('/login', {title: "Login", page_function: "Log into an account NOW", error: 'Internal Server Error'})
+    return
+
 });
 
 module.exports = router;

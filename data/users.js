@@ -56,12 +56,12 @@ async function checkUser(userName, password) {
     userName = userName.toLowerCase();
     const user = await userCollection.findOne({userName: userName});
     if(user === null) {
-        throw `user not found`;
+        return false;
     } 
 
     let result = await bcrypt.compare(password, user.password);
-    if(!result)    throw "Username and password don't mactch";
-    return { authenticated: true, accountType: user.accountType };
+    if(!result) return false
+    return true;
 
 }
 
