@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const ObjectId = require('mongodb').ObjectId;
 const user_DAL = require('./users');
+const manager_DAL = require('../data/managers');
 const restaurants = mongoCollections.restaurants;
 
 async function validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
@@ -45,7 +46,7 @@ async function addRestaurant(name, address, city, state, zip, priceRange, foodTy
     if ( insert.insertedCount === 0 ) throw "Restaurant insert failed"
     
     restaurantId = insert.insertedId.toString()
-    await user_DAL.addRestaurantToManager(restaurantId, managerUsername)
+    await manager_DAL.addRestaurantToManager(restaurantId, managerUsername)
     return {restaurantInserted: true}
 }
 
@@ -85,7 +86,7 @@ async function getAllResaurants(){
 }
 
 async function getRestaurantsManagedByUser(username){
-    if(!await user_DAL.isManager(username)){
+    if(!await manager_DAL.isManager(username)){
         return []
     }
 
