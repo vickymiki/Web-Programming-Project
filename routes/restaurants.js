@@ -139,8 +139,9 @@ router.post('/:id/reviews', async (req, res) => {
       res.render('partials/likes', { layout: null, _id: req.body.likeId, likes: Data })
       
     } catch (e) {
-      res.status(500);
-      res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+      res.status(409); //status 409 is for conflict
+      res.send(e);
+      //res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
     }
   } else if (req.body.postType == "remove_like") {
     try {
@@ -161,8 +162,9 @@ router.post('/:id/reviews', async (req, res) => {
       res.render('partials/likes', { layout: null, _id: req.body.likeId, likes: Data })
 
     } catch (e) {
-      res.status(500);
-      res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
+      res.status(409); //status 409 is for conflict
+      res.send(e);
+      //res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "add_dislike") {
     try {
@@ -183,8 +185,9 @@ router.post('/:id/reviews', async (req, res) => {
       res.render('partials/dislikes', { layout: null, _id: req.body.likeId, dislikes: Data })
 
     } catch (e) {
-      res.status(500);
-      res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
+      res.status(409); //status 409 is for conflict
+      res.send(e);
+      //res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "remove_dislike") {
     try {
@@ -205,8 +208,9 @@ router.post('/:id/reviews', async (req, res) => {
       res.render('partials/dislikes', { layout: null, _id: req.body.likeId, dislikes: Data })
 
     } catch (e) {
-      res.status(500);
-      res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
+      res.status(409); //status 409 is for conflict
+      res.send(e);
+      //res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   }
   //No longer needed, but keeping just in case

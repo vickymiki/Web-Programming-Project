@@ -51,7 +51,10 @@
           $(update).empty();
           $(update).append(newElement);
 
-        }, function () { alert("failed") });
+        }, function (error) {
+          var msg = error.responseText;
+          alert(msg);
+        });
 
       } else if (dislike) {
 
@@ -61,7 +64,10 @@
           $(update).empty();
           $(update).append(newElement);
 
-        }, function () { alert("failed") });
+        }, function (error) {
+          var msg = error.responseText;
+          alert(msg)
+        });
       }
     }
   })
