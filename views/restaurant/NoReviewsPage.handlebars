@@ -1,14 +1,16 @@
 <h1>{{page_function}}</h1>
 <body>
-  <form method="POST" id="New_Review">
+  <form method="POST" id="New_Review" action="/restaurants/{{restaurantId}}/upload" enctype="multipart/form-data">
     <input type="hidden" name="postType" value="new_review">
     <label for="review">New Review:</label>
     <input type="text" name="review">
     <label for="rating">Rating (1-5):</label>
     <input type="number" name="rating" min="1" max="5">
-    <input type="hidden" name="restaurantId" value={{restaurantId}}>
-    <input type="hidden" name="userId" value={{userId}}>
-    <input type="hidden" name="isManager" value={{isManager}}>
+    <label for="photo">Optionally add a photo:</label>
+    <input type="file" name="photo" accept="image/png, image/jpeg">
+    <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
+    <input type="hidden" name="userId" value={{loggedUserId}}>
+    <input type="hidden" name="isManager" value={{loggedIsManager}}>
     <button type="submit">Submit Review</button>
   </form>
   <h3>No Reviews Found</h3>

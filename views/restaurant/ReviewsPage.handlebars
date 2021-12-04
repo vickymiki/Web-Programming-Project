@@ -8,44 +8,48 @@
     <input type="number" name="rating" min="1" max="5">
     <label for="photo">Optionally add a photo:</label>
     <input type="file" name="photo" accept="image/png, image/jpeg">
-    <input type="hidden" name="restaurantId" value={{restaurantId}}>
+    <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
     <input type="hidden" name="userId" value={{loggedUserId}}>
     <input type="hidden" name="isManager" value={{loggedIsManager}}>
     <button type="submit">Submit Review</button>
   </form>
+  <div id="reviewList">
   {{#if reviewData.length}}
     {{#each reviewData}}  
       <div>
         <h3>Review:</h3>
         <p>Username: {{userName}} </p>
-        <img src="/images/{{imageName}}" alt="Review Image">
+        <img src="/public/images/{{imageName}}" alt="Review Image">
         <p>Review: {{review}} </p>
         <p>Date: {{date}}</p>
         <p>Rating: {{rating}}</p>
-        <p>Likes: {{likes}}
-          <form method="POST" id="Like_Button">
-            <input type="hidden" name="postType" value="add_like">
-            <input type="hidden" name="likeId" value={{_id}}>
+        <!--<p>Likes: {{likes}}</p>-->
+        <div id="likePartial_{{_id}}">
+        {{> likes}}
+        </div>
+          <form method="POST" id="LB1_{{_id}}">
+            <input type="hidden" id="postType1_{{_id}}" name="postType" value="add_like">
+            <!--<input type="hidden" id="likeId1_{{_id}}" name="likeId" value={{_id}}> not needed anymore-->
             <button type="submit">Like</button>
           </form>
-          <form method="POST" id="Remove_Like_Button">
-            <input type="hidden" name="postType" value="remove_like">
-            <input type="hidden" name="removeLikeId" value={{_id}}>
+          <form method="POST" id="LB2_{{_id}}">
+            <input type="hidden" id="postType2_{{_id}}" name="postType" value="remove_like">
+            <!--<input type="hidden" name="removeLikeId" value={{_id}}>-->
             <button type="submit">Remove Like</button>
           </form>
-        </p>
-        <p>Dislikes: {{dislikes}}
-          <form method="POST" id="Dislike_Button">
-            <input type="hidden" name="postType" value="add_dislike">
-            <input type="hidden" name="dislikeId" value={{_id}}>
+        <div id="dislikePartial_{{_id}}">
+        {{> dislikes}}
+        </div>
+          <form method="POST" id="DB1_{{_id}}">
+            <input type="hidden" id="postType3_{{_id}}" name="postType" value="add_dislike">
+            <!--<input type="hidden" name="dislikeId" value={{_id}}>-->
             <button type="submit">Dislike</button>
           </form>
-          <form method="POST" id="Remove_Dislike_Button">
-            <input type="hidden" name="postType" value="remove_dislike">
-            <input type="hidden" name="removeDislikeId" value={{_id}}>
+          <form method="POST" id="DB2_{{_id}}">
+            <input type="hidden" id="postType4_{{_id}}" name="postType" value="remove_dislike">
+            <!--<input type="hidden" name="removeDislikeId" value={{_id}}>-->
             <button type="submit">Remove Dislike</button>
           </form>
-        </p>
         {{#if replies.length}}
           <div>
             <h4>Replies:</h4>
@@ -70,4 +74,8 @@
       <br>
     {{/each}}
   {{/if}}
+  </div>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script src="/public/js/reviews_jq.js"></script>
+
 </body>
