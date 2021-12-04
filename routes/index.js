@@ -2,6 +2,7 @@
 const restaurantsRoutes = require('./restaurants');
 const signupRoutes = require('./signup');
 const loginRoutes = require('./login');
+const logoutRoutes = require('./logout');
 const profileRoutes = require('./profile');
 
 const constructorMethod = (app) => {
@@ -13,6 +14,7 @@ const constructorMethod = (app) => {
   app.use('/restaurants', restaurantsRoutes);
   app.use('/signup', signupRoutes);
   app.use('/login', loginRoutes);
+  app.use('/logout', logoutRoutes);
   app.use('/profile', profileRoutes);
 
   app.use('*', (req, res) => {
