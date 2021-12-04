@@ -63,7 +63,7 @@ async function create(restaurantId, userId, review, rating, isManager, imgname) 
   const replies = [];
   const date = new Date();
   //Format date 
-  const month = date.getMonth();
+  const month = date.getMonth() + 1; //indexes from 0
   const day = date.getDate();
   const year = date.getFullYear();
   let hours = date.getHours();
@@ -325,7 +325,7 @@ async function remove(reviewId) {
 //If we want to do this we will need to add an attribute to user for "feedback_Reviews" and "feedback_replies"
 // these will be arrays, each of which store the ids of reviews/ replies that have been liked/dislike
 // This way a user cannot like more than once, or like and dislike a post 
-async function addLike(reviewId) {
+async function addLike(reviewId, user_id, managerStatus) {
   if (!reviewId || reviewId == null) throw 'Must provide a review id';
   if (typeof reviewId !== 'string') throw 'Review id must be a string';
   if (isSpaces(reviewId)) throw 'Review id can not be only spaces';
@@ -338,9 +338,6 @@ async function addLike(reviewId) {
   if (!target) {
     throw "That review doesn't exist";
   }
-  //pull the needed info 
-  const user_id = target.userId;
-  const managerStatus = target.isManager;
   
   //First check the user/manager's review_feedback to see if they already left feedback
 
@@ -365,6 +362,7 @@ async function addLike(reviewId) {
   //Add one to the total likes of that review
   //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { likes: 1 } });
+  const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
   //Add the reviewId to the users' review_feedback so they can't like it again or dislike
   if (managerStatus) {
@@ -375,10 +373,11 @@ async function addLike(reviewId) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $push: { "review_feedback.likes": reviewId } } );
   }
 
-  return {"reviewId": reviewId, "liked": true}
+  //return {"reviewId": reviewId, "liked": true}
+  return action.likes;
 }
 
-async function addDislike(reviewId) {
+async function addDislike(reviewId, user_id, managerStatus) {
   if (!reviewId || reviewId == null) throw 'Must provide a review id';
   if (typeof reviewId !== 'string') throw 'Review id must be a string';
   if (isSpaces(reviewId)) throw 'Review id can not be only spaces';
@@ -391,9 +390,6 @@ async function addDislike(reviewId) {
   if (!target) {
     throw "That review doesn't exist";
   }
-  //pull the needed info 
-  const user_id = target.userId;
-  const managerStatus = target.isManager;
   
   //First check the user/manager's review_feedback to see if they already left feedback
 
@@ -418,6 +414,7 @@ async function addDislike(reviewId) {
   //Add one to the total dislikes of that review
   //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { dislikes: 1 } });
+  const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
   //Add the reviewId to the users' review_feedback so they can't like it again or dislike
   if (managerStatus) {
@@ -428,10 +425,11 @@ async function addDislike(reviewId) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $push: { "review_feedback.dislikes": reviewId } } );
   }
 
-  return {"reviewId": reviewId, "disliked": true}
+  //return {"reviewId": reviewId, "disliked": true}
+  return action.dislikes;
 }
 
-async function removeLike(reviewId) {
+async function removeLike(reviewId, user_id, managerStatus) {
   if (!reviewId || reviewId == null) throw 'Must provide a review id';
   if (typeof reviewId !== 'string') throw 'Review id must be a string';
   if (isSpaces(reviewId)) throw 'Review id can not be only spaces';
@@ -444,9 +442,6 @@ async function removeLike(reviewId) {
   if (!target) {
     throw "That review doesn't exist";
   }
-  //pull the needed info 
-  const user_id = target.userId;
-  const managerStatus = target.isManager;
   
   //First check the user/manager's review_feedback to see if they already left feedback
 
@@ -465,6 +460,7 @@ async function removeLike(reviewId) {
   //Remove one from the total dlikes of that review
   //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { likes: -1 } });
+  const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
   //Remove the reviewId from the users' review_feedback so they can like it again or dislike
   if (managerStatus) {
@@ -475,10 +471,11 @@ async function removeLike(reviewId) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $pull: { "review_feedback.likes": reviewId } } );
   }
 
-  return {"reviewId": reviewId, "liked": false}
+  //return {"reviewId": reviewId, "liked": false}
+  return action.likes;
 }
 
-async function removeDislike(reviewId) {
+async function removeDislike(reviewId, user_id, managerStatus) {
   if (!reviewId || reviewId == null) throw 'Must provide a review id';
   if (typeof reviewId !== 'string') throw 'Review id must be a string';
   if (isSpaces(reviewId)) throw 'Review id can not be only spaces';
@@ -491,9 +488,6 @@ async function removeDislike(reviewId) {
   if (!target) {
     throw "That review doesn't exist";
   }
-  //pull the needed info 
-  const user_id = target.userId;
-  const managerStatus = target.isManager;
   
   //First check the user/manager's review_feedback to see if they already left feedback
 
@@ -512,6 +506,7 @@ async function removeDislike(reviewId) {
   //Remove one from the total dislikes of that review
   //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { dislikes: -1 } });
+  const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
   //Remove the reviewId from the users' review_feedback so they can like it again or dislike
   if (managerStatus) {
@@ -522,7 +517,8 @@ async function removeDislike(reviewId) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $pull: { "review_feedback.dislikes": reviewId } } );
   }
 
-  return {"reviewId": reviewId, "disliked": false}
+  //return {"reviewId": reviewId, "disliked": false}
+  return action.dislikes;
 }
 
 module.exports = {
