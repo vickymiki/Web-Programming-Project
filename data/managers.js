@@ -72,10 +72,10 @@ async function checkManager(userName, password) {
     return true;
 }
 
-async function getManagerIdByName(username) {
+async function getManagerIdByName(managerName) {
     isValidName(managerName);
     const managerCollection = await managers();
-    const manager = await managerCollection.findOne({ userName: username });
+    const manager = await managerCollection.findOne({ userName: managerName });
     if(manager === null) {
         throw "manager not found";
     }
