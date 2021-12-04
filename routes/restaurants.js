@@ -76,14 +76,47 @@ router.get('/menu/edit/:id', async (req, res) => {
   const id = req.params.id
 
   //Check that the person attempting to access this is the manager of 
-  if (!req.session.user && !id && !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
+  if (!req.session.user || !id || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
     return res.status(403).redirect('/restaurants')
   }
 
   //Get restaurant menu items, then display page with form for creating a new item,
   // and list existing items with remove/edit options
   const restaurant = await restaurants_DAL.getRestaurantFromId(id)
-  res.render('restaurant/RestaurantPage', {title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant})
+  res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant})
+});
+
+router.post('/menu/add/:id', async (req, res) => {
+  const id = req.params.id
+  
+  //Check that the person attempting to access this is the manager of 
+  if (!req.session.user || !id || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
+    return res.status(403).redirect('/restaurants')
+  }
+
+  const form = req.body
+  const restaurant = await restaurants_DAL.getRestaurantFromId(id)
+
+  if(!form.foodname){
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Food name not provided!"})
+    return
+  }
+
+  if(!form.price){
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Price not provided!"})
+    return
+  }
+
+  try{
+      await restaurants_DAL.addFood_Item(restaurant._id, {foodname: form.foodname, price: form.price})
+  }
+  catch(e){
+      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      return
+  }
+  
+  res.redirect('/restaurants/menu/edit/' + restaurant._id)
+  return
 });
 
 router.post('/:id/reviews', async (req, res) => {

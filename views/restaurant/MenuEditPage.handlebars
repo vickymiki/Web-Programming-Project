@@ -2,61 +2,20 @@
   {{#if error}}
     <h2 id="error">{{error}}</h2>
   {{/if}}
-  <form method="POST" id="menu-form" action="/restaurants/menu/edit">
-    <label id="name">Food name:
+  <form method="POST" id="menu-form" action="/restaurants/menu/add">
+    <label id="foodname">Food name:
       <input type = "text" name="foodname" placeholder="Food name"/>
     </label>
     <br>
-    <label id="streetAddress">Street Address:
-      <input type = "text" name="streetAddress" placeholder="Street Address"/>
+    <label id="price">Price:
+      <input type = "text" name="price" placeholder="5.99"/>
     </label>
     <br>
-    <label id="city">City:
-      <input type = "text" name="city" placeholder="City"/>
-    </label>
-    <br>
-    <!--TODO: change to dropdown -->
-    <label id="state">State:
-      <input type = "text" name="state" placeholder="State"/>
-    </label>
-    <br>
-    <label id="zip">Zip:
-      <input type = "text" name="zip" placeholder="Zip"/>
-    </label>
-    <br>
-    <label id="email">Email:
-      <input type = "text" name="email" placeholder="Email"/>
-    </label>
-    <br>
-    <label id="phone">Phone:
-      <input type = "text" name="phone" placeholder="123-456-7890"/>
-    </label>
-    <br>
-
-    <label for="priceRange">Choose a price range:</label>
-    <select name="priceRange" id="priceRange">
-      <option value="$">$</option>
-      <option value="$$">$$</option>
-      <option value="$$$">$$$</option>
-      <option value="$$$$">$$$$</option>
-    </select>
-    <br>
-
-    <p>Select Restaurant Food Categories:</p>
-    <label id="asian">Asian:
-      <input type = "checkbox" name="asian"/>
-    </label>
-    <br>
-    <label id="american">American:
-      <input type = "checkbox" name="american"/>
-    </label>
-    <br>
-    <label id="Italian">Italian:
-      <input type = "checkbox" name="italian"/>
-    </label>
-    <br>
-
     <label id="submit">Submit:
       <input type="submit"/>
     </label>
+
+    {{#each restaurant.menuItems}}
+        <h1>food item</h1>
+    {{/each}}
 </form>

@@ -105,17 +105,16 @@ async function removeRestaurant(restaurant_id){
     return {restaurantDeleted: true}
 }
 
-async function addFood_Items(restaurant_id, foodItems){
+async function addFood_Item(restaurant_id, foodItem){
     // TODO
     //foodObj = validateFoodObject(foodItems)
     restaurant_id = validateObjectId(restaurant_id)
     const restaurantCollection = await restaurants()
-    for (const item of foodItems) {
-        let update = await restaurantCollection.updateOne({_id: restaurant_id}, {$push: {menuItems: item}})
-        if(update.matchedCount === 0) throw `Failed to add food item: ${item}`    
-    }
+    
+    let update = await restaurantCollection.updateOne({_id: restaurant_id}, {$push: {menuItems: foodItem}})
+    if(update.matchedCount === 0) throw `Failed to add food item: ${item}`    
 
     return {restaurantFoodUpdated: true}
 }
 
-module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Items, getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser}
+module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Item, getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser}

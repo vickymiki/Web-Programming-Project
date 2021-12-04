@@ -1,12 +1,9 @@
 const mongoCollections = require('../config/mongoCollections');
 const managers = mongoCollections.managers;
-const users = mongoCollections.users;
 const user_DAL = require('./users');
-const restaurant_DAL = require('./restaurants');
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { isValidName, isValidPassword, managerFieldChecker } = require('../dataUtils');
-const { restaurants } = require('../config/mongoCollections');
 
 async function createManager(userName, streetAddress, city, state, zip, email, phone, password) {
 
@@ -102,11 +99,9 @@ async function addRestaurantToManager(restaurantId, managerName){
     if(manager === null) {
         throw "manager not found";
     }
-    let restaurants = manager.restaurants;
-    restaurants.push(restaurantId);
 
     const managerCollection = await managers();
-    let updateInfo = await managerCollection.updateOne({userName: managerName}, {$push: {restaurants: restaurants}});
+    let updateInfo = await managerCollection.updateOne({userName: managerName}, {$push: {restaurants: restaurantId}});
     if(updateInfo.matchedCount === 0) throw `Failed to add restaurant to manager: ${managerName}.`
     return { addRestaurant: true};
 }
@@ -123,19 +118,17 @@ async function isManager(username){
 }
 
 async function userIsManagerOfRestaurant(userName, restaurantId){
-    let restaurant = null
+    
+    let manager = null
     try{
-        restaurant = await restaurant_DAL.getRestaurantFromId(restaurantId)
+        manager = await getManagerByName(userName)
     }
     catch(e){
         return false
     }
 
-    if(restaurant.managerUsername === userName){
-        return true
-    }
-
-    return false
+    let idFound = manager.restaurants.find(x => x === restaurantId)
+    return idFound
 }
 
 module.exports = {createManager, checkManager, getManagerIdByName, getManagerByName, addRestaurantToManager, isManager, userIsManagerOfRestaurant}
