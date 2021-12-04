@@ -60,6 +60,7 @@ async function checkIfAddressExists(address, city, state, zip){
     }
 }
 
+//TODO restaurant names aren't guarenteed to be unique, might want to remove as it's misleading
 async function getRestaurantIdFromName(name){
     const restaurantCollection = await restaurants()
     const restQuery = await restaurantCollection.findOne({restaurantName: name})
@@ -91,7 +92,8 @@ async function getRestaurantsManagedByUser(username){
     }
 
     const restaurantCollection = await restaurants()
-    const restQuery = await restaurantCollection.find({}, { managerUsername: username }).toArray();
+    let restQuery = await restaurantCollection.find({}, { managerUsername: username }).toArray();
+    restQuery.forEach(x => x._id = x._id.toString())
     return restQuery
 }
 

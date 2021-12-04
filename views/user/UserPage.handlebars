@@ -5,6 +5,17 @@
   {{#if restaurants.length}}
     {{#each restaurants}}  
     <h1>{{restaurantName}}</h1>
+    <ul>
+      <li>
+        <a href="/orders/{{_id}}">View Orders</a>
+      </li>
+      <li>
+        <a href="/restaurants/menu/edit/{{_id}}">Edit Menu</a>
+      </li>
+      <li>
+        <a href="">View Comments</a>
+      </li>
+    </ul>
     {{/each}}
   {{/if}}
 {{/if}}

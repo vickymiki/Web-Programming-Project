@@ -71,6 +71,21 @@ router.get('/:id/reviews', async (req, res) => {
   }
 });
 
+router.get('/menu/edit/:id', async (req, res) => {
+  
+  const id = req.params.id
+
+  //Check that the person attempting to access this is the manager of 
+  if (!req.session.user && !id && !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
+    return res.status(403).redirect('/restaurants')
+  }
+
+  //Get restaurant menu items, then display page with form for creating a new item,
+  // and list existing items with remove/edit options
+  const restaurant = await restaurants_DAL.getRestaurantFromId(id)
+  res.render('restaurant/RestaurantPage', {title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant})
+});
+
 router.post('/:id/reviews', async (req, res) => {
   if (req.body.postType == "add_like") {
     try {
