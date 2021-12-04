@@ -74,32 +74,88 @@ router.get('/:id/reviews', async (req, res) => {
 router.post('/:id/reviews', async (req, res) => {
   if (req.body.postType == "add_like") {
     try {
-      await reviews_DAL.addLike(req.body.likeId);
-      res.redirect(`/restaurants/${req.params.id}/reviews`);
+      let isManager = null;
+      let userId = null;
+      if (req.session.user.accountType === "user") {
+        isManager = false;
+        userId = await user_DAL.getUserIdByName(req.session.user.username);
+      }
+      else if (req.session.user.accountType === "manager") {
+        isManager = true;
+        userId = await manager_DAL.getManagerIdByName(req.session.user.username);
+      }
+      else res.redirect(`/login`);
+
+      let Data = await reviews_DAL.addLike(req.body.likeId, userId, isManager);
+      //res.redirect(`/restaurants/${req.params.id}/reviews`);
+      res.render('partials/likes', { layout: null, _id: req.body.likeId, likes: Data })
+      
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
     }
   } else if (req.body.postType == "remove_like") {
     try {
-      await reviews_DAL.removeLike(req.body.removeLikeId);
-      res.redirect(`/restaurants/${req.params.id}/reviews`);
+      let isManager = null;
+      let userId = null;
+      if (req.session.user.accountType === "user") {
+        isManager = false;
+        userId = await user_DAL.getUserIdByName(req.session.user.username);
+      }
+      else if (req.session.user.accountType === "manager") {
+        isManager = true;
+        userId = await manager_DAL.getManagerIdByName(req.session.user.username);
+      }
+      else res.redirect(`/login`);
+
+      let Data = await reviews_DAL.removeLike(req.body.likeId, userId, isManager);
+      //res.redirect(`/restaurants/${req.params.id}/reviews`);
+      res.render('partials/likes', { layout: null, _id: req.body.likeId, likes: Data })
+
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "add_dislike") {
     try {
-      await reviews_DAL.addDislike(req.body.dislikeId);
-      res.redirect(`/restaurants/${req.params.id}/reviews`);
+      let isManager = null;
+      let userId = null;
+      if (req.session.user.accountType === "user") {
+        isManager = false;
+        userId = await user_DAL.getUserIdByName(req.session.user.username);
+      }
+      else if (req.session.user.accountType === "manager") {
+        isManager = true;
+        userId = await manager_DAL.getManagerIdByName(req.session.user.username);
+      }
+      else res.redirect(`/login`);
+
+      let Data = await reviews_DAL.addDislike(req.body.likeId, userId, isManager);
+      //res.redirect(`/restaurants/${req.params.id}/reviews`);
+      res.render('partials/dislikes', { layout: null, _id: req.body.likeId, dislikes: Data })
+
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "remove_dislike") {
     try {
-      await reviews_DAL.removeDislike(req.body.removeDislikeId);
-      res.redirect(`/restaurants/${req.params.id}/reviews`);
+      let isManager = null;
+      let userId = null;
+      if (req.session.user.accountType === "user") {
+        isManager = false;
+        userId = await user_DAL.getUserIdByName(req.session.user.username);
+      }
+      else if (req.session.user.accountType === "manager") {
+        isManager = true;
+        userId = await manager_DAL.getManagerIdByName(req.session.user.username);
+      }
+      else res.redirect(`/login`);
+
+     let Data = await reviews_DAL.removeDislike(req.body.likeId, userId, isManager);
+      //res.redirect(`/restaurants/${req.params.id}/reviews`);
+      res.render('partials/dislikes', { layout: null, _id: req.body.likeId, dislikes: Data })
+
     } catch (e) {
       res.status(500);
       res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
