@@ -93,7 +93,12 @@ async function getRestaurantsManagedByUser(username){
 
     const restaurantCollection = await restaurants()
     let restQuery = await restaurantCollection.find({managerUsername: username}).toArray();
-    restQuery.forEach(x => x._id = x._id.toString())
+    restQuery.forEach(x => {
+        x._id = x._id.toString()
+        x.menuItems.forEach(y => {
+            y._id = y._id.toString()
+        })
+    })
     return restQuery
 }
 
@@ -110,7 +115,7 @@ async function addFood_Item(restaurant_id, foodItem){
     //foodObj = validateFoodObject(foodItems)
     restaurant_id = validateObjectId(restaurant_id)
     const restaurantCollection = await restaurants()
-    
+    foodItem._id = ObjectId()
     let update = await restaurantCollection.updateOne({_id: restaurant_id}, {$push: {menuItems: foodItem}})
     if(update.matchedCount === 0) throw `Failed to add food item: ${item}`    
 
