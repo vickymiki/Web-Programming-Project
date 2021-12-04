@@ -92,7 +92,7 @@ async function getRestaurantsManagedByUser(username){
     }
 
     const restaurantCollection = await restaurants()
-    let restQuery = await restaurantCollection.find({}, { managerUsername: username }).toArray();
+    let restQuery = await restaurantCollection.find({managerUsername: username}).toArray();
     restQuery.forEach(x => x._id = x._id.toString())
     return restQuery
 }
