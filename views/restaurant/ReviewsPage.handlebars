@@ -1,13 +1,14 @@
 <h1>{{page_function}}</h1>
 <body>
+  <div id="reviewErr"></div>
   <form method="POST" id="New_Review" action="/restaurants/{{restaurantId}}/upload" enctype="multipart/form-data">
     <input type="hidden" name="postType" value="new_review">
     <label for="review">New Review:</label>
-    <input type="text" name="review">
+    <input type="text" name="review" maxlength="280" required>
     <label for="rating">Rating (1-5):</label>
-    <input type="number" name="rating" min="1" max="5">
+    <input type="number" name="rating" min="1" max="5" required>
     <label for="photo">Optionally add a photo:</label>
-    <input type="file" name="photo" accept="image/png, image/jpeg">
+    <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
     <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
     <input type="hidden" name="userId" value={{loggedUserId}}>
     <input type="hidden" name="isManager" value={{loggedIsManager}}>
@@ -63,7 +64,7 @@
         <form method="POST" id="New_Reply">
           <label for="reply">Reply:</label>
           <input type="hidden" name="postType" value="new_reply">
-          <input type="text" name="reply">
+          <input type="text" name="reply" maxlength ="280" required>
           <input type="hidden" name="reviewId" value={{_id}}>
           <!-- Had to go about this a different way = was pulling the id of the og review user-->
           <!--<input type="hidden" name="userId" value={{loggedUserId}}>

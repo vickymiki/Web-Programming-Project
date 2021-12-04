@@ -1,5 +1,6 @@
 (function ($) {
   
+  $("#reviewErr").empty();
   let restaurantId = document.getElementById('restaurantId').value;
 
   //Listen for all forms 
@@ -69,6 +70,17 @@
           alert(msg)
         });
       }
+    } else {
+      var reviewForm = document.getElementById("New_Review");
+      if (reviewForm) {
+        var myFile = document.getElementById("photo").files[0].name;
+        var extension = myFile.split(".")[1];
+        if (extension !== "png" || extension !== "jpeg" || extension !== "jpg") {
+          $("#reviewErr").empty();
+          $("#reviewErr").append('<h2 id="errMsg">Image submission is optional, but file must be png, jpeg, or jpg format</h2>');
+          event.preventDefault();
+        }
+       }
     }
   })
 
