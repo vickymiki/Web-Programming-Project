@@ -65,7 +65,7 @@ router.get('/:id/reviews', async (req, res) => {
   }
 
   if (reviewData.length == 0) {
-    res.render('restaurant/NoReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, restaurantId: id, userId: userId, isManager: isManager });
+    res.render('restaurant/NoReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
   } else {
     res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `View reviews for ${restaurant.restaurantName}`, reviewData: reviewData, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
   }
