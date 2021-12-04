@@ -1,9 +1,12 @@
 const mongoCollections = require('../config/mongoCollections');
 const managers = mongoCollections.managers;
 const users = mongoCollections.users;
+const user_DAL = require('./users');
+const restaurant_DAL = require('./restaurants');
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { isValidName, isValidPassword, managerFieldChecker } = require('../dataUtils');
+const { restaurants } = require('../config/mongoCollections');
 
 async function createManager(userName, streetAddress, city, state, zip, email, phone, password) {
 
@@ -24,18 +27,28 @@ async function createManager(userName, streetAddress, city, state, zip, email, p
     
     userName = userName.toLowerCase();
     newManager.userName = userName;
-    const managerCollection = await managers();
-    const manager = await managerCollection.findOne({userName: userName});
-    if(manager !== null) {
-        throw `${userName} is occupied, try a different one`;
+    
+    //Check that the user doesn't already exist, throw if it does
+    let userProfile = null
+    let managerProfile = null
+    try{
+        managerProfile = await getManagerByName(userName)
+    }catch(e){
+        //pass
+    }
+    try{
+        userProfile = await user_DAL.getUserProfileByName(userName)
+    }catch(e){
+        //pass
     }
 
-    const userCollection = await users();
-    const user = await userCollection.findOne({userName: userName});
-    if(user !== null) {
-        throw `${userName} is occupied, try a different one`;
+    if(managerProfile || userProfile){
+        throw `Username already exists!`
     }
+
     newManager.password = await bcrypt.hash(password, saltRounds);
+
+    const managerCollection = await managers();
     const insertInfo = await managerCollection.insertOne(newManager);
     if(insertInfo.insertedCount === 0)  { 
         throw 'creating new user failed'; 
@@ -109,5 +122,20 @@ async function isManager(username){
     return false
 }
 
+async function userIsManagerOfRestaurant(userName, restaurantId){
+    let restaurant = null
+    try{
+        restaurant = await restaurant_DAL.getRestaurantFromId(restaurantId)
+    }
+    catch(e){
+        return false
+    }
 
-module.exports = {createManager, checkManager, getManagerIdByName, getManagerByName, addRestaurantToManager, isManager}
+    if(restaurant.managerUsername === userName){
+        return true
+    }
+
+    return false
+}
+
+module.exports = {createManager, checkManager, getManagerIdByName, getManagerByName, addRestaurantToManager, isManager, userIsManagerOfRestaurant}
