@@ -279,7 +279,7 @@ router.post('/:id/upload', upload.single("photo"), async (req, res) => {
 
   } catch (e) {
     //TODO set status code
-    res.render('error/error', { error: "Inernal error", title: "Error", page_function: "Error Display" });
+    res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
   }
   
 });
