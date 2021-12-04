@@ -29,7 +29,7 @@
 {{#each restaurant.menuItems}}
     <p>{{foodname}}</p>
     <p>{{price}}</p>
-    <form method="POST" id="modify-form" action="/restaurants/menu/modify/{{_id}}">
+    <form method="POST" id="modify-form" action="/restaurants/menu/modify/{{../restaurant._id}}/{{_id}}">
     <label id="submit_modify">
         <input type="submit" value="Modify"/>
     </label>
