@@ -49,7 +49,7 @@ async function create(reviewId, userId, reply, isManager) {
 
   //Format date 
   const date = new Date();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1; //indexese from 0
   const day = date.getDate();
   const year = date.getFullYear();
   let hours = date.getHours();
