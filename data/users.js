@@ -3,7 +3,7 @@ const users = mongoCollections.users;
 const managers = mongoCollections.managers;
 const { toObjectId, isValidName, isValidPassword, userFieldChecker } = require("../dataUtils"); 
 const bcrypt = require('bcrypt');
-const { use } = require('../routes/restaurants');
+//const { use } = require('../routes/restaurants');
 const saltRounds = 16;
 
 
