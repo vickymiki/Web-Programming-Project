@@ -2,7 +2,8 @@
   {{#if error}}
     <h2 id="error">{{error}}</h2>
   {{/if}}
-  <form method="POST" id="menu-form" action="/restaurants/menu/add">
+  <h2>Add New Item</h2>
+  <form method="POST" id="menu-form" action="/restaurants/menu/add/{{restaurant._id}}">
     <label id="foodname">Food name:
       <input type = "text" name="foodname" placeholder="Food name"/>
     </label>
@@ -15,7 +16,11 @@
       <input type="submit"/>
     </label>
 
+    {{#if restaurant.menuItems.length}}
+    <h2>Edit Existing Item</h2>
     {{#each restaurant.menuItems}}
-        <h1>food item</h1>
+        <p>{{foodname}}</p>
+        <p>{{price}}</p>
     {{/each}}
+    {{/if}}
 </form>
