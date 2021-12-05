@@ -2,16 +2,17 @@
 {{#if error}}
 <h2 id="error">{{error}}</h2>
 {{/if}}
-<h2>Add New Item</h2>
-<form method="POST" id="menu-form" action="/restaurants/menu/add/{{restaurant._id}}">
+<h2>Edit Item</h2>
+<form method="POST" id="menu-form" action="/restaurants/menu/modify/{{restaurant._id}}/{{foodItem._id}}/">
 <label id="itemName">Food name:
-    <input type = "text" name="itemName" placeholder="Food name"/>
+    <input type = "text" name="itemName" placeholder="Food name" value="{{foodItem.itemName}}"/>
 </label>
 <br>
 <label id="price">Price:
-    <input type = "text" name="price" placeholder="5.99"/>
+    <input type = "text" name="price" placeholder="5.99" value="{{foodItem.price}}"/>
 </label>
 <br>
+{{#if foodItem.isBurger}}
 <label id="superburger">Super Burger
     <input type = "radio" name="customType" value="superburger" checked/>
 </label>
@@ -34,29 +35,39 @@
     <ul id="customList"></ul>
     
 <br>
+{{else}}
+<label id="superburger">Super Burger
+    <input type = "radio" name="customType" value="superburger" />
+</label>
+<label id="notsuperburger">Not Super Burger
+    <input type = "radio" name="customType" value="notsuperburger" checked/>
+</label>
+<br>
+<p id="superburgerselected" hidden>No customization can be added for the Super Burger</p>
+<div id="customArea">
+    <p id="error" hidden>Custom Option Cannot Be Empty</p>
+    <label id="customText">Custom Option
+        <input type = "text" name="customText" id="customTextbox" class="customOptions" placeholder="Custom Option"/>
+    </label>
+    <label id="addCustom">
+        <input type="submit" id="addCustomButton" value="Add Item"/>
+    </label>
+    <label id="deleteCustom">
+        <input type="submit" id="deleteCustomButton" value="Delete Last Item"/>
+    </label>
+    <ul id="customList">
+        {{#each foodItem.customizableComponents}}
+        <li id="item{{@index}}">{{this}}</li>
+        {{/each}}
+    </ul>
+    
+<br>
+{{/if}}
 </div>
 <label id="submit">Submit:
     <input type="submit" id="submitButton"/>
 </label>
 </form>
-
-{{#if restaurant.menuItems.length}}
-<h2>Edit Existing Item</h2>
-{{#each restaurant.menuItems}}
-    <p>{{itemName}}</p>
-    <p>{{price}}</p>
-    <form method="GET" id="modify-form" action="/restaurants/menu/modify/{{../restaurant._id}}/{{_id}}">
-    <label id="submit_modify">
-        <input type="submit" value="Modify"/>
-    </label>
-    </form>
-    <form method="POST" id="delete-form" action="/restaurants/menu/delete/{{../restaurant._id}}/{{_id}}">
-    <label id="submit">
-        <input type="submit" value="Delete"/>
-    </label>
-    </form>
-{{/each}}
-{{/if}}
 
 <script
     src="https://code.jquery.com/jquery-3.5.1.js"
