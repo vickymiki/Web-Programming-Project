@@ -119,6 +119,28 @@ router.post('/menu/add/:id', async (req, res) => {
   return
 });
 
+router.post('/menu/delete/:restid/:foodid', async (req, res) => {
+  const foodid = req.params.foodid
+  const restid = req.params.restid
+  const restaurant = await restaurants_DAL.getRestaurantFromId(restid)
+  
+  //Check that the person attempting to access this is the manager of 
+  if (!req.session.user || !foodid || !restid || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, restid)){
+    return res.status(403).redirect('/restaurants')
+  }
+
+  try{
+      await restaurants_DAL.removeFood_Item(restid, foodid)
+  }
+  catch(e){
+      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      return
+  }
+  
+  res.redirect('/restaurants/menu/edit/' + restid)
+  return
+});
+
 router.post('/:id/reviews', async (req, res) => {
   if (req.body.postType == "add_like") {
     try {
@@ -279,7 +301,7 @@ router.post('/:id/upload', upload.single("photo"), async (req, res) => {
 
   } catch (e) {
     //TODO set status code
-    res.render('error/error', { error: "Inernal error", title: "Error", page_function: "Error Display" });
+    res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
   }
   
 });

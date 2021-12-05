@@ -1,26 +1,43 @@
 <h1>{{page_function}}</h1>
-  {{#if error}}
-    <h2 id="error">{{error}}</h2>
-  {{/if}}
-  <h2>Add New Item</h2>
-  <form method="POST" id="menu-form" action="/restaurants/menu/add/{{restaurant._id}}">
-    <label id="foodname">Food name:
-      <input type = "text" name="foodname" placeholder="Food name"/>
-    </label>
-    <br>
-    <label id="price">Price:
-      <input type = "text" name="price" placeholder="5.99"/>
-    </label>
-    <br>
-    <label id="submit">Submit:
-      <input type="submit"/>
-    </label>
-
-    {{#if restaurant.menuItems.length}}
-    <h2>Edit Existing Item</h2>
-    {{#each restaurant.menuItems}}
-        <p>{{foodname}}</p>
-        <p>{{price}}</p>
-    {{/each}}
-    {{/if}}
+{{#if error}}
+<h2 id="error">{{error}}</h2>
+{{/if}}
+<h2>Add New Item</h2>
+<form method="POST" id="menu-form" action="/restaurants/menu/add/{{restaurant._id}}">
+<label id="foodname">Food name:
+    <input type = "text" name="foodname" placeholder="Food name"/>
+</label>
+<br>
+<label id="price">Price:
+    <input type = "text" name="price" placeholder="5.99"/>
+</label>
+<br>
+<label id="superburger">Super Burger
+    <input type = "radio" name="customType" value="superburger"/>
+</label>
+<label id="notsuperburger">Not Super Burger
+    <input type = "radio" name="customType" value="notsuperburger"/>
+</label>
+<br>
+<label id="submit">Submit:
+    <input type="submit"/>
+</label>
 </form>
+
+{{#if restaurant.menuItems.length}}
+<h2>Edit Existing Item</h2>
+{{#each restaurant.menuItems}}
+    <p>{{foodname}}</p>
+    <p>{{price}}</p>
+    <form method="POST" id="modify-form" action="/restaurants/menu/modify/{{../restaurant._id}}/{{_id}}">
+    <label id="submit_modify">
+        <input type="submit" value="Modify"/>
+    </label>
+    </form>
+    <form method="POST" id="delete-form" action="/restaurants/menu/delete/{{../restaurant._id}}/{{_id}}">
+    <label id="submit">
+        <input type="submit" value="Delete"/>
+    </label>
+    </form>
+{{/each}}
+{{/if}}
