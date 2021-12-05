@@ -132,4 +132,31 @@ async function removeFood_Item(restaurant_id, foodItem_id){
     return {restaurantFoodUpdated: true}
 }
 
-module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Item, removeFood_Item, getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser}
+async function getFood_Item(restaurant_id, foodItem_id){
+    restaurant_id = validateObjectId(restaurant_id)
+    foodItem_id = validateObjectId(foodItem_id)
+    const restaurantCollection = await restaurants()
+    let restaurant = await restaurantCollection.findOne({_id: restaurant_id, "menuItems._id": foodItem_id})
+    if(restaurant === null) throw `Failed to get food item: ${foodItem_id}`    
+    let food = restaurant.menuItems.find(x => {
+        return x._id.toString() === foodItem_id.toString()
+    })
+    food._id = food._id.toString()
+    return food
+}
+
+async function replaceFood_Item(restaurant_id, foodItem_id, foodItem){
+    restaurant_id = validateObjectId(restaurant_id)
+    foodItem_id = validateObjectId(foodItem_id)
+    const restaurantCollection = await restaurants()
+
+    let restaurant = await restaurantCollection.updateOne({_id: restaurant_id, "menuItems._id": foodItem_id}, 
+        {$set: {"menuItems.$.itemName": foodItem.itemName,
+                "menuItems.$.price": foodItem.price,
+                "menuItems.$.isBurger": foodItem.isBurger,
+                "menuItems.$.customizableComponents": foodItem.customizableComponents}})
+    if(restaurant.matchedCount === 0) throw `Failed to update food item: ${foodItem_id}`    
+    return true
+}
+
+module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Item, removeFood_Item, getFood_Item, replaceFood_Item, getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser}

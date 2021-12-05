@@ -86,6 +86,29 @@ router.get('/menu/edit/:id', async (req, res) => {
   res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant})
 });
 
+router.get('/menu/modify/:restid/:foodid', async (req, res) => {
+  
+  const foodid = req.params.foodid
+  const restid = req.params.restid
+  const restaurant = await restaurants_DAL.getRestaurantFromId(restid)
+
+  //Check that the person attempting to access this is the manager of 
+  if (!req.session.user || !foodid || !restid || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, restid)){
+    return res.status(403).redirect('/restaurants')
+  }
+  let foodItem = null
+  try{
+      foodItem = await restaurants_DAL.getFood_Item(restid, foodid)
+  }
+  catch(e){
+      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      return
+  }
+  
+  res.render('restaurant/FoodEditPage', {title: "Edit Food Item", page_function: `Edit food item ${foodItem.itemName} for ${restaurant.restaurantName}`, restaurant: restaurant, foodItem: foodItem})
+  return
+});
+
 router.post('/menu/add/:id', async (req, res) => {
   const id = req.params.id
   
@@ -97,7 +120,7 @@ router.post('/menu/add/:id', async (req, res) => {
   const form = req.body
   const restaurant = await restaurants_DAL.getRestaurantFromId(id)
 
-  if(!form.foodname){
+  if(!form.itemName){
     res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Food name not provided!"})
     return
   }
@@ -120,10 +143,56 @@ router.post('/menu/add/:id', async (req, res) => {
   try{
       isBurger = form.customType === "superburger"
       if(isBurger) form.customOptionArray = ["Bread-top" , "seeds" , "lettuce" , "bacon" , "cheese" , "meat" , "bread-bottom"]
-      await restaurants_DAL.addFood_Item(restaurant._id, {foodname: form.foodname, price: form.price, isBurger, customizableComponents: form.customOptionArray})
+      await restaurants_DAL.addFood_Item(restaurant._id, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray})
   }
   catch(e){
       res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      return
+  }
+  
+  res.redirect('/restaurants/menu/edit/' + restaurant._id)
+  return
+});
+
+router.post('/menu/modify/:restid/:foodid', async (req, res) => {
+  const foodid = req.params.foodid
+  const restid = req.params.restid
+  const restaurant = await restaurants_DAL.getRestaurantFromId(restid)
+  
+  //Check that the person attempting to access this is the manager of 
+  if (!req.session.user || !foodid || !restid || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, restid)){
+    return res.status(403).redirect('/restaurants')
+  }
+
+  const form = req.body
+
+  if(!form.itemName){
+    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Food name not provided!"})
+    return
+  }
+
+  if(!form.price){
+    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Price not provided!"})
+    return
+  }
+
+  if(!form.customType){
+    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Custom type not provided!"})
+    return
+  }
+
+  if(!form.customOptionArray){
+    //It's ok for custom items to not be provided
+    form.customOptionArray = []
+  }
+
+  try{
+      isBurger = form.customType === "superburger"
+      if(isBurger) form.customOptionArray = ["Bread-top" , "seeds" , "lettuce" , "bacon" , "cheese" , "meat" , "bread-bottom"]
+      await restaurants_DAL.replaceFood_Item(restid, foodid, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray})
+  }
+  catch(e){
+      res.status(400).render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
       return
   }
   

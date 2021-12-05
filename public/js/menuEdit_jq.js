@@ -17,14 +17,13 @@ function handleAddCustom(){
     }
 
     $('#error').hide()
-    let customList = $('#customList')
-    let listLength = $('#customList')[0].childNodes.length
+    let listLength = $('#customList')[0].children.length
     var newItem = $(`<li id="item${listLength}"">${$('#customTextbox').val().trim()}</li>`)
     $('#customList').append(newItem)
 }
 
 function handleDeleteCustom(){
-    let listLength = $('#customList')[0].childNodes.length
+    let listLength = $('#customList')[0].children.length
     if(listLength === 0) return
 
     $(`#item${listLength-1}`).remove()
