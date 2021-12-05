@@ -67,6 +67,12 @@ function getValue() {
   //do something with that value
 }
 
+
+function getValue_item(x) {
+ 
+  console.log("_____" + x)
+}
+
 function myFunction() {
   var checkBox = document.getElementById("myCheck");
   var text = document.getElementById("text");

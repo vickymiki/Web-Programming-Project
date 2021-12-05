@@ -28,10 +28,11 @@
  {{/if}}
 
     <section>
-      <p>{{this.itemName}}</p>
-      <button class="cart">Add to cart</button>
+      <p><input type="checkbox" id={{this.itemName}}  value="bread_top" >{{this.itemName}} </p>
+      {{!-- <button class="cart">Add to cart</button> --}}
     </section>
   {{/each}}
+  <button class="cart" onclick="getValue_item()">Add to cart</button>
 {{/if}}
 
 <script
