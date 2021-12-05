@@ -13,14 +13,30 @@
 </label>
 <br>
 <label id="superburger">Super Burger
-    <input type = "radio" name="customType" value="superburger"/>
+    <input type = "radio" name="customType" value="superburger" checked/>
 </label>
 <label id="notsuperburger">Not Super Burger
     <input type = "radio" name="customType" value="notsuperburger"/>
 </label>
 <br>
+<p id="superburgerselected">No customization can be added for the Super Burger</p>
+<div id="customArea" hidden>
+    <p id="error" hidden>Custom Option Cannot Be Empty</p>
+    <label id="customText">Custom Option
+        <input type = "text" name="customText" id="customTextbox" class="customOptions" placeholder="Custom Option"/>
+    </label>
+    <label id="addCustom">
+        <input type="submit" id="addCustomButton" value="Add Item"/>
+    </label>
+    <label id="deleteCustom">
+        <input type="submit" id="deleteCustomButton" value="Delete Last Item"/>
+    </label>
+    <ul id="customList"></ul>
+    
+<br>
+</div>
 <label id="submit">Submit:
-    <input type="submit"/>
+    <input type="submit" id="submitButton"/>
 </label>
 </form>
 
@@ -41,3 +57,9 @@
     </form>
 {{/each}}
 {{/if}}
+
+<script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src='/public/js/menuEdit_jq.js'></script>

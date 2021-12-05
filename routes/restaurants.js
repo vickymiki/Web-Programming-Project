@@ -107,8 +107,20 @@ router.post('/menu/add/:id', async (req, res) => {
     return
   }
 
+  if(!form.customType){
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Custom type not provided!"})
+    return
+  }
+
+  if(!form.customOptionArray){
+    //It's ok for custom items to not be provided
+    form.customOptionArray = []
+  }
+
   try{
-      await restaurants_DAL.addFood_Item(restaurant._id, {foodname: form.foodname, price: form.price})
+      isBurger = form.customType === "superburger"
+      if(isBurger) form.customOptionArray = ["Bread-top" , "seeds" , "lettuce" , "bacon" , "cheese" , "meat" , "bread-bottom"]
+      await restaurants_DAL.addFood_Item(restaurant._id, {foodname: form.foodname, price: form.price, isBurger, customizableComponents: form.customOptionArray})
   }
   catch(e){
       res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
@@ -123,7 +135,7 @@ router.post('/menu/delete/:restid/:foodid', async (req, res) => {
   const foodid = req.params.foodid
   const restid = req.params.restid
   const restaurant = await restaurants_DAL.getRestaurantFromId(restid)
-  
+
   //Check that the person attempting to access this is the manager of 
   if (!req.session.user || !foodid || !restid || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, restid)){
     return res.status(403).redirect('/restaurants')
