@@ -70,7 +70,7 @@
           alert(msg)
         });
       }
-    } else {
+    } else if (formId.length !== 0){
       var reviewForm = document.getElementById("New_Review");
       reviewForm.submit(function() {
         var myFile = document.getElementById("photo").files[0].name;
