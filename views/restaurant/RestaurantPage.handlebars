@@ -1,6 +1,47 @@
 <h1>{{page_function}}</h1>
+
+
 {{#if restaurant.menuItems.length}}
-  {{#each restaurant.menuItems}}  
+  {{#each restaurant.menuItems}}
+
+{{#if this.isBurger}}
+  <div class="box">
+      {{#if this.customizableComponents.bread_top}}
+        <div class="bread_top">
+        {{#if this.customizableComponents.seeds}}
+        <div class="seeds1"></div>
+        <div class="seeds2"></div>
+        <div class="seeds3"></div>
+        <div class="seeds4"></div>
+        <div class="seeds5"></div>
+        {{/if}}
+        </div>
+      {{/if}}
+      {{#if this.customizableComponents.lettuce}}
+        <div class="lettuce"></div>
+      {{/if}}
+      {{#if this.customizableComponents.bacon}}
+        <div class="bacon"></div>
+      {{/if}}
+      {{#if this.customizableComponents.cheese}}
+        <div class="cheese"></div>
+      {{/if}}
+      {{#if this.customizableComponents.meat}}
+        <div class="meat"></div>
+      {{/if}}
+      {{#if this.customizableComponents.bread_bottom}}
+        <div class="bread_bottom"></div>
+      {{/if}}
+  </div>
+  <label><input type="checkbox" value="bread_top" > Top Bread</label>
+  <label><input type="checkbox" value="seeds" > Seeds</label>
+  <label><input type="checkbox" value="lettuce" > Lettuce</label>
+  <label><input type="checkbox" value="bacon" > Bacon</label>
+  <label><input type="checkbox" value="cheese" > Cheese</label>
+  <label><input type="checkbox" value="meat" > Meat</label>
+  <label><input type="checkbox" value="bread_bottom" name=""> Bottom Bread</label>
+
+{{/if}}
     <section>
       <p>{{this.itemName}}</p>
       <button class="cart">Add to cart</button>
