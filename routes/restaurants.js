@@ -44,26 +44,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
-  const id = req.params.id;
-  let menuItem = {};
-  menuItem._id = ObjectId(req.body.id);
-  menuItem.itemName = req.body.itemName;
-  menuItem.price = Number(req.body.price);
-  menuItem.customizableComponents = [];
-  for (const key in req.body) {
-    if (key !== 'id' && key !== 'itemName' && key !== 'price' && key !== 'quantity') {
-      (menuItem.customizableComponents).push(key);
-    }
-  }
-  const currentOrderId = await orders_DAL.findCurrentOrder(req.session.user.username, id);
-  for (let i = 0; i < req.body.quantity; i++) {
-    await orders_DAL.addItemToOrder(currentOrderId, menuItem);
-  }
-  //Todo redirect to viewcart page
-  res.redirect(`/restaurants/${id}`);
-});
-
 router.get('/:id/reviews', async (req, res) => {
   const id = req.params.id
   let restaunt = null;
@@ -496,5 +476,26 @@ router.post('/create', async (req, res) => {
   res.redirect('/profile')
   return
 });
+
+router.post('/:id', async (req, res) => {
+  const id = req.params.id;
+  let menuItem = {};
+  menuItem._id = ObjectId(req.body.id);
+  menuItem.itemName = req.body.itemName;
+  menuItem.price = Number(req.body.price);
+  menuItem.customizableComponents = [];
+  for (const key in req.body) {
+    if (key !== 'id' && key !== 'itemName' && key !== 'price' && key !== 'quantity') {
+      (menuItem.customizableComponents).push(key);
+    }
+  }
+  const currentOrderId = await orders_DAL.findCurrentOrder(req.session.user.username, id);
+  for (let i = 0; i < req.body.quantity; i++) {
+    await orders_DAL.addItemToOrder(currentOrderId, menuItem);
+  }
+  //Todo redirect to viewcart page
+  res.redirect(`/restaurants/${id}`);
+});
+
 
 module.exports = router;
