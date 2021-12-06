@@ -216,6 +216,21 @@ async function getPlacedOrdersFromIds(order_id_array){
   return myOrders
 }
 
+async function getCompletedOrdersFromIds(order_id_array){
+  const orderCollection = await orders();
+  const myOrders = []
+  
+  for (const order_id of order_id_array) {
+    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "delivered" })
+    if(myOrder !== null) {
+      myOrder._id = myOrder._id.toString()
+      myOrders.push(myOrder)
+    }
+  }
+  
+  return myOrders
+}
+
 module.exports = {
   initOrder,
   addItemToOrder,
@@ -225,5 +240,6 @@ module.exports = {
   deleteOrder,
   findCurrentOrder,
   findOrderItems,
-  getPlacedOrdersFromIds
+  getPlacedOrdersFromIds,
+  getCompletedOrdersFromIds
 };

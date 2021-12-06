@@ -38,8 +38,15 @@ router.get('/completed/:restid', async (req, res) => {
     if (!req.session.user || !id || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
       return res.status(403).redirect('/restaurants')
     }
-  
-  res.render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create a restaurant!"})
+
+    let restaurantOrders = await restaurants_DAL.getRestaurantFromId(id)
+    restaurantOrders = restaurantOrders.ordersPlaced
+    let placedOrdersArray = []
+    if(restaurantOrders.length > 0){
+        placedOrdersArray = await orders_DAL.getCompletedOrdersFromIds(restaurantOrders)
+    }
+
+    res.render('orders/OrdersCompletedPage', {title: "Completed Orders", page_function: "View Completed Customer Orders!", orders: placedOrdersArray})
 });
 
 router.post('/complete/:restid/:orderid', async (req, res) => {
