@@ -17,6 +17,10 @@ body {
   font-size: 40px;
 }
 
+.w-30 {
+    width: 30%!important;
+}
+
 .fs_20 {
   font-size: 20px !important;
 }
@@ -58,3 +62,48 @@ body {
   border-radius: 8px;
   background-color: #edc1c1;
 }
+
+
+/* Signup Page */
+
+.signup_div {
+  background-color: #dce7b1;
+  margin-top: 100px;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  padding: 75px 34px 28px 75px !important;
+}
+
+.username_input {
+ margin-left: 64px;
+}
+.password_input {
+    margin-left: 69px;
+}
+.streetAddress_input {
+    margin-left: 37px;
+}
+.city_input {
+    margin-left: 103px;
+}
+.state_input {
+    margin-left: 96px;
+}
+.zip_input {
+    margin-left: 107px;
+}
+.email_input {
+    margin-left: 93px;
+}
+.phone_input {
+    margin-left: 88px;
+}
+.user_label {
+    padding: 5px 89px 5px 115px
+}
+.signup_btn {
+    padding: 3px 20px 7px 20px;
+    background-color: #c3d76a;
+    height: 35px;
+    font-size: 20px;
+  }

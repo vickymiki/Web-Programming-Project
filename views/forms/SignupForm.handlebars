@@ -1,50 +1,63 @@
-<h1>IT'S TIME TO SIGN UP!</h1>
+{{!-- <h1>IT'S TIME TO SIGN UP!</h1> --}}
   {{#if error}}
     <h2 id="error">{{error}}</h2>
   {{/if}}
+  <div class="container w-30 signup_div">
   <form method="POST" id="signup-form" action="/signup">
-    <label id="username">Username:
-      <input type = "text" name="username" placeholder="Username"/>
+    <div class="">
+    <label id="username" class="">Username
+      <input type = "text" name="username" placeholder="Username" class="username_input"/>
     </label>
-    <br>
-    <label id="password">Password:
-      <input type = "password" name="password" placeholder="Password"/>
+    </div>
+    <div class="">
+    <label id="password">Password
+      <input type = "password" name="password" placeholder="Password" class="password_input"/>
     </label>
-    <br>
-    <label id="streetAddress">Street Address:
-      <input type = "text" name="streetAddress" placeholder="Street Address"/>
+    </div>
+    <div class="">
+    <label id="streetAddress">Street Address
+      <input type = "text" name="streetAddress" placeholder="Street Address" class="streetAddress_input"/>
     </label>
-    <br>
-    <label id="city">City:
-      <input type = "text" name="city" placeholder="City"/>
+    </div>
+    <div class="">
+    <label id="city">City
+      <input type = "text" name="city" placeholder="City" class="city_input"/>
     </label>
-    <br>
+    </div>
     <!--TODO: change to dropdown -->
-    <label id="state">State:
-      <input type = "text" name="state" placeholder="State"/>
+    <div class="">
+    <label id="state">State
+      <input type = "text" name="state" placeholder="State" class="state_input"/>
     </label>
-    <br>
-    <label id="zip">Zip:
-      <input type = "text" name="zip" placeholder="Zip"/>
+    </div>
+    <div class="">
+    <label id="zip">Zip
+      <input type = "text" name="zip" placeholder="Zip" class="zip_input"/>
     </label>
-    <br>
-    <label id="email">Email:
-      <input type = "text" name="email" placeholder="Email"/>
+    </div>
+    <div class="">
+    <label id="email">Email
+      <input type = "text" name="email" placeholder="Email" class="email_input"/>
     </label>
-    <br>
-    <label id="phone">Phone:
-      <input type = "text" name="phone" placeholder="123-456-7890"/>
+    </div>
+    <div class="">
+    <label id="phone">Phone
+      <input type = "text" name="phone" placeholder="123-456-7890" class="phone_input"/>
     </label>
-    <br>
-    <label id="user">User
+    </div>
+    <div class="">
+    <label id="user" class="user_label">User
       <input type = "radio" name="accountType" value="user"/>
     </label>
     <label id="manager">Manager
       <input type = "radio" name="accountType" value="manager"/>
     </label>
-    <br>
-    <label id="submit">Submit:
-      <input type="submit"/>
+    </div>
+    <div class="d-flex justify-content-center mr-4">
+    <label id="submit">
+      <input type="submit" value="Sign Up" class="signup_btn"/>
     </label>
+    </div> 
 </form>
-<a href="/login">Already have an account? Click here to log in</a>
+<div class="pl-5"><a href="/login">Already have an account? Click here to log in</a></div>
+</div>
