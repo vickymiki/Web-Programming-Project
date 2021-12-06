@@ -74,3 +74,10 @@ $('.cart').click(function(){
     alert("The cart button was clicked.");
   });
 
+
+  // form.addEventListener("submit", (event) => {
+  //   event.preventDefault();
+
+
+
+  // });

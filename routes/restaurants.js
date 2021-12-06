@@ -64,6 +64,17 @@ router.post('/:id', async (req, res) => {
   res.redirect(`/restaurants/${id}`);
 });
 
+router.post('/:id', async (req, res) => {
+  // const id = req.params.id
+  console.log(req.body)
+  console.log(req)
+
+
+  console.log(req.body.bread_top)
+  console.log(req.body.lettuce)
+
+});
+
 router.get('/:id/reviews', async (req, res) => {
   const id = req.params.id
   let restaunt = null;
