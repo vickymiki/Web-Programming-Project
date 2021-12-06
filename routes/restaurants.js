@@ -15,8 +15,10 @@ const ObjectId = require('mongodb').ObjectId;
 const upload = multer({ dest: '/uploads/'});
 
 router.get('/', async (req, res) => {
-    const allResaurants = await restaurants_DAL.getAllResaurants()
-    res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "Available Restaurants", restaurantArray: allResaurants})
+  let isManager = false;
+  if (req.session.user && req.session.user.accountType === 'manager') isManager = true
+  const allResaurants = await restaurants_DAL.getAllResaurants()
+  res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "Available Restaurants", restaurantArray: allResaurants, isManager:isManager})
 });
 
 router.get('/create', async (req, res) => {
