@@ -1,2 +1,12 @@
-/* testing */
-/* testing */
+.nav_header {
+    background: linear-gradient(#f4f0ec,#d3d3d3);
+    box-shadow: 0 3px 5px rgb(57 63 72 / 30%);
+}
+
+.fs_20 {
+font-size: 20px;
+}
+
+.webiste_title {
+    font-size: 40px;
+}
