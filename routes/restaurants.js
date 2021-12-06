@@ -16,9 +16,11 @@ const upload = multer({ dest: '/uploads/'});
 
 router.get('/', async (req, res) => {
   let isManager = false;
+  let userName = null;
   if (req.session.user && req.session.user.accountType === 'manager') isManager = true
+  if (req.session.user) userName = req.session.user.username
   const allResaurants = await restaurants_DAL.getAllResaurants()
-  res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "Available Restaurants", restaurantArray: allResaurants, isManager:isManager})
+  res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "Available Restaurants", restaurantArray: allResaurants, isManager:isManager, userName})
 });
 
 router.get('/create', async (req, res) => {
