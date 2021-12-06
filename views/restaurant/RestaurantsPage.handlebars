@@ -1,13 +1,15 @@
-<h1>{{page_function}}</h1>
+<div>
+<div class="restaurantsPage_heading">{{page_function}}</div>
 {{#if restaurantArray.length}}
     <body>
     {{#each restaurantArray}}  
-      <div>
-        <a href="/restaurants/{{_id}}">{{restaurantName}}</a>
-        <a href="/restaurants/{{_id}}/reviews">Reviews</a>
-        <p>Rating: {{rating}}</p>
+      <div class="row w-30 rest">
+        <div class="col-6 restName_link"><a href="/restaurants/{{_id}}" class="">{{restaurantName}}</a></div>
+        <div class="col-3"><a href="/restaurants/{{_id}}/reviews" class="reviews_link">Reviews</a></div>
+        <div class="col-3"><p>Rating: {{rating}}</p></div>
       </div>
       <br>
     {{/each}}
     </body>
 {{/if}}
+</div>

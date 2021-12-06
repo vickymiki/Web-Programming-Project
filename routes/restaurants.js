@@ -16,7 +16,7 @@ const upload = multer({ dest: '/uploads/'});
 
 router.get('/', async (req, res) => {
     const allResaurants = await restaurants_DAL.getAllResaurants()
-    res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "View available restaurants!", restaurantArray: allResaurants})
+    res.render('restaurant/RestaurantsPage', {title: "Restaurants", page_function: "Available Restaurants", restaurantArray: allResaurants})
 });
 
 router.get('/create', async (req, res) => {
