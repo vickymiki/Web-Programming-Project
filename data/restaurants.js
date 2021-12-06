@@ -159,4 +159,28 @@ async function replaceFood_Item(restaurant_id, foodItem_id, foodItem){
     return true
 }
 
-module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Item, removeFood_Item, getFood_Item, replaceFood_Item, getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser}
+async function addOrderToRestaurant(order_id, restaurant_id){
+    restaurant_id = validateObjectId(restaurant_id)
+    order_id = validateObjectId(order_id)
+    const restaurantCollection = await restaurants()
+    let update = await restaurantCollection.updateOne({_id: restaurant_id}, {$push: {ordersPlaced: order_id}})
+    if(update.matchedCount === 0) throw `Failed to add order: ${order_id}`    
+
+    return true
+}
+
+async function removeOrderFromRestaurant(order_id, restaurant_id){
+    restaurant_id = validateObjectId(restaurant_id)
+    order_id = validateObjectId(order_id)
+    const restaurantCollection = await restaurants()
+    let update = await restaurantCollection.updateOne({_id: restaurant_id}, {$pull: {ordersPlaced: order_id}})
+    //No need to throw on a failed delete
+    if(update.matchedCount === 0) return false   
+
+    return true
+}
+
+module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Item, 
+    removeFood_Item, getFood_Item, replaceFood_Item, 
+    getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser,
+    addOrderToRestaurant, removeOrderFromRestaurant}

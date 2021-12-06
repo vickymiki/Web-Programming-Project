@@ -4,6 +4,7 @@ const signupRoutes = require('./signup');
 const loginRoutes = require('./login');
 const logoutRoutes = require('./logout');
 const profileRoutes = require('./profile');
+const ordersRoutes = require('./orders');
 
 const constructorMethod = (app) => {
   //Default page as restaurant list
@@ -16,6 +17,7 @@ const constructorMethod = (app) => {
   app.use('/login', loginRoutes);
   app.use('/logout', logoutRoutes);
   app.use('/profile', profileRoutes);
+  app.use('/orders', ordersRoutes);
 
   app.use('*', (req, res) => {
     res.sendStatus(404);

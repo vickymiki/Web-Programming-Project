@@ -7,7 +7,10 @@
     <h1>{{restaurantName}}</h1>
     <ul>
       <li>
-        <a href="/orders/{{_id}}">View Orders</a>
+        <a href="/orders/placed/{{_id}}">View Placed Orders</a>
+        <li>
+        <a href="/orders/completed/{{_id}}">View Completed Orders</a>
+      </li>
       </li>
       <li>
         <a href="/restaurants/menu/edit/{{_id}}">Edit Menu</a>
