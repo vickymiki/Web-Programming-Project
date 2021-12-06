@@ -32,7 +32,11 @@ router.get('/create', async (req, res) => {
 router.get('/:id', async (req, res) => {
   if (!(req.session.user)) {
     return res.status(403).redirect('/login')
-  } else {
+  }
+  else if(req.session.user.accountType === 'manager') {
+    return res.status(403).redirect('/')
+  }
+  else {
     const id = req.params.id;
     const restaurant = await restaurants_DAL.getRestaurantFromId(id);
     const currentOrderId = await orders_DAL.findCurrentOrder(req.session.user.username, id);
@@ -91,7 +95,11 @@ router.get('/:id/cart', async (req, res) => {
 
   if (!(req.session.user)) {
     return res.status(403).redirect('/login')
-  } else {
+  } 
+  else if(req.session.user.accountType === 'manager') {
+    return res.status(403).redirect('/')
+  }
+  else {
     const id = req.params.id;
     const restaurant = await restaurants_DAL.getRestaurantFromId(id);
     let orderData = await orders_DAL.findOrderItems(req.session.user.username, id);
