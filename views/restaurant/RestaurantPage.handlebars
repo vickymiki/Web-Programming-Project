@@ -1,9 +1,8 @@
 <h1>{{page_function}}</h1>
-
 {{#if restaurant.menuItems.length}}
   {{#each restaurant.menuItems}}
-
 {{#if this.isBurger}}
+<form method="POST" id={{this.itemName}}>
   <div class="box">
     <div class="bread_top" id="bread_top_css">
       <div class="seeds1"></div>
@@ -18,26 +17,30 @@
     <div class="meat" id="meat_css"></div>
     <div class="bread_bottom" id="bread_bottom_css"></div>
   </div>
-  
-  <label><input onclick="getValue()" type="checkbox" checked="true" id="bread_top"  value="bread_top" > Top Bread</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" id="lettuce"  value="lettuce" > Lettuce</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" id="bacon"  value="bacon" > Bacon</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" id="cheese"  value="cheese" > Cheese</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" id="meat"  value="meat" > Meat</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" id="bread_bottom" value="bread_bottom" name=""> Bottom Bread</label>
- {{/if}}
-
+  <label><input onclick="getValue()" type="checkbox" checked="true" name="bread_top" id="bread_top"  > Top Bread</label>
+  <label><input onclick="getValue()" type="checkbox" checked="true" name="lettuce" id="lettuce"  > Lettuce</label>
+  <label><input onclick="getValue()" type="checkbox" checked="true" name="bacon" id="bacon"  > Bacon</label>
+  <label><input onclick="getValue()" type="checkbox" checked="true" name="cheese" id="cheese"  > Cheese</label>
+  <label><input onclick="getValue()" type="checkbox" checked="true" name="meat" id="meat"   > Meat</label>
+  <label><input onclick="getValue()" type="checkbox" checked="true" name="bread_bottom" id="bread_bottom"> Bottom Bread</label>
+  <label><input type="number" id={{this.itemName}} name={{this.itemName}} step="1">{{this.itemName}}
+  <button type="submit" id="btn-id">Submit</button>
+</form>
+ {{else}}
+<form method="POST" id={{this.itemName}}>
     <section>
-      <p><input type="checkbox" id={{this.itemName}}  value="bread_top" >{{this.itemName}} </p>
+      <p> <label><input type="number" id={{this.itemName}} name={{this.itemName}} step="1">{{this.itemName}}</label>
+         </p>
       {{!-- <button class="cart">Add to cart</button> --}}
     </section>
+    <button type="submit" id="btn-id">Submit</button>
+    </form>
+    {{/if}}
   {{/each}}
-  <button class="cart" onclick="getValue_item()">Add to cart</button>
-
+  {{!-- <button class="cart" onclick="getValue_item()">Add to cart</button> --}}
 {{else}}
 <p>This restaurant hasn't created their menu yet!</p>
 {{/if}}
-
 <script
     src="https://code.jquery.com/jquery-3.5.1.js"
     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
