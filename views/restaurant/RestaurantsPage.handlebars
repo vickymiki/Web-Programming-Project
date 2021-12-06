@@ -12,8 +12,17 @@
         {{else}}
           <div class="col-6 restName_link"><a href="/restaurants/{{_id}}" class="">{{restaurantName}}</a></div>
         {{/if}}
+        <div>
+          <ul>
+          {{#each foodTypes}}
+            <li>{{this}}</li>
+          {{/each}}
+          </ul>
+        </div>
         <div class="col-3"><a href="/restaurants/{{_id}}/reviews" class="reviews_link">Reviews</a></div>
         <div class="col-3"><p>Rating: {{rating}}</p></div>
+        <div>{{streetAddress}}</div>
+        <div>{{city}}, {{state}}</div>
       </div>
       <br>
     {{/each}}
