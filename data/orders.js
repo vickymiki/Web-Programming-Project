@@ -120,7 +120,7 @@ async function reomveItemFromOrder(orderId, itemOrderedId) {
   let sum = 0;
   const myOrder = await orderCollection.findOne({ _id: ObjectId(orderId) });
   for (let i = 0; i < (myOrder.itemsOrdered).length; i++) {
-    sum += (myOrder.itemsOrdered[i]).price;
+    sum = Math.round(100 * (sum + (myOrder.itemsOrdered[i]).price))/100;
   }
 
   await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: sum } });
@@ -184,6 +184,20 @@ async function findCurrentOrder(userName, restaurantId) {
 
 }
 
+async function findOrderItems(userName, restaurantId) {
+  if (!userName) throw 'All fields need to have valid values';
+  if (!restaurantId) throw 'All fields need to have valid values';
+  if (typeof userName !== 'string') throw 'Username must be a string';
+  if (!validId(restaurantId)) throw "Order Id must be a string of 24 hex characters";
+
+  const orderCollection = await orders();
+
+  const myOrder = await orderCollection.findOne({ userName: userName, restaurant_id: restaurantId, orderStatus: "Not Placed" });
+
+  return myOrder;
+
+}
+
 module.exports = {
   initOrder,
   addItemToOrder,
@@ -191,5 +205,6 @@ module.exports = {
   placeOrder,
   deliveredOrder,
   deleteOrder,
-  findCurrentOrder
+  findCurrentOrder,
+  findOrderItems
 };

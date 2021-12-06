@@ -84,6 +84,20 @@ router.get('/:id/reviews', async (req, res) => {
   }
 });
 
+router.get('/:id/cart', async (req, res) => {
+  const id = req.params.id;
+
+  if (!(req.session.user)) {
+    return res.status(403).redirect('/login')
+  } else {
+    const id = req.params.id;
+    const restaurant = await restaurants_DAL.getRestaurantFromId(id);
+    let orderData = await orders_DAL.findOrderItems(req.session.user.username, id);
+    res.render('restaurant/ViewCart', {title: "View Cart", page_function: `View ${req.session.user.username}'s cart at ${restaurant.restaurantName}`, orderData: orderData})
+  }
+
+});
+
 router.get('/menu/edit/:id', async (req, res) => {
   
   const id = req.params.id
@@ -495,6 +509,19 @@ router.post('/:id', async (req, res) => {
   }
   //Todo redirect to viewcart page
   res.redirect(`/restaurants/${id}`);
+});
+
+router.post('/items/delete', async (req, res) => { 
+  const id = req.body.restaurantId;
+  let deletionInfo = await orders_DAL.reomveItemFromOrder(req.body.orderId, req.body.itemId);
+  res.redirect(`/restaurants/${id}/cart`);
+
+});
+
+router.post('/orders/place', async (req, res) => { 
+  let orderInfo = await orders_DAL.placeOrder(req.body.orderId);
+  res.redirect(`/restaurants/`);
+
 });
 
 

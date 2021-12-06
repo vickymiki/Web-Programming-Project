@@ -1,0 +1,24 @@
+<h1>{{page_function}}</h1>
+<h2>Total Price: {{orderData.totalPrice}}</h2>
+{{#if orderData.itemsOrdered.length}}
+  {{#each orderData.itemsOrdered}}
+    <h3>{{itemName}}</h3>
+    <p>{{price}}</p>
+    <ul>
+      {{#each customizableComponents}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    <form method="POST" action="/restaurants/items/delete" id="DeleteItem">
+    <input type="hidden" name="orderId" value={{../orderData._id}}>
+    <input type="hidden" name="itemId" value={{this._id}}>
+    <input type="hidden" name="restaurantId" value={{../orderData.restaurant_id}}>
+    <button type="submit">Remove Item</button>
+  </form>
+  {{/each}}
+  <form method="POST" action="/restaurants/orders/place" id="PlaceOrder">
+    <input type="hidden" name="orderId" value={{orderData._id}}>
+    <button type="submit">Submit Order</button>
+{{else}}
+<p>No items have been added to your order yet</p>
+{{/if}}
