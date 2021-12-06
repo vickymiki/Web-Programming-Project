@@ -2,6 +2,7 @@
 {{#if restaurant.menuItems.length}}
   {{#each restaurant.menuItems}}
 {{#if this.isBurger}}
+<h3>{{this.itemName}}</h3>
 <form method="POST" id={{this.itemName}}>
   <div class="box">
     <div class="bread_top" id="bread_top_css">
@@ -17,25 +18,31 @@
     <div class="meat" id="meat_css"></div>
     <div class="bread_bottom" id="bread_bottom_css"></div>
   </div>
+  <input type="hidden" name="id" value={{this._id}}>
+  <input type="hidden" name="itemName" value={{this.itemName}}>
+  <input type="hidden" name="price" value={{this.price}}>
   <label><input onclick="getValue()" type="checkbox" checked="true" name="bread_top" id="bread_top"  > Top Bread</label>
   <label><input onclick="getValue()" type="checkbox" checked="true" name="lettuce" id="lettuce"  > Lettuce</label>
   <label><input onclick="getValue()" type="checkbox" checked="true" name="bacon" id="bacon"  > Bacon</label>
   <label><input onclick="getValue()" type="checkbox" checked="true" name="cheese" id="cheese"  > Cheese</label>
   <label><input onclick="getValue()" type="checkbox" checked="true" name="meat" id="meat"   > Meat</label>
   <label><input onclick="getValue()" type="checkbox" checked="true" name="bread_bottom" id="bread_bottom"> Bottom Bread</label>
-  <label><input type="number" id={{this.itemName}} name={{this.itemName}} step="1">{{this.itemName}}
+  <label><input type="number" name="quantity" step="1" min="0" placeholder="0" value="0"> <p>Price : {{this.price}}</p>
   <button type="submit" id="btn-id">Submit</button>
 </form>
  {{else}}
-<form method="POST" id={{this.itemName}}>
-    <section>
-      <p> <label><input type="number" id={{this.itemName}} name={{this.itemName}} step="1">{{this.itemName}}</label>
-         </p>
-      {{!-- <button class="cart">Add to cart</button> --}}
-    </section>
+  <h3>{{this.itemName}}</h3>
+  <form method="POST" id={{this.itemName}}>
+    <input type="hidden" name="id" value={{this._id}}>
+    <input type="hidden" name="itemName" value={{this.itemName}}>
+    <input type="hidden" name="price" value={{this.price}}>
+    {{#each this.customizableComponents}}
+    <label><input onclick="getValue()" type="checkbox" checked="true" name={{this}} id={{this}}  > {{this}}</label>
+    {{/each}}
+    <label><input type="number" name="quantity" step="1" min="0" placeholder="0" value="0"></label> <p>Price : {{this.price}}</p>
     <button type="submit" id="btn-id">Submit</button>
     </form>
-    {{/if}}
+  {{/if}}
   {{/each}}
   {{!-- <button class="cart" onclick="getValue_item()">Add to cart</button> --}}
 {{else}}
