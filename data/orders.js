@@ -177,7 +177,7 @@ async function findCurrentOrder(userName, restaurantId) {
 
   const orderCollection = await orders();
 
-  const myOrder = await orderCollection.findOne({ userName: userName, orderStatus: "Not Placed" });
+  const myOrder = await orderCollection.findOne({ userName: userName, restaurant_id: restaurantId, orderStatus: "Not Placed" });
 
   if (myOrder) return (myOrder._id).toString();
   else return null;
