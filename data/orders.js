@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const ObjectId = require('mongodb').ObjectId;
 const orders = mongoCollections.orders;
+const restaurant_DAL = require('./restaurants');
 
 const isSpaces = function isSpaces(input) {
   let spaces = true;
@@ -61,6 +62,9 @@ async function initOrder(userName, restaurant_id, deliveryAddr) {
   const insertInfo = await orderCollection.insertOne(newOrder);
   if (insertInfo.insertedCount === 0) throw "Could not create a new order";
   
+  //Add order id to the restaurant that it's for
+  restaurant_DAL.addOrderToRestaurant(insertInfo.insertedId, newOrder.restaurant_id)
+
   return { createdOrder: true };
 }
 
@@ -195,7 +199,21 @@ async function findOrderItems(userName, restaurantId) {
   const myOrder = await orderCollection.findOne({ userName: userName, restaurant_id: restaurantId, orderStatus: "Not Placed" });
 
   return myOrder;
+}
 
+async function getPlacedOrdersFromIds(order_id_array){
+  const orderCollection = await orders();
+  const myOrders = []
+  
+  for (const order_id of order_id_array) {
+    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "order_placed" })
+    if(myOrder !== null) {
+      myOrder._id = myOrder._id.toString()
+      myOrders.push(myOrder)
+    }
+  }
+  
+  return myOrders
 }
 
 module.exports = {
@@ -206,5 +224,6 @@ module.exports = {
   deliveredOrder,
   deleteOrder,
   findCurrentOrder,
-  findOrderItems
+  findOrderItems,
+  getPlacedOrdersFromIds
 };

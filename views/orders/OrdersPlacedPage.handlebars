@@ -1,0 +1,38 @@
+<h1>{{page_function}}</h1>
+{{#if error}}
+<h2 id="error">{{error}}</h2>
+{{/if}}
+
+<h2>Placed Orders</h2>
+{{#if orders.length}}
+{{#each orders}}
+    <p>User: {{userName}}</p>
+    <p>Delivery Address: {{deliveryAddress}}</p>
+    <p>Ordered Items:</p>
+    <ul>
+        {{#each itemsOrdered}}
+            <li>{{itemName}}</li>
+            {{#if customizableComponents.length}}
+            <ul>
+                {{#each customizableComponents}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+            {{/if}}
+        {{/each}}
+    </ul>
+    <form method="POST" id="complete-form" action="/orders/complete/{{restaurant_id}}/{{_id}}">
+    <label id="submit">
+        <input type="submit" value="Order Completed"/>
+    </label>
+    </form>
+{{/each}}
+{{else}}
+<h3>There are currently no orders placed!</h3>
+{{/if}}
+
+<script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src='/public/js/menuEdit_jq.js'></script>
