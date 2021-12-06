@@ -21,6 +21,18 @@
     </ul>
     {{/each}}
   {{/if}}
+{{else}}
+<ul>
+  <li>
+    <a href="/orders/{{userId}}/incomplete">View Incomplete Orders</a>
+  </li>
+  <li>
+    <a href="/orders/{{userId}}/placed">View Placed Orders</a>
+  </li>
+  <li>
+    <a href="/orders/{{userId}}/completed">View Completed Orders</a>
+  </li>
+</ul>
 {{/if}}
 
 {{#if isManager}}

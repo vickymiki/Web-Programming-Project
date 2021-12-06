@@ -14,7 +14,8 @@ router.get('/', async (req, res) => {
         res.render('user/UserPage', {title: "Profile", page_function: "Your Profile", isManager: true, restaurants})
     }
     else if(req.session.user.accountType === 'user'){
-        res.render('user/UserPage', {title: "Profile", page_function: "Your Profile"})
+        let userId = await user_DAL.getUserIdByName(req.session.user.username)
+        res.render('user/UserPage', {title: "Profile", page_function: "Your Profile", userId})
     }
     else{
         res.status(400).redirect('/login')
