@@ -5,10 +5,12 @@ const reviews_DAL = require('../data/reviews');
 const replies_DAL = require('../data/replies');
 const user_DAL = require('../data/users');
 const manager_DAL = require('../data/managers');
+const orders_DAL = require('../data/orders');
 const path = require('path');
 const session = require('express-session');
 const fs = require('fs');
 const multer = require('multer');
+const ObjectId = require('mongodb').ObjectId;
 
 const upload = multer({ dest: '/uploads/'});
 
@@ -26,9 +28,40 @@ router.get('/create', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id
-    const restaurant = await restaurants_DAL.getRestaurantFromId(id)
-    res.render('restaurant/RestaurantPage', {title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant})
+  if (!(req.session.user)) {
+    return res.status(403).redirect('/login')
+  } else {
+    const id = req.params.id;
+    const restaurant = await restaurants_DAL.getRestaurantFromId(id);
+    const currentOrderId = await orders_DAL.findCurrentOrder(req.session.user.username, id);
+    if (currentOrderId)
+      res.render('restaurant/RestaurantPage', { title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant })
+    else {
+      //Todo pull the actual address
+      await orders_DAL.initOrder(req.session.user.username, id, "fakeAddress");
+      res.render('restaurant/RestaurantPage', { title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant })
+    }
+  }
+});
+
+router.post('/:id', async (req, res) => {
+  const id = req.params.id;
+  let menuItem = {};
+  menuItem._id = ObjectId(req.body.id);
+  menuItem.itemName = req.body.itemName;
+  menuItem.price = Number(req.body.price);
+  menuItem.customizableComponents = [];
+  for (const key in req.body) {
+    if (key !== 'id' && key !== 'itemName' && key !== 'price' && key !== 'quantity') {
+      (menuItem.customizableComponents).push(key);
+    }
+  }
+  const currentOrderId = await orders_DAL.findCurrentOrder(req.session.user.username, id);
+  for (let i = 0; i < req.body.quantity; i++) {
+    await orders_DAL.addItemToOrder(currentOrderId, menuItem);
+  }
+  //Todo redirect to viewcart page
+  res.redirect(`/restaurants/${id}`);
 });
 
 router.get('/:id/reviews', async (req, res) => {
