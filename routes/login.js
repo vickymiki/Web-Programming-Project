@@ -19,11 +19,11 @@ router.post('/', async (req, res) => {
         || !loginForm.username.match(/^[0-9a-zA-Z]+$/) 
         || loginForm.username.length < 4){
 
-        res.status(400).render('forms/LoginForm', {title: "Login", page_function: "Log into an account NOW", error: "Username invalid!"})    
+        res.status(400).render('forms/LoginForm', {title: "Login", page_function: "Log into an account NOW", error: "Username or Password invalid!"})    
         return
     }
     if (!loginForm.password || loginForm.password.includes(' ') || loginForm.password.length<6){
-        res.status(400).render('forms/LoginForm', {title: "Login", page_function: "Log into an account NOW", error: "Password invalid!"})    
+        res.status(400).render('forms/LoginForm', {title: "Login", page_function: "Log into an account NOW", error: "Username or Password invalid!"})    
         return
     }
 

@@ -1,12 +1,60 @@
-.nav_header {
-    background: linear-gradient(#f4f0ec,#d3d3d3);
-    box-shadow: 0 3px 5px rgb(57 63 72 / 30%);
+html,
+body {
+  margin: 0;
+  height: 100%;
 }
 
-.fs_20 {
-font-size: 20px;
+body {
+  background-color: #e4e9cc !important;
+}
+
+.nav_header {
+  background: linear-gradient(#ffffff, #ebe2e2);
+  box-shadow: 0 3px 5px rgb(57 63 72 / 30%);
 }
 
 .webiste_title {
-    font-size: 40px;
+  font-size: 40px;
+}
+
+.fs_20 {
+  font-size: 20px !important;
+}
+
+.h_35 {
+  height: 35px !important;
+}
+
+/* Login Page */
+
+.login_form {
+  padding: 100px 0px 100px 0px;
+}
+
+.login_div {
+  background-color: #dce7b1;
+  margin-top: 100px;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+
+.login_btn {
+  padding: 3px 20px 7px 20px;
+  background-color: #c3d76a;
+  height: 40px;
+  font-size: 22px;
+}
+
+.login_btn:hover {
+  background-color: #c4dd57;
+}
+
+.error_div {
+  margin: 0 auto;
+  text-align: center;
+  width: 15%;
+  padding: 3px 3px 3px 3px;
+  border: 1px dotted #889927;
+  border-radius: 8px;
+  background-color: #edc1c1;
 }
