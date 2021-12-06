@@ -138,6 +138,62 @@ body {
     margin: 0px 0px 21px 13px;
     padding: 0px 0px 0px 13px;
     box-shadow: 0 3px 11px 4px grey;
-    width: 15%;
+    width: 20%;
     background-color: white;
+}
+
+/* Reviews Page */
+
+.review_heading {
+    font-size: 31px;
+    font-weight: 500;
+}
+
+.new_review_div {
+  width: 35%;
+  border: 1px dashed;
+  padding: 13px 0px 0px 16px;
+  background-color: #dee9af;  
+}
+
+.add_review {
+  border-bottom: 1px solid;
+  width: 97px;
+  margin-bottom: 11px;
+  font-style: italic;
+}
+
+.new_review_input {
+margin: 4px 1px 1px 1px !important
+}
+
+.new_review_label {
+    margin-right: 70px;
+}
+
+.new_rating_label {
+    margin-right: 73px;
+}
+
+.submit_review_btn {
+ text-align: center;
+ margin-top: 25px;
+}
+
+.reviews {
+    width: 35% !important;
+    border: 1px dashed;
+  padding: 17px 0px 0px 0px;
+  background-color: #dee9af;
+}
+
+.rev {
+box-shadow: 0 5px 2px -2px grey;
+width: 35% !important;
+}
+
+.reply_div {
+    border: 1px dashed;
+    padding: 5px 0px 0px 9px;
+    margin: 0px 0px 11px 0px;
 }

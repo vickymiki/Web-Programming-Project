@@ -1,82 +1,116 @@
-<h1>{{page_function}}</h1>
-<body>
+<div class="review_heading ml-4 mb-3">{{page_function}}</div>
+
   <div id="reviewErr"></div>
+<div class="ml-4 new_review_div">
+  <div class="add_review font-weight-bold">Add Review :</div>
   <form method="POST" id="New_Review" action="/restaurants/{{restaurantId}}/upload" enctype="multipart/form-data">
     <input type="hidden" name="postType" value="new_review">
-    <label for="review">New Review:</label>
-    <input type="text" name="review" maxlength="280" required>
-    <label for="rating">Rating (1-5):</label>
+    <div class="">
+    <label class="new_review_label font-weight-bold" for="review">New Review</label>
+    <input class="new_review_input" type="text" name="review" maxlength="280" required>
+    </div>
+    <div class="">
+    <label class="new_rating_label font-weight-bold" for="rating">Rating (1-5)</label>
     <input type="number" name="rating" min="1" max="5" required>
-    <label for="photo">Optionally add a photo:</label>
+    </div>
+    <div class="">
+    <label for="photo" class="font-weight-bold">Optionally add a photo</label>
     <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
+    </div>
     <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
     <input type="hidden" name="userId" value={{loggedUserId}}>
     <input type="hidden" name="isManager" value={{loggedIsManager}}>
-    <button type="submit">Submit Review</button>
+    <div class="submit_review_btn"><button type="submit">Submit Review</button></div>
   </form>
+</div>
   <div id="reviewList">
+    
+<div class="rev ml-4 mt-3"><h3>Reviews</h3></div>
   {{#if reviewData.length}}
     {{#each reviewData}}  
-      <div>
-        <h3>Review:</h3>
-        <p>Username: {{userName}} </p>
-        <img src="/public/images/{{imageName}}" alt="Review Image">
-        <p>Review: {{review}} </p>
-        <p>Date: {{date}}</p>
-        <p>Rating: {{rating}}</p>
-        <!--<p>Likes: {{likes}}</p>-->
-        <div id="likePartial_{{_id}}">
-        {{> likes}}
-        </div>
-          <form method="POST" id="LB1_{{_id}}">
-            <input type="hidden" id="postType1_{{_id}}" name="postType" value="add_like">
-            <!--<input type="hidden" id="likeId1_{{_id}}" name="likeId" value={{_id}}> not needed anymore-->
-            <button type="submit">Like</button>
-          </form>
-          <form method="POST" id="LB2_{{_id}}">
-            <input type="hidden" id="postType2_{{_id}}" name="postType" value="remove_like">
-            <!--<input type="hidden" name="removeLikeId" value={{_id}}>-->
-            <button type="submit">Remove Like</button>
-          </form>
-        <div id="dislikePartial_{{_id}}">
-        {{> dislikes}}
-        </div>
-          <form method="POST" id="DB1_{{_id}}">
-            <input type="hidden" id="postType3_{{_id}}" name="postType" value="add_dislike">
-            <!--<input type="hidden" name="dislikeId" value={{_id}}>-->
-            <button type="submit">Dislike</button>
-          </form>
-          <form method="POST" id="DB2_{{_id}}">
-            <input type="hidden" id="postType4_{{_id}}" name="postType" value="remove_dislike">
-            <!--<input type="hidden" name="removeDislikeId" value={{_id}}>-->
-            <button type="submit">Remove Dislike</button>
-          </form>
-        {{#if replies.length}}
-          <div>
-            <h4>Replies:</h4>
-            {{#each replies}}
-            <p>Username: {{userName}}</p>
-            <p>Reply: {{reply}}</p>
-            <p>Date: {{date}}</p>
-            {{/each}}
+      <div class="reviews ml-4 mt-4">
+        
+        
+        <div class="pl-3">
+          <div class="row mb-2">
+            <div class="col-2 font-weight-bold">Username:</div> <div class="col-10"> {{userName}}</div>
           </div>
-        {{/if}}
-        <form method="POST" id="New_Reply">
-          <label for="reply">Reply:</label>
-          <input type="hidden" name="postType" value="new_reply">
-          <input type="text" name="reply" maxlength ="280" required>
-          <input type="hidden" name="reviewId" value={{_id}}>
-          <!-- Had to go about this a different way = was pulling the id of the og review user-->
-          <!--<input type="hidden" name="userId" value={{loggedUserId}}>
-          <input type="hidden" name="isManager" value={{loggedisManager}}>-->
-          <button type="submit">Submit Reply</button>
-        </form>
+          <div class=" mb-2"><img src="/public/images/{{imageName}}" alt="Review Image"></div>
+          <div class="row mb-2">
+            <div class="col-2 font-weight-bold">Review:  </div><div class="col-10">{{review}}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-2 font-weight-bold">Date: </div><div class="col-10">{{date}}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-2 font-weight-bold">Rating: </div><div class="col-10">{{rating}}</div>
+          </div>
+          <!--<p>Likes: {{likes}}</p>-->
+          <div id="likePartial_{{_id}}"  class="row mb-2">
+          {{> likes}}
+          </div>
+          <div class="row">
+            <form method="POST" id="LB1_{{_id}}" class="col-3">
+              <input type="hidden" id="postType1_{{_id}}" name="postType" value="add_like">
+              <!--<input type="hidden" id="likeId1_{{_id}}" name="likeId" value={{_id}}> not needed anymore-->
+              <i class="icon-thumbs-up-alt pr-2"></i><button type="submit">Like</button>
+            </form>
+            <form method="POST" id="LB2_{{_id}}" class="col-9">
+              <input type="hidden" id="postType2_{{_id}}" name="postType" value="remove_like">
+             <!--<input type="hidden" name="removeLikeId" value={{_id}}>-->
+             <button type="submit">Remove Like</button>
+            </form>
+          </div>  
+          <div id="dislikePartial_{{_id}}" class="row  mb-2">
+          {{> dislikes}}
+          </div>
+          <div class="row">
+            <form method="POST" id="DB1_{{_id}}" class="col-3">
+              <input type="hidden" id="postType3_{{_id}}" name="postType" value="add_dislike">
+              <!--<input type="hidden" name="dislikeId" value={{_id}}>-->
+              <i class="icon-thumbs-down-alt pr-2"></i><button type="submit">Dislike</button>
+            </form>
+            <form method="POST" id="DB2_{{_id}}" class="col-9">
+              <input type="hidden" id="postType4_{{_id}}" name="postType" value="remove_dislike">
+              <!--<input type="hidden" name="removeDislikeId" value={{_id}}>-->
+              <button type="submit">Remove Dislike</button>
+            </form>
+          </div>
+            {{#if replies.length}}
+            <h4>Replies:</h4>
+            <div >
+              
+              {{#each replies}}
+              <div class="reply_div w-75">
+              <div class="row mb-2">
+                <div class="col-2 font-weight-bold">Username:</div> <div class="col-10">{{userName}}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-2 font-weight-bold">Reply:</div> <div class="col-10">{{reply}}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-2 font-weight-bold">Date:</div> <div class="col-10">{{date}}</div>
+              </div>
+              </div>
+              {{/each}}
+            </div>
+          {{/if}}
+
+          <form method="POST" id="New_Reply">
+            <label for="reply" class="font-weight-bold pl-2 pr-5">Reply:</label>
+            <input type="hidden" name="postType" value="new_reply">
+            <input type="text" name="reply" maxlength ="280" required>
+            <input type="hidden" name="reviewId" value={{_id}}>
+            <!-- Had to go about this a different way = was pulling the id of the og review user-->
+            <!--<input type="hidden" name="userId" value={{loggedUserId}}>
+            <input type="hidden" name="isManager" value={{loggedisManager}}>-->
+             <button type="submit"class="ml-5">Submit Reply</button>
+          </form>
+        </div>
       </div>
-      <br>
+
     {{/each}}
   {{/if}}
   </div>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script src="/public/js/reviews_jq.js"></script>
-
-</body>
