@@ -196,8 +196,46 @@ async function getAllByUser(userId, isManager) {
   return userReplies;  
 }
 
+async function editReply(reviewId, replyId, reply) {
+  //Error checking
+  if (!reviewId || reviewId == null) throw 'All fields need to have valid values';
+  if (!replyId || replyId == null) throw 'All fields need to have valid values';
+  if (!reply || reply == null) throw 'All fields need to have valid values';
+  //More error checking
+  if (typeof reviewId !== 'string') throw 'Review id must be a string';
+  if (typeof replyId !== 'string') throw 'Reply id must be a string';
+  if (typeof reply !== 'string') throw 'Reply must be a string';
+  
+  if (!validId(reviewId)) throw 'Review Id must be a string of 24 hex characters';
+  if (!validId(replyId)) throw 'Reply Id must be a string of 24 hex characters';
+  if (isSpaces(reply)) throw 'Reply can not be only spaces';
+
+  //Format date 
+  const date = new Date();
+  const month = date.getMonth() + 1; //indexese from 0
+  const day = date.getDate();
+  const year = date.getFullYear();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  if (minutes < 10) minutes = `0${minutes}`;
+  let period = "AM";
+  if (hours > 12) {
+    hours -= 12;
+    period = "PM";
+  }
+  if (hours == 0) hours = 12;
+  const timestamp = `${month}/${day}/${year} ${hours}:${minutes} ${period}`;
+
+  const reviewCollection = await reviews();
+
+  const target = await reviewCollection.updateOne({ _id: ObjectId(reviewId), 'replies._id': ObjectId(replyId) }, { $set: {'replies.$.reply': reply, 'replies.$.date': timestamp}});
+
+  return { updatedReply: true };
+}
+
 module.exports = {
   create,
   remove,
-  getAllByUser
+  getAllByUser,
+  editReply
 };
