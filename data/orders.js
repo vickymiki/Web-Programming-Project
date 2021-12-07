@@ -216,12 +216,25 @@ async function getAllOrdersFromUser(userName){
   return order_ids
 }
 
+function validateObjectId(id){
+  if( typeof id !== 'string' && !ObjectId.isValid(id) ) throw `id must be of type string or ObjectId: ${id}`
+  if( typeof id === 'string' && id.length === id.split(' ').length - 1) throw `id as string must not be empty: ${id}`
+  if( typeof id === 'string' ){
+      try{
+          id = ObjectId(id)    
+      }catch(e){
+          throw `Provided id not a valid ObjectId: ${id}`
+      }
+  }
+  return id
+}
+
 async function getPlacedOrdersFromIds(order_id_array){
   const orderCollection = await orders();
   const myOrders = []
   
   for (const order_id of order_id_array) {
-    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "order_placed" })
+    const myOrder = await orderCollection.findOne({ _id: validateObjectId(order_id), orderStatus: "order_placed" })
     if(myOrder !== null) {
       myOrder._id = myOrder._id.toString()
       myOrders.push(myOrder)
@@ -236,7 +249,7 @@ async function getCompletedOrdersFromIds(order_id_array){
   const myOrders = []
   
   for (const order_id of order_id_array) {
-    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "delivered" })
+    const myOrder = await orderCollection.findOne({ _id: validateObjectId(order_id), orderStatus: "delivered" })
     if(myOrder !== null) {
       myOrder._id = myOrder._id.toString()
       myOrders.push(myOrder)
@@ -251,7 +264,7 @@ async function getIncompleteOrdersFromIds(order_id_array){
   const myOrders = []
   
   for (const order_id of order_id_array) {
-    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "Not Placed" })
+    const myOrder = await orderCollection.findOne({ _id: validateObjectId(order_id), orderStatus: "Not Placed" })
     if(myOrder !== null) {
       myOrder._id = myOrder._id.toString()
       myOrders.push(myOrder)

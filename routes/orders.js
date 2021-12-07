@@ -100,6 +100,26 @@ router.get('/:userid/completed', async (req, res) => {
     res.render('user/OrdersCompletedPage', {title: "Completed Orders", page_function: "View Completed Orders!", orders: orders, userid: userid})
 });
 
+router.get('/:userid/favorites', async (req, res) => {
+    const userid = req.params.userid
+
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    let favorites = await user_DAL.getUserProfileByName(req.session.user.username)
+    favorites = favorites.favorites
+    let orders = []
+    if(favorites.length > 0){
+        orders = await orders_DAL.getCompletedOrdersFromIds(favorites)
+    }
+
+    //TODO: check that the itemNames still exist and if they don't remove the favorite item from the user
+
+    res.render('user/OrdersFavoritePage', {title: "Favorites", page_function: "View Your Favorites!", orders: orders, userid: userid})
+});
+
 router.post('/complete/:restid/:orderid', async (req, res) => {
     const restid = req.params.restid
     const orderid = req.params.orderid
@@ -136,7 +156,20 @@ router.post('/addFavorite/:orderid/:userid', async (req, res) => {
 
     await user_DAL.addOrderToFavorites(orderid, userid)
 
-    res.redirect(`/restaurants`)
+    res.redirect(`/orders/${userid}/favorites`)
+});
+
+router.post('/removeFavorite/:orderid/:userid', async (req, res) => {
+    const orderid = req.params.orderid
+    const userid = req.params.userid
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !orderid || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    await user_DAL.removeOrderFromFavorites(orderid, userid)
+
+    res.redirect(`/orders/${userid}/favorites`)
 });
 
 module.exports = router;
