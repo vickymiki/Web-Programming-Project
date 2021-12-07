@@ -166,9 +166,12 @@ async function deleteOrder(orderId) {
   if (!validId(orderId)) throw "Order Id must be a string of 24 hex characters";
 
   const orderCollection = await orders();
-
+  let order = await orderCollection.findOne({ _id: ObjectId(orderId) });
+  if (order === null) throw "Could not delete order";
+  let restaurant_id = order.restaurant_id;
   const deletionInfo = await orderCollection.deleteOne({ _id: ObjectId(orderId) });
   if (deletionInfo.deletedCount === 0) throw "Could not delete order";
+  await restaurant_DAL.removeOrderFromRestaurant(orderId, restaurant_id)
 
   return { deletedOrder: true };
 }
@@ -201,6 +204,18 @@ async function findOrderItems(userName, restaurantId) {
   return myOrder;
 }
 
+async function getAllOrdersFromUser(userName){
+  const orderCollection = await orders();
+  const allOrders = await orderCollection.find({userName: userName}).toArray()
+
+  let order_ids = []
+  for (const order of allOrders) {
+    order_ids.push(order._id)
+  }
+
+  return order_ids
+}
+
 async function getPlacedOrdersFromIds(order_id_array){
   const orderCollection = await orders();
   const myOrders = []
@@ -231,6 +246,21 @@ async function getCompletedOrdersFromIds(order_id_array){
   return myOrders
 }
 
+async function getIncompleteOrdersFromIds(order_id_array){
+  const orderCollection = await orders();
+  const myOrders = []
+  
+  for (const order_id of order_id_array) {
+    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "Not Placed" })
+    if(myOrder !== null) {
+      myOrder._id = myOrder._id.toString()
+      myOrders.push(myOrder)
+    }
+  }
+  
+  return myOrders
+}
+
 module.exports = {
   initOrder,
   addItemToOrder,
@@ -241,5 +271,7 @@ module.exports = {
   findCurrentOrder,
   findOrderItems,
   getPlacedOrdersFromIds,
-  getCompletedOrdersFromIds
+  getCompletedOrdersFromIds,
+  getIncompleteOrdersFromIds,
+  getAllOrdersFromUser
 };

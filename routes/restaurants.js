@@ -42,13 +42,8 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id;
     const restaurant = await restaurants_DAL.getRestaurantFromId(id);
     const currentOrderId = await orders_DAL.findCurrentOrder(req.session.user.username, id);
-    if (currentOrderId)
-      res.render('restaurant/RestaurantPage', { title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant })
-    else {
-      //Todo pull the actual address
-      await orders_DAL.initOrder(req.session.user.username, id, "fakeAddress");
-      res.render('restaurant/RestaurantPage', { title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant })
-    }
+
+    res.render('restaurant/RestaurantPage', { title: "Restaurant", page_function: `View food at ${restaurant.restaurantName}`, restaurant: restaurant })
   }
 });
 
@@ -510,6 +505,12 @@ router.post('/:id', async (req, res) => {
   menuItem.itemName = req.body.itemName;
   menuItem.price = Number(req.body.price);
   menuItem.customizableComponents = [];
+
+  if(!await orders_DAL.findCurrentOrder(req.session.user.username, id)){
+    //Todo pull the actual address
+    await orders_DAL.initOrder(req.session.user.username, id, "fakeAddress");
+  }
+
   for (const key in req.body) {
     if (key !== 'id' && key !== 'itemName' && key !== 'price' && key !== 'quantity') {
       (menuItem.customizableComponents).push(key);
