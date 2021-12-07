@@ -6,23 +6,38 @@
 {{#if restaurantArray.length}}
     <body>
     {{#each restaurantArray}}  
-      <div class="row w-30 rest">        
-        {{#if ../isManager}}
-          <div class="col-6 restName_link"><p>{{restaurantName}}</p></div>
-        {{else}}
-          <div class="col-6 restName_link"><a href="/restaurants/{{_id}}" class="">{{restaurantName}}</a></div>
-        {{/if}}
-        <div>
-          <ul>
-          {{#each foodTypes}}
-            <li>{{this}}</li>
-          {{/each}}
-          </ul>
+      <div class="rest">
+        <div class="m-0 row">        
+          {{#if ../isManager}}
+            <div class="col-6 restName_link"><p>{{restaurantName}}</p></div>
+          {{else}}
+            <div class="col-6 restName_link"><a href="/restaurants/{{_id}}" class="">{{restaurantName}}</a></div>
+          {{/if}}
+        
+          <div class="col-3"><a href="/restaurants/{{_id}}/reviews" class="reviews_link">Reviews</a></div>
+          <div class="col-3 row"><p class="font-weight-bold pr-2">Rating:</p> <p>{{rating}}</p></div>
         </div>
-        <div class="col-3"><a href="/restaurants/{{_id}}/reviews" class="reviews_link">Reviews</a></div>
-        <div class="col-3"><p>Rating: {{rating}}</p></div>
-        <div>{{streetAddress}}</div>
-        <div>{{city}}, {{state}}</div>
+        <div class="row">
+          <div class="col-3 font-weight-bold">Street Address:</div>
+          <div class="pl-0 col-9">{{streetAddress}}</div>
+        </div>
+        <div class="row">
+          <div class="col-2 font-weight-bold">City:</div>
+          <div class="col-4 ml-lg-n5">{{city}}</div>
+        
+          <div class="col-2 font-weight-bold">State:</div>
+          <div class="col-4 ml-lg-n5 pl-4">{{state}}</div>
+        </div>
+        <div class="row">
+          <div class="col-3 pr-0 font-weight-bold">Food Types:</div>  
+          <div class="col-9 pl-0">
+            <ul>
+            {{#each foodTypes}}
+              <li>{{this}}</li>
+            {{/each}}
+            </ul>
+          </div>
+        </div>
       </div>
       <br>
     {{/each}}
