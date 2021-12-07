@@ -24,8 +24,10 @@
   </form>
 </div>
 
-  <a href="/profile/reviews/{{restaurantId}}">Edit your Reviews</a>
-  <a href="/profile/replies/{{restaurantId}}">Edit your Replies</a>
+<div class="ml-4 mt-3">
+  <a href="/profile/reviews/{{restaurantId}}" class="ml-5 mr-5">Edit your Reviews</a>
+  <a href="/profile/replies/{{restaurantId}}" class="ml-5">Edit your Replies</a>
+</div>
   <div id="reviewList">
     
 <div class="rev ml-4 mt-3"><h3>Reviews</h3></div>
@@ -84,7 +86,7 @@
               {{#each replies}}
               <div class="reply_div w-75">
               <div class="row mb-2">
-                <div class="col-2 font-weight-bold">Username:</div> <div class="col-10">{{userName}}</div>
+                <div class="col-3 font-weight-bold">Username:</div> <div class="col-9">{{userName}}</div>
               </div>
               <div class="row mb-2">
                 <div class="col-2 font-weight-bold">Reply:</div> <div class="col-10">{{reply}}</div>

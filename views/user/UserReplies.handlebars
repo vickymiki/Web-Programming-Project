@@ -1,34 +1,41 @@
-<h1>{{page_function}}</h1>
+<div class="your_replies_heading ml-4 mb-3">{{page_function}}</div>
 
 {{#if replies.length}}
   {{#each replies}}
-         <div class="reply_div w-75">
-              <div class="row mb-2">
-                <div class="col-2 font-weight-bold">Username:</div> <div class="col-10">{{userName}}</div>
-              </div>
-              <div class="row mb-2">
-                <div class="col-2 font-weight-bold">Reply:</div> <div class="col-10">{{reply}}</div>
-              </div>
-              <div class="row mb-2">
-                <div class="col-2 font-weight-bold">Date:</div> <div class="col-10">{{date}}</div>
-              </div>
-            </div>
+  <div class="ml-4 reply_div w-50">  
+    <div class="">
+      <div class="row mb-2">
+        <div class="col-2 font-weight-bold">Username:</div> <div class="col-10">{{userName}}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-2 font-weight-bold">Reply:</div> <div class="col-10">{{reply}}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-2 font-weight-bold">Date:</div> <div class="col-10">{{date}}</div>
+      </div>
+    </div>
+    <div class="row pl-3">
+    <form class="row col-9" method="POST" id="Edit_Reply" action="/profile/replies/{{../restaurantId}}/edit">
+      <input type="hidden" id="replyId" name="replyId" value={{_id}}>
+      <input type="hidden" id="restaurantId" name="restaurantId" value={{../restaurantId}}>
+      <input type="hidden" id="reviewId" name="reviewId" value={{reviewId}}>
 
-          <form method="POST" id="Edit_Reply" action="/profile/replies/{{../restaurantId}}/edit">
-            <input type="hidden" id="replyId" name="replyId" value={{_id}}>
-            <input type="hidden" id="restaurantId" name="restaurantId" value={{../restaurantId}}>
-            <input type="hidden" id="reviewId" name="reviewId" value={{reviewId}}>
-            <label for="review">Edited Reply</label>
-            <input type="text" name="reply" maxlength="280" required>
-            <button type="submit">Edit Reply</button>
-        </form>
-          <form method="POST" action="/profile/replies/{{../restaurantId}}/remove" id="ReomveReply">
-              <input type="hidden" id="replyId" name="replyId" value={{_id}}>
-              <input type="hidden" id="restaurantId" name="restaurantId" value={{../restaurantId}}>
-              <input type="hidden" id="reviewId" name="reviewId" value={{reviewId}}>
-              <button type="submit">Delete Reply</button>
-            </form>
-          </div>
+      <div>
+        <label for="review" class="font-weight-bold">Edited Reply</label>
+        <input class="ml-5  mb-0" type="text" name="reply" maxlength="280" required>
+      </div>
+      
+      <button type="submit" class="ml-5">Edit Reply</button>
+    </form>
+    <form class="col-3" method="POST" action="/profile/replies/{{../restaurantId}}/remove" id="ReomveReply">
+        <input type="hidden" id="replyId" name="replyId" value={{_id}}>
+        <input type="hidden" id="restaurantId" name="restaurantId" value={{../restaurantId}}>
+        <input type="hidden" id="reviewId" name="reviewId" value={{reviewId}}>
+      
+        <button type="submit">Delete Reply</button>
+    </form>
+    </div>        
+  </div>
   {{/each}}
 {{else}}
 <p>No replies by {{userName}} have been posted for {{restaurantName}}</p>
