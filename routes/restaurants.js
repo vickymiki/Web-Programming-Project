@@ -81,9 +81,9 @@ router.get('/:id/reviews', async (req, res) => {
   }
 
   if (reviewData.length == 0) {
-    res.render('restaurant/NoReviewsPage', { title: "Reviews", page_function: `Reviews for ${restaurant.restaurantName}`, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
+    res.render('restaurant/NoReviewsPage', { title: "Reviews", page_function: `Reviews for "${restaurant.restaurantName}"`, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
   } else {
-    res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `Reviews for ${restaurant.restaurantName}`, reviewData: reviewData, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
+    res.render('restaurant/ReviewsPage', { title: "Reviews", page_function: `Reviews for "${restaurant.restaurantName}"`, reviewData: reviewData, restaurantId: id, loggedUserId: userId, loggedIsManager: isManager });
   }
 });
 
@@ -117,7 +117,7 @@ router.get('/menu/edit/:id', async (req, res) => {
   //Get restaurant menu items, then display page with form for creating a new item,
   // and list existing items with remove/edit options
   const restaurant = await restaurants_DAL.getRestaurantFromId(id)
-  res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant})
+  res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant})
 });
 
 router.get('/menu/modify/:restid/:foodid', async (req, res) => {
@@ -135,7 +135,7 @@ router.get('/menu/modify/:restid/:foodid', async (req, res) => {
       foodItem = await restaurants_DAL.getFood_Item(restid, foodid)
   }
   catch(e){
-      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: e})
       return
   }
   
@@ -155,17 +155,17 @@ router.post('/menu/add/:id', async (req, res) => {
   const restaurant = await restaurants_DAL.getRestaurantFromId(id)
 
   if(!form.itemName){
-    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Food name not provided!"})
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Food name not provided!"})
     return
   }
 
   if(!form.price){
-    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Price not provided!"})
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Price not provided!"})
     return
   }
 
   if(!form.customType){
-    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Custom type not provided!"})
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Custom type not provided!"})
     return
   }
 
@@ -180,7 +180,7 @@ router.post('/menu/add/:id', async (req, res) => {
       await restaurants_DAL.addFood_Item(restaurant._id, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray})
   }
   catch(e){
-      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: e})
       return
   }
   
@@ -201,17 +201,17 @@ router.post('/menu/modify/:restid/:foodid', async (req, res) => {
   const form = req.body
 
   if(!form.itemName){
-    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Food name not provided!"})
+    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Food name not provided!"})
     return
   }
 
   if(!form.price){
-    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Price not provided!"})
+    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Price not provided!"})
     return
   }
 
   if(!form.customType){
-    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: "Custom type not provided!"})
+    res.render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Custom type not provided!"})
     return
   }
 
@@ -226,7 +226,7 @@ router.post('/menu/modify/:restid/:foodid', async (req, res) => {
       await restaurants_DAL.replaceFood_Item(restid, foodid, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray})
   }
   catch(e){
-      res.status(400).render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      res.status(400).render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: e})
       return
   }
   
@@ -248,7 +248,7 @@ router.post('/menu/delete/:restid/:foodid', async (req, res) => {
       await restaurants_DAL.removeFood_Item(restid, foodid)
   }
   catch(e){
-      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for ${restaurant.restaurantName}`, restaurant: restaurant, error: e})
+      res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: e})
       return
   }
   

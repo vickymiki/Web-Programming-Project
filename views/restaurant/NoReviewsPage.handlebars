@@ -1,17 +1,25 @@
-<h1>{{page_function}}</h1>
+<div class="ml-3"><h3>{{page_function}}</h3></div>
 <body>
+  <div class="ml-4 new_review_div">
   <form method="POST" id="New_Review" action="/restaurants/{{restaurantId}}/upload" enctype="multipart/form-data">
     <input type="hidden" name="postType" value="new_review">
-    <label for="review">New Review:</label>
-    <input type="text" name="review">
-    <label for="rating">Rating (1-5):</label>
-    <input type="number" name="rating" min="1" max="5">
-    <label for="photo">Optionally add a photo:</label>
-    <input type="file" name="photo" accept="image/png, image/jpeg">
+    <div class="">
+    <label class="new_review_label font-weight-bold" for="review">New Review</label>
+    <input class="new_review_input" type="text" name="review" maxlength="280" required>
+    </div>
+    <div class="">
+    <label class="new_rating_label font-weight-bold" for="rating">Rating (1-5)</label>
+    <input type="number" name="rating" min="1" max="5" required>
+    </div>
+    <div class="">
+    <label for="photo" class="font-weight-bold">Optionally add a photo</label>
+    <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
+    </div>
     <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
     <input type="hidden" name="userId" value={{loggedUserId}}>
     <input type="hidden" name="isManager" value={{loggedIsManager}}>
-    <button type="submit">Submit Review</button>
+    <div class="submit_review_btn"><button type="submit">Submit Review</button></div>
   </form>
-  <h3>No Reviews Found</h3>
+  </div>
+  <div class="ml-3 mt-3"><h4>No Reviews Found</h4></div>
 </body>
