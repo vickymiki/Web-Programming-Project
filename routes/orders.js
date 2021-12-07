@@ -49,6 +49,23 @@ router.get('/completed/:restid', async (req, res) => {
     res.render('orders/OrdersCompletedPage', {title: "Completed Orders", page_function: "View Completed Customer Orders!", orders: placedOrdersArray})
 });
 
+router.get('/:userid/incomplete', async (req, res) => {
+    const userid = req.params.userid
+
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    let userOrders = await orders_DAL.getAllOrdersFromUser(req.session.user.username)
+    let incompleteOrders = []
+    if(userOrders.length > 0){
+        incompleteOrders = await orders_DAL.getIncompleteOrdersFromIds(userOrders)
+    }
+
+    res.render('user/OrdersIncompletePage', {title: "Incomplete Orders", page_function: "View Incomplete Orders!", orders: incompleteOrders, userid: userid})
+});
+
 router.post('/complete/:restid/:orderid', async (req, res) => {
     const restid = req.params.restid
     const orderid = req.params.orderid
@@ -60,6 +77,19 @@ router.post('/complete/:restid/:orderid', async (req, res) => {
     await orders_DAL.deliveredOrder(orderid)
 
     res.redirect('/orders/placed/' + restid)
+});
+
+router.post('/delete/:orderid/:userid', async (req, res) => {
+    const orderid = req.params.orderid
+    const userid = req.params.userid
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !orderid || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    await orders_DAL.deleteOrder(orderid)
+
+    res.redirect(`/orders/${userid}/incomplete`)
 });
 
 module.exports = router;

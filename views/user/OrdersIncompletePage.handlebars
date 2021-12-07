@@ -1,0 +1,42 @@
+<h1>{{page_function}}</h1>
+{{#if error}}
+<h2 id="error">{{error}}</h2>
+{{/if}}
+
+<h2>Incomplete Orders</h2>
+{{#if orders.length}}
+{{#each orders}}
+    <p>Delivery Address: {{deliveryAddress}}</p>
+    <p>Items in cart:</p>
+    <ul>
+        {{#each itemsOrdered}}
+            <li>{{itemName}}</li>
+            {{#if customizableComponents.length}}
+            <ul>
+                {{#each customizableComponents}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+            {{/if}}
+        {{/each}}
+    </ul>
+    <form method="GET" id="complete-form" action="/restaurants/{{restaurant_id}}/cart">
+    <label id="submit">
+        <input type="submit" value="Finish Ordering"/>
+    </label>
+    </form>
+    <form method="POST" id="complete-form" action="/orders/delete/{{_id}}/{{../userid}}">
+    <label id="submit">
+        <input type="submit" value="Remove Order"/>
+    </label>
+    </form>
+{{/each}}
+{{else}}
+<h3>There are currently no incomplete orders!</h3>
+{{/if}}
+
+<script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src='/public/js/menuEdit_jq.js'></script>

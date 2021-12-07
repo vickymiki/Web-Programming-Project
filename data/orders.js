@@ -204,6 +204,18 @@ async function findOrderItems(userName, restaurantId) {
   return myOrder;
 }
 
+async function getAllOrdersFromUser(userName){
+  const orderCollection = await orders();
+  const allOrders = await orderCollection.find({userName: userName}).toArray()
+
+  let order_ids = []
+  for (const order of allOrders) {
+    order_ids.push(order._id)
+  }
+
+  return order_ids
+}
+
 async function getPlacedOrdersFromIds(order_id_array){
   const orderCollection = await orders();
   const myOrders = []
@@ -234,6 +246,21 @@ async function getCompletedOrdersFromIds(order_id_array){
   return myOrders
 }
 
+async function getIncompleteOrdersFromIds(order_id_array){
+  const orderCollection = await orders();
+  const myOrders = []
+  
+  for (const order_id of order_id_array) {
+    const myOrder = await orderCollection.findOne({ _id: order_id, orderStatus: "Not Placed" })
+    if(myOrder !== null) {
+      myOrder._id = myOrder._id.toString()
+      myOrders.push(myOrder)
+    }
+  }
+  
+  return myOrders
+}
+
 module.exports = {
   initOrder,
   addItemToOrder,
@@ -244,5 +271,7 @@ module.exports = {
   findCurrentOrder,
   findOrderItems,
   getPlacedOrdersFromIds,
-  getCompletedOrdersFromIds
+  getCompletedOrdersFromIds,
+  getIncompleteOrdersFromIds,
+  getAllOrdersFromUser
 };
