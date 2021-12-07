@@ -57,7 +57,7 @@ router.get('/:id/reviews', async (req, res) => {
     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
   }
   try {
-    reviewData = await reviews_DAL.getAllByRestuarant(id);
+    reviewData = await reviews_DAL.getAllByRestaurant(id);
   } catch (e) {
     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
   }

@@ -23,14 +23,15 @@
     <div class="submit_review_btn"><button type="submit">Submit Review</button></div>
   </form>
 </div>
+
+  <a href="/profile/reviews/{{restaurantId}}">Edit your Reviews</a>
+  <a href="/profile/replies/{{restaurantId}}">Edit your Replies</a>
   <div id="reviewList">
     
 <div class="rev ml-4 mt-3"><h3>Reviews</h3></div>
   {{#if reviewData.length}}
     {{#each reviewData}}  
       <div class="reviews ml-4 mt-4">
-        
-        
         <div class="pl-3">
           <div class="row mb-2">
             <div class="col-2 font-weight-bold">Username:</div> <div class="col-10"> {{userName}}</div>

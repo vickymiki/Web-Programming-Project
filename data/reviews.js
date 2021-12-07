@@ -145,7 +145,8 @@ async function create(restaurantId, userId, review, rating, isManager, imgname) 
     count += 1;
   };
 
-  const avg = sum / count;
+  let avg = sum / count;
+  avg = Math.round(100 * avg)/100;
   await restaurantCollection.updateOne({ _id: ObjectId(restaurantId) }, { $set: { rating: avg }});
 
   return { addedReview: true };
@@ -160,7 +161,7 @@ async function getAll() {
 
 //Function to return array of all reviews from a particular restaurant
 //This will be needed when displaying all restaurants
-async function getAllByRestuarant(restaurantId) {
+async function getAllByRestaurant(restaurantId) {
   if (!restaurantId || restaurantId == null) throw 'Must provide a restaurant id';
   if (typeof restaurantId !== 'string') throw 'Restaurant id must be a string';
   if (isSpaces(restaurantId)) throw 'Restaurant name id can not be only spaces';
@@ -315,7 +316,10 @@ async function remove(reviewId) {
     count += 1;
   };
 
-  if (count !== 0) avg = sum / count;
+  if (count !== 0) {
+    avg = sum / count;
+    avg = Math.round(100 * avg)/100;
+  }
   await restaurantCollection.updateOne({ _id: ObjectId(restaurant_id) }, { $set: { rating: avg }});
 
 
@@ -521,14 +525,98 @@ async function removeDislike(reviewId, user_id, managerStatus) {
   return action.dislikes;
 }
 
+async function editReview(reviewId, restaurantId, review, rating, imgname) {
+  //Error checking
+  if (!reviewId || reviewId == null) throw 'All fields need to have valid values';
+  if (!review || review == null) throw 'All fields need to have valid values';
+  if (!rating || rating == null) throw 'All fields need to have valid values';
+  if (!imgname || imgname == null) throw 'All fields need to have valid values'
+  //More error checking
+  if (typeof reviewId !== 'string') throw 'Restaurant id must be a string';
+  if (typeof review !== 'string') throw 'Review must be a string';
+  if (typeof rating !== 'number') throw 'Rating must be a number';
+  if (typeof imgname !== 'string') throw 'Image name must be a string';
+  
+  //More error checking
+  if (isSpaces(review)) throw 'Reviewer can not be only spaces';
+  if (isSpaces(imgname)) throw 'Image name can not be only spaces';
+  if (rating > 5 || rating < 1) throw 'Rating must be in the range [1-5]';
+  //Check for valid ID's
+  if (!validId(reviewId)) throw "Restaurant Id must be a string of 24 hex characters";
+
+  const reviewCollection = await reviews();
+  const restaurantCollection = await restaurants();
+  const myReview = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
+
+  if (!myReview) {
+    throw 'That review was not found';
+  } else {
+    const date = new Date();
+    //Format date 
+    const month = date.getMonth() + 1; //indexes from 0
+    const day = date.getDate();
+    const year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    if (minutes < 10) minutes = `0${minutes}`;
+    let period = "AM";
+    if (hours > 12) {
+      hours -= 12;
+      period = "PM";
+    }
+    if (hours == 0) hours = 12;
+    const timestamp = `${month}/${day}/${year} ${hours}:${minutes} ${period}`;
+    const updatedInfo = await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $set: { review: review, rating: rating, imageName: imgname, date: timestamp } });
+    //Now update the new rating average for that restaurant
+    const myRestaurant = await restaurantCollection.findOne(ObjectId(restaurantId));
+    const allReviews = myRestaurant.reviews;
+
+    let sum = 0;
+    let count = 0;
+    for (let i = 0; i < allReviews.length; i++){
+      let itemReview = await reviewCollection.findOne(ObjectId(allReviews[i]));
+      sum += itemReview.rating;
+      count += 1;
+    };
+    let avg = sum / count;
+    avg = Math.round(100 * avg)/100;
+    await restaurantCollection.updateOne({ _id: ObjectId(restaurantId) }, { $set: { rating: avg }});
+  }
+
+  return { updatedReview: true };
+}
+
+async function getAllRepliesByRestaurant(restaurantId) {
+  if (!restaurantId || restaurantId == null) throw 'Must provide a restaurant id';
+  if (typeof restaurantId !== 'string') throw 'restaurant id must be a string';
+  if (!validId(restaurantId)) throw "Restaurant Id must be a string of 24 hex characters";
+
+  const myReviews = await this.getAllByRestaurant(restaurantId);
+  const myReplies = [];
+  //array to hold review ids so we can push them to myReplies later for deleting 
+  const myReviewIds = [];
+
+  myReviews.forEach(review => {
+    review.replies.forEach(reply => {
+      //Need to add the proper review id for when we remove it later
+      myReviewIds.push(review._id.toString());
+      myReplies.push(reply);
+    })
+  });
+
+  return [myReplies, myReviewIds];
+}
+
 module.exports = {
   create,
   getAll,
-  getAllByRestuarant,
+  getAllByRestaurant,
   getAllByUser,
   remove,
   addLike,
   addDislike,
   removeLike,
-  removeDislike
+  removeDislike,
+  getAllRepliesByRestaurant,
+  editReview
 };
