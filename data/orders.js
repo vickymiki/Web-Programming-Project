@@ -166,9 +166,12 @@ async function deleteOrder(orderId) {
   if (!validId(orderId)) throw "Order Id must be a string of 24 hex characters";
 
   const orderCollection = await orders();
-
+  let order = await orderCollection.findOne({ _id: ObjectId(orderId) });
+  if (order === null) throw "Could not delete order";
+  let restaurant_id = order.restaurant_id;
   const deletionInfo = await orderCollection.deleteOne({ _id: ObjectId(orderId) });
   if (deletionInfo.deletedCount === 0) throw "Could not delete order";
+  await restaurant_DAL.removeOrderFromRestaurant(orderId, restaurant_id)
 
   return { deletedOrder: true };
 }
