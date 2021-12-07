@@ -3,9 +3,22 @@ const users = mongoCollections.users;
 const managers = mongoCollections.managers;
 const { toObjectId, isValidName, isValidPassword, userFieldChecker } = require("../dataUtils"); 
 const bcrypt = require('bcrypt');
+const ObjectId = require('mongodb').ObjectId;
 //const { use } = require('../routes/restaurants');
 const saltRounds = 16;
 
+function validateObjectId(id){
+    if( typeof id !== 'string' && !ObjectId.isValid(id) ) throw `id must be of type string or ObjectId: ${id}`
+    if( typeof id === 'string' && id.length === id.split(' ').length - 1) throw `id as string must not be empty: ${id}`
+    if( typeof id === 'string' ){
+        try{
+            id = ObjectId(id)    
+        }catch(e){
+            throw `Provided id not a valid ObjectId: ${id}`
+        }
+    }
+    return id
+}
 
 async function createUser(userName, streetAddress, city, state, zip, 
     email, phone, password) {
@@ -117,4 +130,14 @@ async function changePassword(userId, oldPwd, newPwd) {
     return { updatePwd: true };
 }
 
-module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, changePassword}
+async function addOrderToFavorites(order_id, user_id){
+    user_id = validateObjectId(user_id)
+    order_id = validateObjectId(order_id)
+    const userCollection = await users()
+    let update = await userCollection.updateOne({_id: user_id}, {$push: {favorites: order_id.toString()}})
+    if(update.matchedCount === 0) throw `Failed to add order: ${order_id}`    
+
+    return true
+}
+
+module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, changePassword, addOrderToFavorites}

@@ -66,6 +66,40 @@ router.get('/:userid/incomplete', async (req, res) => {
     res.render('user/OrdersIncompletePage', {title: "Incomplete Orders", page_function: "View Incomplete Orders!", orders: incompleteOrders, userid: userid})
 });
 
+router.get('/:userid/placed', async (req, res) => {
+    const userid = req.params.userid
+
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    let userOrders = await orders_DAL.getAllOrdersFromUser(req.session.user.username)
+    let orders = []
+    if(userOrders.length > 0){
+        orders = await orders_DAL.getPlacedOrdersFromIds(userOrders)
+    }
+
+    res.render('user/OrdersPlacedPage', {title: "In Progress Orders", page_function: "View In Progress Orders!", orders: orders, userid: userid})
+});
+
+router.get('/:userid/completed', async (req, res) => {
+    const userid = req.params.userid
+
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    let userOrders = await orders_DAL.getAllOrdersFromUser(req.session.user.username)
+    let orders = []
+    if(userOrders.length > 0){
+        orders = await orders_DAL.getCompletedOrdersFromIds(userOrders)
+    }
+
+    res.render('user/OrdersCompletedPage', {title: "Completed Orders", page_function: "View Completed Orders!", orders: orders, userid: userid})
+});
+
 router.post('/complete/:restid/:orderid', async (req, res) => {
     const restid = req.params.restid
     const orderid = req.params.orderid
@@ -90,6 +124,19 @@ router.post('/delete/:orderid/:userid', async (req, res) => {
     await orders_DAL.deleteOrder(orderid)
 
     res.redirect(`/orders/${userid}/incomplete`)
+});
+
+router.post('/addFavorite/:orderid/:userid', async (req, res) => {
+    const orderid = req.params.orderid
+    const userid = req.params.userid
+    //Check that the person attempting to access this is the manager of 
+    if (!req.session.user || !orderid || !userid || !((await user_DAL.getUserIdByName(req.session.user.username)) === userid)){
+      return res.status(403).redirect('/restaurants')
+    }
+
+    await user_DAL.addOrderToFavorites(orderid, userid)
+
+    res.redirect(`/restaurants`)
 });
 
 module.exports = router;
