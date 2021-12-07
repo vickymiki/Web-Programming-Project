@@ -39,6 +39,7 @@ body {
   background-color: #dce7b1;
   margin-top: 100px;
   border-radius: 25px;
+  width: 450px !important;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
@@ -70,8 +71,9 @@ body {
   background-color: #dce7b1;
   margin-top: 100px;
   border-radius: 25px;
+  width: 550px !important;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-  padding: 75px 34px 28px 75px !important;
+  padding: 45px 34px 28px 75px !important;
 }
 
 .username_input {
@@ -110,6 +112,9 @@ body {
 
 
   /* Restaurants Page */
+.user_color {
+  color: #009c9c;
+}
 .rest {
     border: 1px dashed black;
     margin: 6px 0px 6px 14px !important;

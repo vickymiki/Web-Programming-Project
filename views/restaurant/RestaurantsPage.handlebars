@@ -1,7 +1,9 @@
 <div>
-  {{#if userName}}
-  <h5>Wecome back {{userName}}!</h5>
-  {{/if}}
+  <div class="row ml-3 mb-2 fs_20">
+    {{#if userName}}
+    <div class="pr-2">Wecome back</div><div class="user_color">"{{userName}}"</div>
+    {{/if}}
+  </div>
 <div class="restaurantsPage_heading">{{page_function}}</div>
 {{#if restaurantArray.length}}
     <body>
@@ -17,7 +19,7 @@
           <div class="col-3"><a href="/restaurants/{{_id}}/reviews" class="reviews_link">Reviews</a></div>
           <div class="col-3 row"><p class="font-weight-bold pr-2">Rating:</p> <p>{{rating}}</p></div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
           <div class="col-3 font-weight-bold">Street Address:</div>
           <div class="pl-0 col-9">{{streetAddress}}</div>
         </div>
