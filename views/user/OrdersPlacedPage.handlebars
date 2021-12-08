@@ -1,29 +1,39 @@
-<h1>{{page_function}}</h1>
+<div class="ml-4 inProg_order_heading mb-3"><h3 class="mb-0">{{page_function}}</h3></div>
+
+
 {{#if error}}
-<h2 id="error">{{error}}</h2>
+<div class="error_div" id="error">{{error}}</div>
 {{/if}}
 
-<h2>Placed Orders</h2>
+<h2 class="ml-4">Placed Orders:</h2>
 {{#if orders.length}}
 {{#each orders}}
-    <p>Delivery Address: {{deliveryAddress}}</p>
-    <p>Items in order:</p>
-    <ul>
-        {{#each itemsOrdered}}
-            <li>{{itemName}}</li>
-            {{#if customizableComponents.length}}
+<div class="incomp_order_box ml-4 pl-3">
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Delivery Address:</div><div class="col-8 pl-0 texxt_overflow">{{deliveryAddress}}</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Items in order:</div>
+        <div class="col-8 pl-0"> 
             <ul>
-                {{#each customizableComponents}}
-                    <li>{{this}}</li>
+                {{#each itemsOrdered}}
+                    <li>{{itemName}}</li>
+                    {{#if customizableComponents.length}}
+                    <ul>
+                        {{#each customizableComponents}}
+                            <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    {{/if}}
                 {{/each}}
             </ul>
-            {{/if}}
-        {{/each}}
-    </ul>
-
+        </div>
+    </div>
+</div>
 {{/each}}
 {{else}}
-<h3>There are currently no placed orders!</h3>
+<div class="bottom_link">There are currently no placed orders!</div>
 {{/if}}
 
 <script
