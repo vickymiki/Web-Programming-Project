@@ -12,7 +12,7 @@ const fs = require('fs');
 const multer = require('multer');
 const ObjectId = require('mongodb').ObjectId;
 
-const upload = multer({ dest: '/uploads/'});
+const upload = multer({ dest: '../uploads/'});
 
 router.get('/', async (req, res) => {
   let isManager = false;
@@ -100,7 +100,7 @@ router.get('/:id/cart', async (req, res) => {
     const id = req.params.id;
     const restaurant = await restaurants_DAL.getRestaurantFromId(id);
     let orderData = await orders_DAL.findOrderItems(req.session.user.username, id);
-    res.render('restaurant/ViewCart', {title: "View Cart", page_function: `View ${req.session.user.username}'s cart at ${restaurant.restaurantName}`, orderData: orderData})
+    res.render('restaurant/ViewCart', {title: "View Cart", page_function: `View ${req.session.user.username}'s cart at ${restaurant.restaurantName}`, orderData: orderData, restaurantId: id})
   }
 
 });
@@ -505,10 +505,18 @@ router.post('/:id', async (req, res) => {
   menuItem.itemName = req.body.itemName;
   menuItem.price = Number(req.body.price);
   menuItem.customizableComponents = [];
+  
+  //This will always be from users collections since managers can't place orders
+  let currentUser = await user_DAL.getUserProfileByName(req.session.user.username);
+  let streetAddress = currentUser.streetAddress;
+  let city = currentUser.city;
+  let state = currentUser.state;
+  let zip = currentUser.zip;
+  let fullAddress = `${streetAddress} ${city}, ${state} ${zip}`
 
   if(!await orders_DAL.findCurrentOrder(req.session.user.username, id)){
     //Todo pull the actual address
-    await orders_DAL.initOrder(req.session.user.username, id, "fakeAddress");
+    await orders_DAL.initOrder(req.session.user.username, id, fullAddress);
   }
 
   for (const key in req.body) {

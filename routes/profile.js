@@ -10,19 +10,19 @@ const e = require('express');
 const fs = require('fs');
 const multer = require('multer');
 
-const upload = multer({ dest: '/uploads/'});
+const upload = multer({ dest: '../uploads/'});
 
 router.get('/reviews/:restId', async (req, res) => {
   
   if (!req.session.user){
         return res.redirect('/login')
-    }
+  }
   let rest = await restaurants_DAL.getRestaurantFromId(req.params.restId);
   let userName = req.session.user.username;
+  let restaurantId = req.params.restId;
 
   if (req.session.user.accountType === 'manager') {
     let isManager = true;
-    let restaurantId = req.params.restId;
     let userId = await manager_DAL.getManagerIdByName(req.session.user.username);
     var myReviews = [];
     let RestReviews = null;
@@ -37,14 +37,13 @@ router.get('/reviews/:restId', async (req, res) => {
         if (JSON.stringify(RestReviews[i]) == JSON.stringify(UserReviews[j])) myReviews.push(RestReviews[i]);
       }
     }
-    res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: true, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName })
+    res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: true, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName, restaurantId: restaurantId})
     } catch (e) {
-      res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: true, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName })
+      res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: true, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName, restaurantId: restaurantId })
     }
   }
   else if (req.session.user.accountType === 'user') {
     let isManager = false;
-    let restaurantId = req.params.restId;
     let userId = await user_DAL.getUserIdByName(req.session.user.username);
     let myReviews = [];
     let RestReviews = null;
@@ -59,9 +58,9 @@ router.get('/reviews/:restId', async (req, res) => {
         if (JSON.stringify(RestReviews[i]) == JSON.stringify(UserReviews[j])) myReviews.push(RestReviews[i]);
       }
     }
-    res.render('user/UserReviews', { title: `${req.user}'s Reviews`, page_function: "Your Reviews", isManager: false, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName })
+    res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: false, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName, restaurantId: restaurantId})
     } catch (e) {
-      res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: false, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName })
+      res.render('user/UserReviews', { title: `${userName}'s Reviews`, page_function: "Your Reviews", isManager: false, reviews: myReviews, restaurantName: rest.restaurantName, userName: userName, restaurantId: restaurantId })
     }
   }
   else {
