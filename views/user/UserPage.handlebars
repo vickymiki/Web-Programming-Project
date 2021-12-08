@@ -25,7 +25,21 @@
   {{/if}}
 {{else}}
 <div class="pl-4">
+  <section>
+    <p id='mb-2'>User Name: {{user.userName}}</p>
+    <p id='mb-2'>Street Address: {{user.streetAddress}}</p>
+    <p id='mb-2'>City: {{user.city}}</p>
+    <p id='mb-2'>State: {{user.state}}</p>
+    <p id='mb-2'>Zip: {{user.zip}}</p>
+    <p id='mb-2'>Email: {{user.email}}</p>
+    <p id='mb-2'>Phone: {{user.phone}}</p>
+  </section>
+</div>
+<div class="pl-4">
   <ul>
+    <li clsss="mb-2">
+      <a href="user/{{userId}}" class="ord_color">Update Profile</a>
+    </li>
     <li class="mb-2">
       <a href="/orders/{{userId}}/incomplete" class="ord_color">View Incomplete Orders</a>
     </li>
