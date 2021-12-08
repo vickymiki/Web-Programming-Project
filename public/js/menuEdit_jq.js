@@ -5,9 +5,11 @@ $('#superburger').click(function(){
     $('#customArea').hide()
 });
 
-    $('#notsuperburger').click(function(){
+$('#notsuperburger').click(function(){
     $('#superburgerselected').hide()
     $('#customArea').show()
+    $('#customArea').removeAttr('style');
+    $('#customArea').removeAttr('hidden');
 });
 
 function handleAddCustom(){
