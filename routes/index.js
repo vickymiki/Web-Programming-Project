@@ -20,7 +20,8 @@ const constructorMethod = (app) => {
   app.use('/orders', ordersRoutes);
 
   app.use('*', (req, res) => {
-    res.sendStatus(404);
+    res.status(404)
+    res.render('error/error', {error: `${res.statusCode} Not Found`});
   });
 };
 
