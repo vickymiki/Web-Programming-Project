@@ -1,6 +1,7 @@
 <h1>{{page_function}}</h1>
 <a href="/restaurants/{{restaurantId}}">Add more items to cart</a>
 <h2>Total Price: {{orderData.totalPrice}}</h2>
+<h2>Current Discount: {{orderData.discount}}% off</h2>
 {{#if orderData.itemsOrdered.length}}
   {{#each orderData.itemsOrdered}}
     <h3>{{itemName}}</h3>
@@ -17,9 +18,20 @@
     <button type="submit">Remove Item</button>
   </form>
   {{/each}}
+  <h2 id="couponResult">{{couponResult}}</h2>
+  <form method="POST" action="/restaurants/orders/applyDiscount" id="applyDiscount">
+    <input type="hidden" name="orderId" value={{orderData._id}}>
+    <input type="hidden" name="restaurantId" value={{orderData.restaurant_id}}>
+    <label for="coupon">Coupon Code</label>
+    <input type="text" id="coupon" name="coupon" maxlength="30" required>
+    <button type="submit">Apply Coupon Code</button>
+  </form>
   <form method="POST" action="/restaurants/orders/place" id="PlaceOrder">
     <input type="hidden" name="orderId" value={{orderData._id}}>
     <button type="submit">Submit Order</button>
+  </form>
 {{else}}
 <p>No items have been added to your order yet</p>
 {{/if}}
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="/public/js/applyDiscount_jq.js"></script>

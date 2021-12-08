@@ -561,5 +561,20 @@ router.post('/orders/place', async (req, res) => {
 
 });
 
+router.post('/orders/applyDiscount', async (req, res) => {
+  let orderId = req.body.orderId;
+  let code = req.body.coupon;
+  let restaurantId = req.body.restaurantId;
+  let applyDiscount = await orders_DAL.addCoupon(orderId, code);
+  let couponResult = "Discount Code is not Valid";
+  if (applyDiscount.addedDiscount) couponResult = "Discount Applied!"
+  
+  //const id = req.params.id;
+  const restaurant = await restaurants_DAL.getRestaurantFromId(restaurantId);
+  let orderData = await orders_DAL.findOrderItems(req.session.user.username, restaurantId);
+  res.render('restaurant/ViewCart', { title: "View Cart", page_function: `View ${req.session.user.username}'s cart at ${restaurant.restaurantName}`, orderData: orderData, restaurantId: restaurantId, couponResult: couponResult });
+  //res.redirect(`/restaurants/${restaurantId}/cart`);
+})
+
 
 module.exports = router;

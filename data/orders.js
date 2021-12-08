@@ -46,6 +46,7 @@ async function initOrder(userName, restaurant_id, deliveryAddr) {
   const itemsOrdered = [];
   const totalPrice = 0;
   const orderStatus = "Not Placed";
+  const discount = 0;
 
   const newOrder = {
     userName: userName,
@@ -53,7 +54,8 @@ async function initOrder(userName, restaurant_id, deliveryAddr) {
     itemsOrdered: itemsOrdered,
     deliveryAddress: deliveryAddr,
     totalPrice: totalPrice,
-    orderStatus: orderStatus
+    orderStatus: orderStatus,
+    discount: discount
   };
 
   const orderCollection = await orders();
@@ -98,7 +100,10 @@ async function addItemToOrder(orderId, item) {
     sum = Math.round(100 * (sum + (myOrder.itemsOrdered[i]).price))/100;
   }
 
-  await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: sum } });
+  let total = sum - (sum * myOrder.discount);
+  total = Math.round(100 * total) / 100;
+
+  await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: total } });
   if (updateInfo.modifiedCount === 0) throw "Could not update order total";
   
   return { addedItem: true };
@@ -127,7 +132,10 @@ async function reomveItemFromOrder(orderId, itemOrderedId) {
     sum = Math.round(100 * (sum + (myOrder.itemsOrdered[i]).price))/100;
   }
 
-  await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: sum } });
+  let total = sum - (sum * myOrder.discount);
+  total = Math.round(100 * total) / 100;
+
+  await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: total } });
   
   return { removedItem: true };
 }
@@ -274,6 +282,46 @@ async function getIncompleteOrdersFromIds(order_id_array){
   return myOrders
 }
 
+async function addCoupon(orderId, code) {
+  if (!orderId || orderId == null) throw 'All fields need to have valid values';
+  if (!code || code == null) throw 'All fields need to have valid values';
+  if (typeof orderId !== 'string') throw 'Order id must be a string';
+  if (typeof code !== 'string') throw 'Coupon code must be a string';
+  if (!validId(orderId)) throw "Order Id must be a string of 24 hex characters";
+
+  const allCoupons = {
+    "matt": 15,
+    "caleb": 15,
+    "vikrant": 15,
+    "zhixiang": 15,
+    "cs546": 10,
+    "finalprojectgrade100/100": 100
+  }
+
+  const orderCollection = await orders();
+  const myOrder = await orderCollection.findOne({ _id: ObjectId(orderId) });
+
+  let coupon = code.toLowerCase();
+  let allCodes = Object.keys(allCoupons)
+  if (allCodes.includes(coupon)) {
+    
+    let sum = 0;
+    for (let i = 0; i < (myOrder.itemsOrdered).length; i++) {
+      let test = (myOrder.itemsOrdered[i]).price;
+      sum = Math.round(100 * (sum + (myOrder.itemsOrdered[i]).price)) / 100;
+    }
+
+    let discount = allCoupons[`${coupon}`];
+    let total = sum - (sum * (discount / 100));
+    total = Math.round(100 * total) / 100;
+
+    let updateInfo = await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: total, discount: discount } });
+    if (updateInfo.modifiedCount === 0) throw "Could not update order total";
+    return { addedDiscount: true }
+  }
+  return { addedDiscount: false };
+}
+
 module.exports = {
   initOrder,
   addItemToOrder,
@@ -286,5 +334,6 @@ module.exports = {
   getPlacedOrdersFromIds,
   getCompletedOrdersFromIds,
   getIncompleteOrdersFromIds,
-  getAllOrdersFromUser
+  getAllOrdersFromUser,
+  addCoupon
 };
