@@ -159,12 +159,31 @@ router.get('/menu/modify/:restid/:foodid', async (req, res) => {
   return
 });
 
-router.post('/menu/add/:id', async (req, res) => {
+router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
   const id = req.params.id
   
   //Check that the person attempting to access this is the manager of 
   if (!req.session.user || !id || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
     return res.status(403).redirect('/restaurants')
+  }
+
+  let imgname = new Date().getTime().toString();
+  if (!req.file) imgname = "no_image.jpeg";
+  else {
+    const tempPath = req.file.path;
+    const targetPath = path.join(__dirname, `../public/images/${imgname}`);
+
+    if (path.extname(req.file.originalname).toLowerCase() === ".png" ||
+      path.extname(req.file.originalname).toLowerCase() === ".jpg" || 
+      path.extname(req.file.originalname).toLowerCase() === ".jpeg") {
+      fs.rename(tempPath, targetPath, err => {
+        if (err) res.render('error/error', { error: "Internal Error", title: "Error", page_function: "Error Display" });
+      })
+    } else {
+      res.status(403);
+      res.render('error/error', { error: "Only png or jpg/jpeg allowed", title: "Error", page_function: "Error Display" });
+      return;
+    }
   }
 
   const form = req.body
@@ -193,7 +212,7 @@ router.post('/menu/add/:id', async (req, res) => {
   try{
       isBurger = form.customType === "superburger"
       if(isBurger) form.customOptionArray = ["Bread-top" , "seeds" , "lettuce" , "bacon" , "cheese" , "meat" , "bread-bottom"]
-      await restaurants_DAL.addFood_Item(restaurant._id, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray})
+      await restaurants_DAL.addFood_Item(restaurant._id, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray, imageName: imgname})
   }
   catch(e){
       res.status(400).render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: e})
@@ -204,7 +223,7 @@ router.post('/menu/add/:id', async (req, res) => {
   return
 });
 
-router.post('/menu/modify/:restid/:foodid', async (req, res) => {
+router.post('/menu/modify/:restid/:foodid', upload.single("photo"), async (req, res) => {
   const foodid = req.params.foodid
   const restid = req.params.restid
   const restaurant = await restaurants_DAL.getRestaurantFromId(restid)
@@ -212,6 +231,25 @@ router.post('/menu/modify/:restid/:foodid', async (req, res) => {
   //Check that the person attempting to access this is the manager of 
   if (!req.session.user || !foodid || !restid || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, restid)){
     return res.status(403).redirect('/restaurants')
+  }
+
+  let imgname = new Date().getTime().toString();
+  if (!req.file) imgname = "no_image.jpeg";
+  else {
+    const tempPath = req.file.path;
+    const targetPath = path.join(__dirname, `../public/images/${imgname}`);
+
+    if (path.extname(req.file.originalname).toLowerCase() === ".png" ||
+      path.extname(req.file.originalname).toLowerCase() === ".jpg" || 
+      path.extname(req.file.originalname).toLowerCase() === ".jpeg") {
+      fs.rename(tempPath, targetPath, err => {
+        if (err) res.render('error/error', { error: "Internal Error", title: "Error", page_function: "Error Display" });
+      })
+    } else {
+      res.status(403);
+      res.render('error/error', { error: "Only png or jpg/jpeg allowed", title: "Error", page_function: "Error Display" });
+      return;
+    }
   }
 
   const form = req.body
@@ -239,7 +277,7 @@ router.post('/menu/modify/:restid/:foodid', async (req, res) => {
   try{
       isBurger = form.customType === "superburger"
       if(isBurger) form.customOptionArray = ["Bread-top" , "seeds" , "lettuce" , "bacon" , "cheese" , "meat" , "bread-bottom"]
-      await restaurants_DAL.replaceFood_Item(restid, foodid, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray})
+      await restaurants_DAL.replaceFood_Item(restid, foodid, {itemName: form.itemName, price: form.price, isBurger, customizableComponents: form.customOptionArray, imageName: imgname})
   }
   catch(e){
       res.status(400).render('restaurant/FoodEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: e})
@@ -531,7 +569,6 @@ router.post('/:id', async (req, res) => {
   let fullAddress = `${streetAddress} ${city}, ${state} ${zip}`
 
   if(!await orders_DAL.findCurrentOrder(req.session.user.username, id)){
-    //Todo pull the actual address
     await orders_DAL.initOrder(req.session.user.username, id, fullAddress);
   }
 

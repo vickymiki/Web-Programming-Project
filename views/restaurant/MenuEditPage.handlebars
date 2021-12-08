@@ -3,13 +3,17 @@
 <h2 id="error">{{error}}</h2>
 {{/if}}
 <h2>Add New Item</h2>
-<form method="POST" id="menu-form" action="/restaurants/menu/add/{{restaurant._id}}">
+<form method="POST" id="menu-form" action="/restaurants/menu/add/{{restaurant._id}}" enctype="multipart/form-data">
 <label id="itemName">Food name:
     <input type = "text" name="itemName" placeholder="Food name"/>
 </label>
 <br>
 <label id="price">Price:
     <input type = "text" name="price" placeholder="5.99"/>
+</label>
+<br>
+<label id="photo">Optionally upload an item photo
+<input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
 </label>
 <br>
 <label id="superburger">Super Burger
@@ -45,6 +49,7 @@
 {{#each restaurant.menuItems}}
     <p>{{itemName}}</p>
     <p>{{price}}</p>
+    <img src="/public/images/{{imageName}}" alt="Menu Item Image">
     <form method="GET" id="modify-form" action="/restaurants/menu/modify/{{../restaurant._id}}/{{_id}}">
     <label id="submit_modify">
         <input type="submit" value="Modify"/>
