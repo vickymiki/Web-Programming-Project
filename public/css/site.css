@@ -153,6 +153,10 @@ body {
 .review_heading {
     font-size: 31px;
     font-weight: 500;
+    border: 1px dashed;
+    width:384px;
+    padding: 0px 0px 0px 15px;
+    background-color: #c2e083;
 }
 
 .new_review_div {
@@ -202,4 +206,87 @@ width: 35% !important;
     border: 1px dashed;
     padding: 5px 0px 0px 9px;
     margin: 0px 0px 11px 0px;
+}
+
+/* Profile Page */
+
+.ord_color {
+    color: #cc05cc !important;
+}
+
+.prof {
+    border: 1px dashed;
+    width: 181px;
+    padding: 4px 0px 4px 16px;
+    background-color: #c2e083;
+}
+
+/* Create Restaurant  */
+
+.create_res_heading {
+    border: 1px dashed;
+    width: 260px;
+    padding: 7px 0px 0px 15px;
+    background-color: #c2e083;
+}
+
+.crt_str_add {
+    margin-left: 41px;
+    margin-top: 7px;
+}
+
+.crt_rest_name {
+    margin-left: 25px;
+    margin-top: 7px;
+}
+
+.crt_city {
+    margin-left: 111px;
+    margin-top: 7px;  
+}
+
+.crt_state {
+    margin-left: 103px;
+    margin-top: 7px;  
+}
+
+.crt_zip {
+    margin-left: 115px;
+    margin-top: 7px;  
+}
+
+.crt_email {
+    margin-left: 101px;
+    margin-top: 7px;  
+}
+
+.crt_phone {
+    margin-left: 96px;
+    margin-top: 7px;  
+}
+
+.crt_btn {
+    margin-left: 140px;
+}
+
+/* User Reviews */
+
+.your_reviews {
+    font-size: 31px;
+    font-weight: 500;
+    border: 1px dashed;
+    width:  217px;
+    padding: 0px 0px 0px 15px;
+    background-color: #c2e083;
+}
+
+/* User Replies */
+
+.your_replies_heading {
+    font-size: 31px;
+    font-weight: 500;
+    border: 1px dashed;
+    width:  206px;
+    padding: 0px 0px 0px 15px;
+    background-color: #c2e083;
 }

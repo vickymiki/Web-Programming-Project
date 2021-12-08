@@ -1,42 +1,49 @@
-<h1>{{page_function}}</h1>
+<div class="ml-4 prof mb-3"><h3 class="mb-0">{{page_function}}</h3></div>
 
 {{#if isManager}}
-<h1>Manage Restaurants</h1>
+<div class="pl-4"><h4>Manage Restaurants</h4></div>
   {{#if restaurants.length}}
     {{#each restaurants}}  
     <h1>{{restaurantName}}</h1>
-    <ul>
-      <li>
-        <a href="/orders/placed/{{_id}}">View Placed Orders</a>
-        <li>
-        <a href="/orders/completed/{{_id}}">View Completed Orders</a>
-      </li>
-      </li>
-      <li>
-        <a href="/restaurants/menu/edit/{{_id}}">Edit Menu</a>
-      </li>
-      <li>
-        <a href="/restaurants/{{_id}}/reviews">View Comments</a>
-      </li>
-    </ul>
+    <div class="pl-4">
+      <ul>
+        <li class="mb-2">
+          <a href="/orders/placed/{{_id}}" class="ord_color">View Placed Orders</a>
+        </li>
+        <li class="mb-2">
+          <a href="/orders/completed/{{_id}}" class="ord_color">View Completed Orders</a>
+        </li>
+        <li class="mb-2">
+          <a href="/restaurants/menu/edit/{{_id}}" class="ord_color">Edit Menu</a>
+        </li>
+        <li class="mb-2">
+          <a href="/restaurants/{{_id}}/reviews" class="ord_color">View Comments</a>
+        </li>
+      </ul>
+    </div>
     {{/each}}
   {{/if}}
 {{else}}
-<ul>
-  <li>
-    <a href="/orders/{{userId}}/incomplete">View Incomplete Orders</a>
-  </li>
-  <li>
-    <a href="/orders/{{userId}}/placed">View Placed Orders</a>
-  </li>
-  <li>
-    <a href="/orders/{{userId}}/completed">View Completed Orders</a>
-  </li>
-</ul>
+<div class="pl-4">
+  <ul>
+    <li class="mb-2">
+      <a href="/orders/{{userId}}/incomplete" class="ord_color">View Incomplete Orders</a>
+    </li>
+    <li class="mb-2">
+      <a href="/orders/{{userId}}/placed" class="ord_color">View Placed Orders</a>
+    </li>
+    <li class="mb-2">
+      <a href="/orders/{{userId}}/completed" class="ord_color">View Completed Orders</a>
+    </li>
+    <li class="mb-2">
+      <a href="/orders/{{userId}}/favorites" class="ord_color">View Favorites</a>
+    </li>
+  </ul>
+</div>
 {{/if}}
 
 {{#if isManager}}
-<a href="/restaurants/create">Need to add a restaurant? Click here!</a>
+<div class="pl-4"><a href="/restaurants/create">Need to add a restaurant? Click here!</a></div>
 {{else}}
-<a href="/restaurants">Ready to order? Click here to find some food!</a>
+<div class="pl-4"><a href="/restaurants">Ready to order? Click here to find some food!</a></div>
 {{/if}}

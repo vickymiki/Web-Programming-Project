@@ -140,4 +140,14 @@ async function addOrderToFavorites(order_id, user_id){
     return true
 }
 
-module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, changePassword, addOrderToFavorites}
+async function removeOrderFromFavorites(order_id, user_id){
+    user_id = validateObjectId(user_id)
+    order_id = validateObjectId(order_id)
+    const userCollection = await users()
+    let update = await userCollection.updateOne({_id: user_id}, {$pull: {favorites: order_id.toString()}})
+    if(update.matchedCount === 0) throw `Failed to remove order: ${order_id}`    
+
+    return true
+}
+
+module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, changePassword, addOrderToFavorites, removeOrderFromFavorites}

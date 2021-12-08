@@ -45,4 +45,16 @@
     {{/each}}
     </body>
 {{/if}}
+
+{{#if orders.length}}
+<a href="/orders/{{userId}}/favorites">Your Favorites</a>
+{{#each orders}}
+
+<ul>
+  {{#each itemsOrdered}}
+      <li>{{itemName}}</li>
+  {{/each}}
+</ul>
+{{/each}}
+{{/if}}
 </div>
