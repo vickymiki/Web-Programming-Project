@@ -121,10 +121,11 @@ function isFieldExistChecker(param, paramName) {
 }
 
 function userFieldChecker(params, update = false) {
-    let allParams = ['userName', 'streetAddress', 'city', 'state', 'zip', 
+    let allParams = ['streetAddress', 'city', 'state', 'zip', 
     'email', 'phone'];
     if(!update) {
         // check whether all params exist or not
+        allParams.push('userName');
         allParams.push('password');
     }
     
@@ -140,11 +141,11 @@ function userFieldChecker(params, update = false) {
         }
     }
 
-    isValidName(params.userName);
     isValidZip(params.zip);
     isValidEmail(params.email);
     isValidPhone(params.phone);
     if(!update) { 
+        isValidName(params.userName);
         isValidPassword(params.password);
     }
 }
