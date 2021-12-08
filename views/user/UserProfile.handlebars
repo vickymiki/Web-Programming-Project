@@ -1,29 +1,21 @@
-<div class="ml-4 create_res_heading mb-3"><h3>{{page_function}}</h3></div>
-{{#if error}}
-  <div class="error_div"><h2 id="error">{{error}}</h2></div>
+ {{#if error}}
+    <h2 id="error">{{error}}</h2>
 {{/if}}
-
-<div class="pl-4">
-  <form method="POST" id="restaurant-form" action="/restaurants/create">
-    <div>
-      <label class="font-weight-bold" id="name">Restaurant name:
-        <input type = "text" name="name" placeholder="Restaurant name" class="crt_rest_name"/>
-      </label>
+<div class="container signup_div">
+  <form method="POST" id="userprofile" action="/user/:id">
+    <div class="">
+    <label id="streetAddress">Street Address
+      <input type = "text" name="streetAddress" value={{user.streetAddress}} class="streetAddress_input"/>
+    </label>
     </div>
-    <div>
-      <label class="font-weight-bold" id="streetAddress">Street Address:
-        <input type = "text" name="streetAddress" placeholder="Street Address" class="crt_str_add"/>
-      </label>
+    <div class="">
+    <label id="city">City
+      <input type = "text" name="city" value={{user.city}} class="city_input"/>
+    </label>
     </div>
-    <div>
-      <label class="font-weight-bold" id="city">City:
-        <input type = "text" name="city" placeholder="City" class="crt_city"/>
-      </label>
-    </div>
-    <!--TODO: change to dropdown -->
-    <div>
-      <label class="font-weight-bold" id="state">State:
-        <select name = "state" class="crt_state">
+    <div class="">
+    <label id="state">State
+      <select name = "state" class="state_input">
             <option value = "Alabama">Alabama</option>
             <option value = "Alaska">Alaska</option>
             <option value = "Arizona">Arizona</option>
@@ -79,59 +71,27 @@
             <option value = "Wisconsin">Wisconsin</option>
             <option value = "Wyoming">Wyoming</option>
       </select>
-      </label>
-    </div>
-    <div>
-      <label class="font-weight-bold" id="zip">Zip:
-        <input type = "text" name="zip" placeholder="Zip" class="crt_zip"/>
-      </label>
-    </div>
-    <div>
-      <label class="font-weight-bold" id="email">Email:
-        <input type = "text" name="email" placeholder="Email" class="crt_email"/>
-      </label>
-    </div>
-    <div>
-      <label class="font-weight-bold" id="phone">Phone:
-        <input type = "text" name="phone" placeholder="123-456-7890" class="crt_phone"/>
-      </label>
-    </div>
-
-    <div class="mb-3">
-      <label for="priceRange" class="font-weight-bold">Choose a price range:</label>
-      <select name="priceRange" id="priceRange">
-        <option value="$">$</option>
-        <option value="$$">$$</option>
-        <option value="$$$">$$$</option>
-        <option value="$$$$">$$$$</option>
-      </select>
-    </div>
-
-    <div class="row pl-3">
-      <div class="font-weight-bold">Select Restaurant Food Categories:</div>
-      <div>
-        <div>
-          <label id="asian" >
-            <input type = "checkbox" name="asian" class="ml-3 mr-2 mt-0"/>Asian
-          </label>
-        </div>
-        <div>
-          <label id="american" >
-            <input type = "checkbox" name="american" class="ml-3 mr-2 mt-0"/>American
-          </label>
-        </div>
-        <div>
-          <label id="Italian" >
-            <input type = "checkbox" name="italian" class="ml-3 mr-2 mt-0"/>Italian
-          </label>
-        </div>
-      </div>
-    </div>
-    
-    
-
-    <label id="submit">
-      <input type="submit" value="Create" class="crt_btn"/>
     </label>
-  </form>
-</div>
+    </div>
+    <div class="">
+    <label id="zip">Zip
+      <input type = "text" name="zip" value={{user.zip}} class="zip_input"/>
+    </label>
+    </div>
+    <div class="">
+    <label id="email">Email
+      <input type = "text" name="email" value={{user.email}} class="email_input"/>
+    </label>
+    </div>
+    <div class="">
+    <label id="phone">Phone
+      <input type = "text" name="phone" value={{user.phone}} class="phone_input"/>
+    </label>
+    </div>
+    <div class="d-flex justify-content-center mr-4 mt-3">
+    <label id="submit">
+      <input type="submit" class="signup_btn"/>
+    </label>
+    </div> 
+</form>
+<div class="pl-5"><a href="/login">Already have an account? Click here to log in</a></div>

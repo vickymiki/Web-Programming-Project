@@ -78,11 +78,11 @@ async function checkUser(userName, password) {
 
 }
 
-async function updateUserProfile(id, userName, streetAddress, city, state, zip, 
-    email, phone, favorites) {
+async function updateUserProfile(id, streetAddress, city, state, zip, 
+    email, phone) {
     
-    const userInfos = {userName, streetAddress, city, state, zip, 
-        email, phone, favorites };
+    const userInfos = { streetAddress, city, state, zip, 
+        email, phone };
     userFieldChecker(userInfos, update = true);
 
     const userCollection = await users();

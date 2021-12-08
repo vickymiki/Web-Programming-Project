@@ -29,6 +29,17 @@ body {
   height: 35px !important;
 }
 
+.texxt_overflow {
+  text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.bottom_link {
+  border: 1px dashed black;
+    padding: 0px 5px 2px 5px;
+}
+
 /* Login Page */
 
 .login_form {
@@ -160,7 +171,7 @@ body {
 }
 
 .new_review_div {
-  width: 35%;
+  width: 535px;
   border: 1px dashed;
   padding: 13px 0px 0px 16px;
   background-color: #dee9af;  
@@ -220,6 +231,17 @@ width: 35% !important;
     padding: 4px 0px 4px 16px;
     background-color: #c2e083;
 }
+
+.ur_prof_info {
+  width: 535px;
+  border: 1px dashed;
+  padding: 0px 0px 0px 0px;
+  background-color: #dee9af;
+}
+
+
+
+
 
 /* Create Restaurant  */
 
@@ -289,4 +311,37 @@ width: 35% !important;
     width:  206px;
     padding: 0px 0px 0px 15px;
     background-color: #c2e083;
+}
+
+/* Incomplete page */
+
+.incomp_order_heading {
+    border: 1px dashed;
+    width: 340px;
+    padding: 7px 0px 6px 12px;
+    background-color: #c2e083;
+}
+
+.incomp_order_box {
+  width: 535px;
+  border: 1px dashed;
+  padding: 0px 0px 0px 0px;
+  background-color: #dee9af;
+}
+
+/* In Progress Page */
+.inProg_order_heading {
+  border: 1px dashed;
+  width: 340px;
+  padding: 7px 0px 6px 12px;
+  background-color: #c2e083;
+}
+
+
+/* Favorite page */
+.fav_heading {
+  border: 1px dashed;
+  width: 282px;
+  padding: 7px 0px 6px 12px;
+  background-color: #c2e083;
 }

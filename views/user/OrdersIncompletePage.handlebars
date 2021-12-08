@@ -1,38 +1,51 @@
-<h1>{{page_function}}</h1>
+<div class="ml-4 incomp_order_heading mb-3"><h3 class="mb-0">{{page_function}}</h3></div>
+
 {{#if error}}
-<h2 id="error">{{error}}</h2>
+<div class="error_div"><h2 id="error">{{error}}</h2></div>
 {{/if}}
 
-<h2>Incomplete Orders</h2>
 {{#if orders.length}}
 {{#each orders}}
-    <p>Delivery Address: {{deliveryAddress}}</p>
-    <p>Items in cart:</p>
-    <ul>
-        {{#each itemsOrdered}}
-            <li>{{itemName}}</li>
-            {{#if customizableComponents.length}}
+<div class="incomp_order_box ml-4 pl-3">
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Delivery Address:</div> <div class="col-8 pl-0 texxt_overflow">{{deliveryAddress}}</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Items in cart: </div>
+        <div class="col-8 pl-0"> 
             <ul>
-                {{#each customizableComponents}}
-                    <li>{{this}}</li>
-                {{/each}}
+            {{#each itemsOrdered}}
+                <li>{{itemName}}</li>
+                {{#if customizableComponents.length}}
+                <ul>
+                    {{#each customizableComponents}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+                {{/if}}
+            {{/each}}
             </ul>
-            {{/if}}
-        {{/each}}
-    </ul>
-    <form method="GET" id="complete-form" action="/restaurants/{{restaurant_id}}/cart">
-    <label id="submit">
-        <input type="submit" value="Finish Ordering"/>
-    </label>
-    </form>
-    <form method="POST" id="complete-form" action="/orders/delete/{{_id}}/{{../userid}}">
-    <label id="submit">
-        <input type="submit" value="Remove Order"/>
-    </label>
-    </form>
+        </div>
+    </div>
+
+ 
+    <div class="row">
+        <form class="col-6" method="GET" id="complete-form" action="/restaurants/{{restaurant_id}}/cart">
+            <label id="submit">
+                <input type="submit" value="Finish Ordering"/>
+            </label>
+        </form>
+        <form class="col-6" method="POST" id="complete-form" action="/orders/delete/{{_id}}/{{../userid}}">
+            <label id="submit">
+                <input type="submit" value="Remove Order"/>
+            </label>
+        </form>
+    </div>
+</div>
 {{/each}}
 {{else}}
-<h3>There are currently no incomplete orders!</h3>
+<div class="bottom_link">There are currently no incomplete orders!</div>
 {{/if}}
 
 <script

@@ -24,23 +24,23 @@
     {{/each}}
   {{/if}}
 {{else}}
+
+  <div class="ur_prof_info ml-4 pl-3">
+    <div class="row mb-2"><div class="col-3 font-weight-bold">User Name: </div><div class="col-9">{{user.userName}}</div></div>
+    <div class="row mb-2"><div class="col-3 font-weight-bold">Street Address: </div><div class="col-9 texxt_overflow">{{user.streetAddress}}</div></div>
+    <div class="row mb-2"><div class="col-3 font-weight-bold">City: </div><div class="col-9">{{user.city}}</div></div>
+    <div class="row mb-2"><div class="col-3 font-weight-bold">State: </div><div class="col-9">{{user.state}}</div></div>
+    <div class="row mb-2"><div class="col-3 font-weight-bold">Zip: </div><div class="col-9">{{user.zip}}</div></div>
+    <div class="row mb-2"><div class="col-3 font-weight-bold">Email: </div><div class="col-9">{{user.email}}</div></div>
+    <div class="row mb-2"><div class="col-3 font-weight-bold">Phone: </div><div class="col-9">{{user.phone}}</div></div>
+  </div class="ur_prof_info">
+
 <div class="pl-4">
-  <section>
-    <p id='mb-2'>User Name: {{user.userName}}</p>
-    <p id='mb-2'>Street Address: {{user.streetAddress}}</p>
-    <p id='mb-2'>City: {{user.city}}</p>
-    <p id='mb-2'>State: {{user.state}}</p>
-    <p id='mb-2'>Zip: {{user.zip}}</p>
-    <p id='mb-2'>Email: {{user.email}}</p>
-    <p id='mb-2'>Phone: {{user.phone}}</p>
-  </section>
-</div>
-<div class="pl-4">
-  <ul>
-    <li clsss="mb-2">
+  <ul class="mt-3">
+    <li clsss="">
       <a href="user/{{userId}}" class="ord_color">Update Profile</a>
     </li>
-    <li class="mb-2">
+    <li class="mb-2 mt-2">
       <a href="/orders/{{userId}}/incomplete" class="ord_color">View Incomplete Orders</a>
     </li>
     <li class="mb-2">
@@ -57,7 +57,7 @@
 {{/if}}
 
 {{#if isManager}}
-<div class="pl-4"><a href="/restaurants/create">Need to add a restaurant? Click here!</a></div>
+<div class="pl-4"><a class="bottom_link" href="/restaurants/create">Need to add a restaurant? Click here!</a></div>
 {{else}}
-<div class="pl-4"><a href="/restaurants">Ready to order? Click here to find some food!</a></div>
+<div class="pl-4"><a class="bottom_link" href="/restaurants">Ready to order? Click here to find some food!</a></div>
 {{/if}}

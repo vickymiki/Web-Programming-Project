@@ -1,38 +1,52 @@
-<h1>{{page_function}}</h1>
+<div class="ml-4 fav_heading mb-3"><h3 class="mb-0">{{page_function}}</h3></div>
+
 {{#if error}}
-<h2 id="error">{{error}}</h2>
+<div class="error_div" id="error">{{error}}</div>
 {{/if}}
 
-<h2>Favorites</h2>
+
 {{#if orders.length}}
 {{#each orders}}
-    <p>Items in order:</p>
-    <p>Price: {{totalPrice}}</p>
-    <ul>
-        {{#each itemsOrdered}}
-            <li>{{itemName}}</li>
-            {{#if customizableComponents.length}}
+<div class="incomp_order_box ml-4 pl-3">
+
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Items in order:</div>
+        <div class="col-8 pl-0"> 
             <ul>
-                {{#each customizableComponents}}
-                    <li>{{this}}</li>
+                {{#each itemsOrdered}}
+                <li>{{itemName}}</li>
+                    {{#if customizableComponents.length}}
+                    <ul>
+                    {{#each customizableComponents}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                    </ul>
+                    {{/if}}
                 {{/each}}
             </ul>
-            {{/if}}
-        {{/each}}
-    </ul>
-    <form method="POST" id="complete-form" action="/orders/addFavorite/{{_id}}/{{../userid}}">
-    <label id="submit">
-        <input type="submit" value="Order Now"/>
-    </label>
-    </form>
-    <form method="POST" id="complete-form" action="/orders/removeFavorite/{{_id}}/{{../userid}}">
-    <label id="submit">
-        <input type="submit" value="Remove Favorite"/>
-    </label>
-    </form>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-3 pr-0 font-weight-bold">Price: </div><div class="col-9 pl-0 texxt_overflow">{{totalPrice}}</div>
+    </div>
+
+    <div class="row">
+        <form class="col-6" method="GET" id="complete-form" action="/restaurants/{{restaurant_id}}">
+            <label id="submit">
+                <input type="submit" value="Order Now"/>
+            </label>
+        </form>
+        <form class="col-6" method="POST" id="complete-form" action="/orders/removeFavorite/{{_id}}/{{../userid}}">
+            <label id="submit">
+                <input type="submit" value="Remove Favorite"/>
+            </label>
+        </form>
+    </div>
+</div>
 {{/each}}
 {{else}}
-<h3>There are currently no favorites!</h3>
+<div class="bottom_link">There are currently no favorites!</div>
 {{/if}}
 
 <script
