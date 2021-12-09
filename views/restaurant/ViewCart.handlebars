@@ -1,8 +1,8 @@
 <h1>{{page_function}}</h1>
 <a href="/restaurants/{{restaurantId}}">Add more items to cart</a>
+{{#if orderData.itemsOrdered.length}}
 <h2>Total Price: {{orderData.totalPrice}}</h2>
 <h2>Current Discount: {{orderData.discount}}% off</h2>
-{{#if orderData.itemsOrdered.length}}
   {{#each orderData.itemsOrdered}}
     <h3>{{itemName}}</h3>
     <p>{{price}}</p>
@@ -11,14 +11,16 @@
         <li>{{this}}</li>
       {{/each}}
     </ul>
-    <form method="POST" action="/restaurants/items/delete" id="DeleteItem">
+    <form method="POST" action="/restaurants/items/delete" id="DeleteItem_{{_id}}">
     <input type="hidden" name="orderId" value={{../orderData._id}}>
     <input type="hidden" name="itemId" value={{this._id}}>
     <input type="hidden" name="restaurantId" value={{../orderData.restaurant_id}}>
     <button type="submit">Remove Item</button>
   </form>
   {{/each}}
-  <h2 id="couponResult">{{couponResult}}</h2>
+  {{#if couponResult}}
+    <h3 id="couponResult">{{couponResult}}</h3>
+  {{/if}}
   <form method="POST" action="/restaurants/orders/applyDiscount" id="applyDiscount">
     <input type="hidden" name="orderId" value={{orderData._id}}>
     <input type="hidden" name="restaurantId" value={{orderData.restaurant_id}}>

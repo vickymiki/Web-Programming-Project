@@ -13,16 +13,18 @@
         {{#each itemsOrdered}}
             <li>{{itemName}}</li>
             {{#if customizableComponents.length}}
-            <ul>
+            <li>
+              <ul>
                 {{#each customizableComponents}}
                     <li>{{this}}</li>
                 {{/each}}
-            </ul>
+              </ul>
+            </li>
             {{/if}}
         {{/each}}
     </ul>
-    <form method="POST" id="complete-form" action="/orders/complete/{{restaurant_id}}/{{_id}}">
-    <label id="submit">
+    <form method="POST" id="complete-form-{{_id}}" action="/orders/complete/{{restaurant_id}}/{{_id}}">
+    <label id="submit-{{_id}}">
         <input type="submit" value="Order Completed"/>
     </label>
     </form>

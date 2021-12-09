@@ -18,11 +18,13 @@
             {{#each itemsOrdered}}
                 <li>{{itemName}}</li>
                 {{#if customizableComponents.length}}
-                <ul>
+                <li>
+                  <ul>
                     {{#each customizableComponents}}
                         <li>{{this}}</li>
                     {{/each}}
-                </ul>
+                  </ul>
+                </li>
                 {{/if}}
             {{/each}}
             </ul>
@@ -31,13 +33,13 @@
 
  
     <div class="row">
-        <form class="col-6" method="GET" id="complete-form" action="/restaurants/{{restaurant_id}}/cart">
-            <label id="submit">
+        <form class="col-6" method="GET" id="complete-form-{{_id}}" action="/restaurants/{{restaurant_id}}/cart">
+            <label id="submit-complete-{{_id}}">
                 <input type="submit" value="Finish Ordering"/>
             </label>
         </form>
-        <form class="col-6" method="POST" id="complete-form" action="/orders/delete/{{_id}}/{{../userid}}">
-            <label id="submit">
+        <form class="col-6" method="POST" id="delete-form-{{_id}}" action="/orders/delete/{{_id}}/{{../userid}}">
+            <label id="submit-remove-{{_id}}">
                 <input type="submit" value="Remove Order"/>
             </label>
         </form>

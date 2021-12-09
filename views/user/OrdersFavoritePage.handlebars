@@ -16,11 +16,13 @@
                 {{#each itemsOrdered}}
                 <li>{{itemName}}</li>
                     {{#if customizableComponents.length}}
-                    <ul>
-                    {{#each customizableComponents}}
-                        <li>{{this}}</li>
-                    {{/each}}
-                    </ul>
+                    <li>
+                      <ul>
+                        {{#each customizableComponents}}
+                          <li>{{this}}</li>
+                        {{/each}}
+                      </ul>
+                    </li>
                     {{/if}}
                 {{/each}}
             </ul>
@@ -32,13 +34,13 @@
     </div>
 
     <div class="row">
-        <form class="col-6" method="GET" id="complete-form" action="/restaurants/{{restaurant_id}}">
-            <label id="submit">
+        <form class="col-6" method="GET" id="complete-form-{{_id}}" action="/restaurants/{{restaurant_id}}">
+            <label id="submit-{{_id}}">
                 <input type="submit" value="Order Now"/>
             </label>
         </form>
-        <form class="col-6" method="POST" id="complete-form" action="/orders/removeFavorite/{{_id}}/{{../userid}}">
-            <label id="submit">
+        <form class="col-6" method="POST" id="complete-form-favorites-{{_id}}" action="/orders/removeFavorite/{{_id}}/{{../userid}}">
+            <label id="submit-favorite-{{_id}}">
                 <input type="submit" value="Remove Favorite"/>
             </label>
         </form>

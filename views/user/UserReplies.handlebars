@@ -16,22 +16,22 @@
       </div>
     </div>
     <div class="row pl-3">
-    <form class="row col-9" method="POST" id="Edit_Reply" action="/profile/replies/{{../restaurantId}}/edit">
-      <input type="hidden" id="replyId" name="replyId" value={{_id}}>
-      <input type="hidden" id="restaurantId" name="restaurantId" value={{../restaurantId}}>
-      <input type="hidden" id="reviewId" name="reviewId" value={{reviewId}}>
+    <form class="row col-9" method="POST" id="Edit_Reply_{{_id}}" action="/profile/replies/{{../restaurantId}}/edit">
+      <input type="hidden" id="EditReplyId_{{_id}}" name="replyId" value={{_id}}>
+      <input type="hidden" id="EditRestaurantId_{{_id}}" name="restaurantId" value={{../restaurantId}}>
+      <input type="hidden" id="EditReviewId_{{_id}}" name="reviewId" value={{reviewId}}>
 
       <div>
-        <label for="review" class="font-weight-bold">Edited Reply</label>
-        <input class="ml-5  mb-0" type="text" name="reply" maxlength="280" required>
+        <label for="reply_{{_id}}" class="font-weight-bold">Edited Reply</label>
+        <input class="ml-5  mb-0" type="text" id="reply_{{_id}}" name="reply" maxlength="280" required>
       </div>
       
       <button type="submit" class="ml-5">Edit Reply</button>
     </form>
-    <form class="col-3" method="POST" action="/profile/replies/{{../restaurantId}}/remove" id="ReomveReply">
-        <input type="hidden" id="replyId" name="replyId" value={{_id}}>
-        <input type="hidden" id="restaurantId" name="restaurantId" value={{../restaurantId}}>
-        <input type="hidden" id="reviewId" name="reviewId" value={{reviewId}}>
+    <form class="col-3" method="POST" action="/profile/replies/{{../restaurantId}}/remove" id="ReomveReply_{{_id}}">
+        <input type="hidden" id="RemoveReplyId_{{_id}}" name="replyId" value={{_id}}>
+        <input type="hidden" id="RemoveRestaurantId_{{_id}}" name="restaurantId" value={{../restaurantId}}>
+        <input type="hidden" id="RemoveReviewId_{{_id}}" name="reviewId" value={{reviewId}}>
       
         <button type="submit">Delete Reply</button>
     </form>

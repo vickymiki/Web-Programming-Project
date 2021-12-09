@@ -7,11 +7,11 @@
     <input type="hidden" name="postType" value="new_review">
     <div class="">
     <label class="new_review_label font-weight-bold" for="review">New Review</label>
-    <input class="new_review_input" type="text" name="review" maxlength="280" required>
+    <input class="new_review_input" type="text" id="review" name="review" maxlength="280" required>
     </div>
     <div class="">
     <label class="new_rating_label font-weight-bold" for="rating">Rating (1-5)</label>
-    <input type="number" name="rating" min="1" max="5" required>
+    <input type="number" id="rating" name="rating" min="1" max="5" required>
     </div>
     <div class="">
     <label for="photo" class="font-weight-bold">Optionally add a photo</label>
@@ -99,10 +99,10 @@
             </div>
           {{/if}}
 
-          <form method="POST" id="New_Reply">
-            <label for="reply" class="font-weight-bold pl-2 pr-5">Reply:</label>
+          <form method="POST" id="New_Reply_{{_id}}">
+            <label for="reply_{{_id}}" class="font-weight-bold pl-2 pr-5">Reply:</label>
             <input type="hidden" name="postType" value="new_reply">
-            <input type="text" name="reply" maxlength ="280" required>
+            <input type="text" id="reply_{{_id}}" name="reply" maxlength ="280" required>
             <input type="hidden" name="reviewId" value={{_id}}>
             <!-- Had to go about this a different way = was pulling the id of the og review user-->
             <!--<input type="hidden" name="userId" value={{loggedUserId}}>

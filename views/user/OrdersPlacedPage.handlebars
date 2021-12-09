@@ -20,11 +20,13 @@
                 {{#each itemsOrdered}}
                     <li>{{itemName}}</li>
                     {{#if customizableComponents.length}}
-                    <ul>
+                    <li>
+                      <ul>
                         {{#each customizableComponents}}
                             <li>{{this}}</li>
                         {{/each}}
-                    </ul>
+                      </ul>
+                    </li>
                     {{/if}}
                 {{/each}}
             </ul>

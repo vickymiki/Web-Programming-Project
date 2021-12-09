@@ -12,7 +12,7 @@
     <input type = "text" name="price" placeholder="5.99"/>
 </label>
 <br>
-<label id="photo">Optionally upload an item photo
+<label id="photo-{{_id}}">Optionally upload an item photo
 <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
 </label>
 <br>
@@ -50,13 +50,13 @@
     <p>{{itemName}}</p>
     <p>{{price}}</p>
     <img src="/public/images/{{imageName}}" alt="Menu Item Image">
-    <form method="GET" id="modify-form" action="/restaurants/menu/modify/{{../restaurant._id}}/{{_id}}">
-    <label id="submit_modify">
+    <form method="GET" id="modify-form-{{_id}}" action="/restaurants/menu/modify/{{../restaurant._id}}/{{_id}}">
+    <label id="submit_modify_{{_id}}">
         <input type="submit" value="Modify"/>
     </label>
     </form>
-    <form method="POST" id="delete-form" action="/restaurants/menu/delete/{{../restaurant._id}}/{{_id}}">
-    <label id="submit">
+    <form method="POST" id="delete-form-{{_id}}" action="/restaurants/menu/delete/{{../restaurant._id}}/{{_id}}">
+    <label id="submit-{{_id}}">
         <input type="submit" value="Delete"/>
     </label>
     </form>

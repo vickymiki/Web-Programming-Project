@@ -28,25 +28,25 @@
              {{> dislikes}}
             </div>
 
-            <form method="POST" id="Edit_Review" action="/profile/reviews/{{restaurantId}}/edit" enctype="multipart/form-data">
-              <input type="hidden" id="reviewId" name="reviewId" value={{_id}}>
-              <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
+            <form method="POST" id="Edit_Review_{{_id}}" action="/profile/reviews/{{restaurantId}}/edit" enctype="multipart/form-data">
+              <input type="hidden" id="EditReviewId_{{_id}}" name="reviewId" value={{_id}}>
+              <input type="hidden" id="EditRestaurantId_{{_id}}" name="restaurantId" value={{restaurantId}}>
 
               
-              <div class="mb-2"><label for="review" class="font-weight-bold">Edited Review</label>
-                <input type="text" name="review" maxlength="280" required>
+              <div class="mb-2"><label for="review_{{_id}}" class="font-weight-bold">Edited Review</label>
+                <input type="text" id="review_{{_id}}" name="review" maxlength="280" required>
               </div>
-              <div class="mb-2"><label for="rating" class="font-weight-bold">New Rating</label>
-                <input class="ml-3" type="number" name="rating" min="1" max="5" required>
+              <div class="mb-2"><label for="rating_{{_id}}" class="font-weight-bold">New Rating</label>
+                <input class="ml-3" type="number" id="rating_{{_id}}" name="rating" min="1" max="5" required>
               </div>
-              <div class="mb-2"><label for="photo" class="font-weight-bold">Replacement photo</label>
-                <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
+              <div class="mb-2"><label for="photo_{{_id}}" class="font-weight-bold">Replacement photo</label>
+                <input type="file" id="photo_{{_id}}" name="photo" accept="image/png, image/jpeg, image/jpg">
               </div>
               <button type="submit" class="mt-1">Edit Review</button>
             </form>
-            <form method="POST" action="/profile/reviews/{{restaurantId}}/remove" id="ReomveReview">
-              <input type="hidden" id="reviewId" name="reviewId" value={{_id}}>
-              <input type="hidden" id="restaurantId" name="restaurantId" value={{restaurantId}}>
+            <form method="POST" action="/profile/reviews/{{restaurantId}}/remove" id="RemoveReview_{{_id}}">
+              <input type="hidden" id="RemoveReviewId_{{_id}}" name="reviewId" value={{_id}}>
+              <input type="hidden" id="RemoveRestaurantId_{{_id}}" name="restaurantId" value={{restaurantId}}>
               <button type="submit">Delete Review</button>
             </form>
           </div>

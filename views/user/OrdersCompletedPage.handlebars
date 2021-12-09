@@ -11,16 +11,18 @@
         {{#each itemsOrdered}}
             <li>{{itemName}}</li>
             {{#if customizableComponents.length}}
-            <ul>
+            <li>
+              <ul>
                 {{#each customizableComponents}}
                     <li>{{this}}</li>
                 {{/each}}
-            </ul>
+              </ul>
+            </li>
             {{/if}}
         {{/each}}
     </ul>
-    <form method="POST" id="complete-form" action="/orders/addFavorite/{{_id}}/{{../userid}}">
-    <label id="submit">
+    <form method="POST" id="complete-form-{{_id}}" action="/orders/addFavorite/{{_id}}/{{../userid}}">
+    <label id="submit-{{_id}}">
         <input type="submit" value="Add Favorite"/>
     </label>
     </form>

@@ -8,7 +8,7 @@
 <h3>{{this.itemName}}</h3>
 <h4>Price: {{this.price}}</h4>
 <img src="/public/images/{{imageName}}" alt="Menu Item Image">
-<form method="POST" id={{this.itemName}}>
+<form method="POST" id={{this._id}}>
   <div class="box">
     <div class="bread_top" id="bread_top_css">
       <div class="seeds1"></div>
@@ -24,30 +24,30 @@
     <div class="bread_bottom" id="bread_bottom_css"></div>
   </div>
   <input type="hidden" name="id" value={{this._id}}>
-  <input type="hidden" name="itemName" value={{this.itemName}}>
+  <input type="hidden" name="itemName" value="{{this.itemName}}">
   <input type="hidden" name="price" value={{this.price}}>
-  <label><input onclick="getValue()" type="checkbox" checked="true" name="bread_top" id="bread_top"  > Top Bread</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" name="lettuce" id="lettuce"  > Lettuce</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" name="bacon" id="bacon"  > Bacon</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" name="cheese" id="cheese"  > Cheese</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" name="meat" id="meat"   > Meat</label>
-  <label><input onclick="getValue()" type="checkbox" checked="true" name="bread_bottom" id="bread_bottom"> Bottom Bread</label>
+  <label><input onclick="getValue()" type="checkbox" name="bread_top" id="bread_top" checked> Top Bread</label>
+  <label><input onclick="getValue()" type="checkbox" name="lettuce" id="lettuce" checked> Lettuce</label>
+  <label><input onclick="getValue()" type="checkbox" name="bacon" id="bacon" checked> Bacon</label>
+  <label><input onclick="getValue()" type="checkbox" name="cheese" id="cheese" checked> Cheese</label>
+  <label><input onclick="getValue()" type="checkbox" name="meat" id="meat" checked> Meat</label>
+  <label><input onclick="getValue()" type="checkbox" name="bread_bottom" id="bread_bottom" checked> Bottom Bread</label>
   <label><input type="number" name="quantity" step="1" min="1">Quantity</label>
-  <button type="submit" id="btn-id">Submit</button>
+  <button type="submit" id="btn-id_{{this._id}}">Submit</button>
 </form>
  {{else}}
   <h3>{{this.itemName}}</h3>
   <h4>Price: {{this.price}}</h4>
   <img src="/public/images/{{imageName}}" alt="Menu Item Image">
-  <form method="POST" id={{this.itemName}}>
+  <form method="POST" id={{this._id}}>
     <input type="hidden" name="id" value={{this._id}}>
-    <input type="hidden" name="itemName" value={{this.itemName}}>
+    <input type="hidden" name="itemName" value="{{this.itemName}}">
     <input type="hidden" name="price" value={{this.price}}>
     {{#each this.customizableComponents}}
-    <label><input onclick="getValue()" type="checkbox" name={{this}} id={{this}}  > {{this}}</label>
+    <label><input onclick="getValue()" type="checkbox" name="{{this}}" id="customItem{{@index}}_{{../_id}}"> {{this}}</label>
     {{/each}}
     <label><input type="number" name="quantity" step="1" min="1">Quantity</label>
-    <button type="submit" id="btn-id">Submit</button>
+    <button type="submit" id="btn-id_{{_id}}">Submit</button>
     </form>
   {{/if}}
   {{/each}}
