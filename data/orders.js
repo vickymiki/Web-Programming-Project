@@ -100,7 +100,7 @@ async function addItemToOrder(orderId, item) {
     sum = Math.round(100 * (sum + (myOrder.itemsOrdered[i]).price))/100;
   }
 
-  let total = sum - (sum * myOrder.discount);
+  let total = sum - (sum * ((myOrder.discount)/100));
   total = Math.round(100 * total) / 100;
 
   await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: total } });
@@ -132,7 +132,7 @@ async function reomveItemFromOrder(orderId, itemOrderedId) {
     sum = Math.round(100 * (sum + (myOrder.itemsOrdered[i]).price))/100;
   }
 
-  let total = sum - (sum * myOrder.discount);
+  let total = sum - (sum * ((myOrder.discount)/100));
   total = Math.round(100 * total) / 100;
 
   await orderCollection.updateOne({ _id: ObjectId(orderId) }, { $set: { totalPrice: total } });
@@ -290,6 +290,7 @@ async function addCoupon(orderId, code) {
   if (!validId(orderId)) throw "Order Id must be a string of 24 hex characters";
 
   const allCoupons = {
+    "zero": 0,
     "matt": 15,
     "caleb": 15,
     "vikrant": 15,
