@@ -91,6 +91,11 @@ function isValidPassword(password) {
         throw 'password not valid';
     }
 }
+function isValidString(param) {
+    if(typeof param !== 'string' || param.trim().length() === 0) {
+        throw `${param} is not a valid string`;
+    }
+}
 function isStringParam(param){
     if(typeof param !== 'string') {
         return false;
@@ -100,7 +105,27 @@ function isStringParam(param){
     }
     return true;
 }
-
+function isValidFoodType(foodType) {
+    if(foodType instanceof Array) {
+        for(let key of foodType) {
+            if(typeof key !== 'string' || key.trim().length() === 0) {
+                throw "foodType is not a valid array of string";
+            }
+        }
+    } else {
+        throw "foodType is not an array";
+    }
+}
+function isValidPriceRange(priceRange) {
+    if(typeof priceRange !== 'string') {
+        throw 'priceRange is not a string';
+    }
+    var rangeRegex = /\${1,5}$/;
+    const valid = rangeRegex.test(priceRange);
+    if(!valid) {
+        throw 'priceRange not valid';
+    }
+}
 function isArrayOfStr(param) {
     if(param instanceof Array) {
         for(let key of param) {
@@ -181,6 +206,9 @@ module.exports = {
     isValidZip,
     isValidEmail,
     isValidPhone,
+    isValidString,
+    isValidPriceRange,
+    isValidFoodType,
     isValidPassword, 
     isValidReviewFeedback,
     isStringParam,
