@@ -40,6 +40,13 @@ body {
     padding: 0px 5px 2px 5px;
 }
 
+.bottom_message {
+  border: 1px dashed black;
+    padding: 0px 5px 2px 5px;
+    width: fit-content;
+}
+
+
 /* Login Page */
 
 .login_form {
