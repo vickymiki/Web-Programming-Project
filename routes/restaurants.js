@@ -11,7 +11,7 @@ const session = require('express-session');
 const fs = require('fs');
 const multer = require('multer');
 const ObjectId = require('mongodb').ObjectId;
-
+const xss = require('xss');
 const upload = multer({ dest: '../uploads/'});
 
 router.get('/', async (req, res) => {
@@ -161,6 +161,17 @@ router.get('/menu/modify/:restid/:foodid', async (req, res) => {
 
 router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
   const id = req.params.id
+  //multipart/form-data xss can't be handled by the middleware in app.js
+  for (const iterator in req.body) {
+    if(!Array.isArray(req.body[iterator])){
+      req.body[iterator] = xss(req.body[iterator])
+    }
+  }
+
+  //Filter empty, undefined, non string values 
+  req.body.customOptionArray = req.body.customOptionArray.filter(x => {
+    return x !== undefined || typeof x !== 'string' || x.trim().length === 0
+  })
   
   //Check that the person attempting to access this is the manager of 
   if (!req.session.user || !id || !await manager_DAL.userIsManagerOfRestaurant(req.session.user.username, id)){
@@ -224,6 +235,11 @@ router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
 });
 
 router.post('/menu/modify/:restid/:foodid', upload.single("photo"), async (req, res) => {
+  //multipart/form-data xss can't be handled by the middleware in app.js
+  for (const iterator in req.body) {
+    req.body[iterator] = xss(req.body[iterator])
+  }
+
   const foodid = req.params.foodid
   const restid = req.params.restid
   const restaurant = await restaurants_DAL.getRestaurantFromId(restid)
@@ -440,6 +456,11 @@ router.post('/:id/reviews', async (req, res) => {
 });
 
 router.post('/:id/upload', upload.single("photo"), async (req, res) => {
+  //multipart/form-data xss can't be handled by the middleware in app.js
+  for (const iterator in req.body) {
+    req.body[iterator] = xss(req.body[iterator])
+  }
+
   //Make the image name a timestamp, this way it will be a unique identifier
   let imgname = new Date().getTime().toString();
   const id = req.params.id;

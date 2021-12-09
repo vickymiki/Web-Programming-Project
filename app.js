@@ -5,6 +5,7 @@ const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const static = express.static(__dirname + '/public');
+const xss = require('xss');
 
 app.use(express.static(__dirname + '/public/')); //Need this to access static images
 app.use('/public', static);
@@ -24,6 +25,16 @@ app.use(
     resave: false
   })
 );
+
+app.use('/', (req, res, next) => {
+  if(req.body){
+    //Protect against xss
+    for (const iterator in req.body) {
+      req.body[iterator] = xss(req.body[iterator])
+    }
+  }
+  next();
+});
 
 configRoutes(app);
 
