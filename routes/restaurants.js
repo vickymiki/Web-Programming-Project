@@ -200,17 +200,17 @@ router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
   const form = req.body
   const restaurant = await restaurants_DAL.getRestaurantFromId(id)
 
-  if(!form.itemName){
-    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Food name not provided!"})
+  if(!form.itemName || form.itemName.trim().length === 0 ||  !form.itemName.match(/^[ a-zA-Z]+$/)){
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Food name invalid!"})
     return
   }
 
-  if(!form.price){
-    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Price not provided!"})
+  if(!form.price || !form.price.match(/^[0-9]+\.[0-9]+$/)){
+    res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Price invalid!"})
     return
   }
 
-  if(!form.customType){
+  if(!form.customType || (form.customType !== 'superburger' && form.customType !== 'notsuperburger')){
     res.render('restaurant/MenuEditPage', {title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Custom type not provided!"})
     return
   }
@@ -227,6 +227,16 @@ router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
   if(!form.customOptionArray){
     //It's ok for custom items to not be provided
     form.customOptionArray = []
+  }
+  else{
+    //validate that each custom item is a non-empty string
+    let invalid = form.customOptionArray.find(x => {
+      return typeof x !== 'string' || x.trim().length === 0 || !x.match(/^[ a-zA-Z]+$/)
+    })
+    if(invalid){
+        res.render('restaurant/MenuEditPage', { title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Custom option invalid!" })
+        return
+    }
   }
 
   try{
