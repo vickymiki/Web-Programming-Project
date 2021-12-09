@@ -38,6 +38,8 @@ async function createUser(userName, streetAddress, city, state, zip,
     userName = userName.toLowerCase();
     newUser.userName = userName;
     const userCollection = await users();
+    
+    // check no account with this username
     const user = await userCollection.findOne({userName: userName});
     if(user !== null) {
         throw `${userName} is occupied, try a different one`;
