@@ -3,9 +3,33 @@ const ObjectId = require('mongodb').ObjectId;
 const user_DAL = require('./users');
 const manager_DAL = require('../data/managers');
 const restaurants = mongoCollections.restaurants;
+const {isValidName, isValidString, isValidZip, isValidPriceRange, isValidFoodType, isValidEmail, isValidPhone} = require('../dataUtils');
+
+function isValidRestaurantName (restName) {
+    if(typeof restName !== 'string') {
+        throw 'Restaurant name is not a string';
+    }
+    if(restName.trim() === '') {
+        throw 'Restaurant name is not a valid string';
+    }
+}
 
 async function validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
     //TODO add validation
+    if(!name || !address || !city || !state || !zip || !priceRange 
+        || !foodTypes || !email || !phone || !managerUsername) {
+            throw "All fields need to be supplied";
+        }
+        isValidRestaurantName(name);
+        isValidString(address);
+        isValidString(city);
+        isValidString(state);
+        isValidZip(zip);
+        isValidPriceRange(priceRange);
+        isValidFoodType(foodTypes);
+        isValidEmail(email);
+        isValidPhone(phone);
+        isValidName(managerUsername);
 
     //There is allowed to be multiple restaurants with the same name, but not with the same address
     if(await checkIfAddressExists(address, city, state, zip)) throw 'A restaurant with that address already exists'
@@ -51,6 +75,13 @@ async function addRestaurant(name, address, city, state, zip, priceRange, foodTy
 }
 
 async function checkIfAddressExists(address, city, state, zip){
+    if(!address || !city || !state || !zip) {
+        throw "All fields need to be supplied";
+    }
+    isValidString(address);
+    isValidString(city);
+    isValidString(state);
+    isValidZip(zip);
     const restaurantCollection = await restaurants()
     const restQuery = await restaurantCollection.findOne({streetAddress: address, city, state, zip})
     if ( restQuery === null ){
@@ -62,6 +93,10 @@ async function checkIfAddressExists(address, city, state, zip){
 
 //TODO restaurant names aren't guarenteed to be unique, might want to remove as it's misleading
 async function getRestaurantIdFromName(name){
+    if(!name) {
+        throw 'restaurant name not supplied';
+    }
+    isValidRestaurantName(name);
     const restaurantCollection = await restaurants()
     const restQuery = await restaurantCollection.findOne({restaurantName: name})
     if ( restQuery === null ) throw `Failed to find restaurant with name: ${name}`
@@ -87,6 +122,10 @@ async function getAllResaurants(){
 }
 
 async function getRestaurantsManagedByUser(username){
+    if(!username) {
+        throw 'username not supplied';
+    }
+    isValidName(username);
     if(!await manager_DAL.isManager(username)){
         return []
     }
