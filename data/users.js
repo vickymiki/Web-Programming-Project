@@ -59,8 +59,15 @@ async function createUser(userName, streetAddress, city, state, zip,
 }
 
 async function checkUser(userName, password) {
-    if(!userName || !password) {
-        throw 'userName or password not provided';
+    if(!userName 
+        || userName.includes(' ') 
+        || !userName.match(/^[0-9a-zA-Z]+$/) 
+        || userName.length < 4
+        || !password
+        || password.includes(' ')
+        || password.length<6) {
+
+        throw 'userName or password not correct';
     }
 
     isValidName(userName);

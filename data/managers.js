@@ -55,9 +55,17 @@ async function createManager(userName, streetAddress, city, state, zip, email, p
 }
 
 async function checkManager(userName, password) {
-    if(!userName || !password) {
-        throw 'UserName or password not provided';
+    if(!userName 
+        || userName.includes(' ') 
+        || !userName.match(/^[0-9a-zA-Z]+$/) 
+        || userName.length < 4
+        || !password
+        || password.includes(' ')
+        || password.length<6) {
+
+        throw 'userName or password not correct';
     }
+    
     isValidName(userName);
     isValidPassword(password);
 
