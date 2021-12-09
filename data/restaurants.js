@@ -154,7 +154,9 @@ async function replaceFood_Item(restaurant_id, foodItem_id, foodItem){
         {$set: {"menuItems.$.itemName": foodItem.itemName,
                 "menuItems.$.price": foodItem.price,
                 "menuItems.$.isBurger": foodItem.isBurger,
-                "menuItems.$.customizableComponents": foodItem.customizableComponents}})
+                "menuItems.$.customizableComponents": foodItem.customizableComponents,
+                "menuItems.$.imageName": foodItem.imageName}
+      })
     if(restaurant.matchedCount === 0) throw `Failed to update food item: ${foodItem_id}`    
     return true
 }

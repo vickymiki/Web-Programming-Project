@@ -7,6 +7,7 @@
 {{#if this.isBurger}}
 <h3>{{this.itemName}}</h3>
 <h4>Price: {{this.price}}</h4>
+<img src="/public/images/{{imageName}}" alt="Menu Item Image">
 <form method="POST" id={{this.itemName}}>
   <div class="box">
     <div class="bread_top" id="bread_top_css">
@@ -37,12 +38,13 @@
  {{else}}
   <h3>{{this.itemName}}</h3>
   <h4>Price: {{this.price}}</h4>
+  <img src="/public/images/{{imageName}}" alt="Menu Item Image">
   <form method="POST" id={{this.itemName}}>
     <input type="hidden" name="id" value={{this._id}}>
     <input type="hidden" name="itemName" value={{this.itemName}}>
     <input type="hidden" name="price" value={{this.price}}>
     {{#each this.customizableComponents}}
-    <label><input onclick="getValue()" type="checkbox" checked="false" name={{this}} id={{this}}  > {{this}}</label>
+    <label><input onclick="getValue()" type="checkbox" name={{this}} id={{this}}  > {{this}}</label>
     {{/each}}
     <label><input type="number" name="quantity" step="1" min="1">Quantity</label>
     <button type="submit" id="btn-id">Submit</button>

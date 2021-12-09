@@ -21,7 +21,7 @@ const constructorMethod = (app) => {
 
   app.use('*', (req, res) => {
     res.status(404)
-    res.render('error/error', {error: `${res.statusCode} Not Found`});
+    res.render('error/error', {error: `${res.statusCode} Not Found`, title: "Error", page_function: "Error Display"});
   });
 };
 

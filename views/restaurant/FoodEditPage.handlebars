@@ -3,13 +3,17 @@
 <h2 id="error">{{error}}</h2>
 {{/if}}
 <h2>Edit Item</h2>
-<form method="POST" id="menu-form" action="/restaurants/menu/modify/{{restaurant._id}}/{{foodItem._id}}/">
+<form method="POST" id="menu-form" action="/restaurants/menu/modify/{{restaurant._id}}/{{foodItem._id}}/" enctype="multipart/form-data">
 <label id="itemName">Food name:
     <input type = "text" name="itemName" placeholder="Food name" value="{{foodItem.itemName}}"/>
 </label>
 <br>
 <label id="price">Price:
     <input type = "text" name="price" placeholder="5.99" value="{{foodItem.price}}"/>
+</label>
+<br>
+<label id="photo">Optionally upload an item photo
+    <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
 </label>
 <br>
 {{#if foodItem.isBurger}}
