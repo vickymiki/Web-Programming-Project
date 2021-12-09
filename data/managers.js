@@ -55,17 +55,11 @@ async function createManager(userName, streetAddress, city, state, zip, email, p
 }
 
 async function checkManager(userName, password) {
-    if(!userName 
-        || userName.includes(' ') 
-        || !userName.match(/^[0-9a-zA-Z]+$/) 
-        || userName.length < 4
-        || !password
-        || password.includes(' ')
-        || password.length<6) {
-
-        throw 'userName or password not correct';
+    //check whether userName and password is provided or not
+    if(!userName || !password) {
+        throw 'userName or password not provided';
     }
-    
+    // check whether userName and password are valid or not
     isValidName(userName);
     isValidPassword(password);
 
@@ -81,7 +75,13 @@ async function checkManager(userName, password) {
 }
 
 async function getManagerIdByName(managerName) {
+    //check whether managerName is provided or not
+    if(!managerName) {
+        throw "managerName not provided";
+    }
+    //check whether manager is valid or not
     isValidName(managerName);
+    
     const managerCollection = await managers();
     const manager = await managerCollection.findOne({ userName: managerName });
     if(manager === null) {
@@ -91,6 +91,11 @@ async function getManagerIdByName(managerName) {
 } 
 
 async function getManagerByName(managerName) {
+    //check whether managerName is provided or not
+    if(!managerName) {
+        throw "managerName not provided";
+    }
+    //check whether manager is valid or not
     isValidName(managerName);
     const managerCollection = await managers();
     const manager = await managerCollection.findOne({userName: managerName});
@@ -102,7 +107,13 @@ async function getManagerByName(managerName) {
 }
 
 async function addRestaurantToManager(restaurantId, managerName){
+    //check whether restaurantId or managerName is provided or not
+    if(!restaurantId || !managerName) {
+        throw "restaurantId or managerName not supplied";
+    }
+    //check whether managerName is valid or not
     isValidName(managerName);
+    
     const manager = await getManagerByName(managerName);
     if(manager === null) {
         throw "manager not found";
@@ -115,6 +126,10 @@ async function addRestaurantToManager(restaurantId, managerName){
 }
 
 async function isManager(username){
+    if(!username) {
+        throw "username not supplied";
+    }
+    isValidName(username);
     const managerCollection = await managers();
     let find = managerCollection.findOne({userName: username})
 
@@ -126,6 +141,10 @@ async function isManager(username){
 }
 
 async function userIsManagerOfRestaurant(userName, restaurantId){
+    if(!userName || !restaurantId) {
+        throw "userName or restaurantId not supplied";
+    }
+    isValidName(userName);
     
     let manager = null
     try{

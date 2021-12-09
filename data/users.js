@@ -38,6 +38,8 @@ async function createUser(userName, streetAddress, city, state, zip,
     userName = userName.toLowerCase();
     newUser.userName = userName;
     const userCollection = await users();
+    
+    // check no account with this username
     const user = await userCollection.findOne({userName: userName});
     if(user !== null) {
         throw `${userName} is occupied, try a different one`;
@@ -59,19 +61,15 @@ async function createUser(userName, streetAddress, city, state, zip,
 }
 
 async function checkUser(userName, password) {
-    if(!userName 
-        || userName.includes(' ') 
-        || !userName.match(/^[0-9a-zA-Z]+$/) 
-        || userName.length < 4
-        || !password
-        || password.includes(' ')
-        || password.length<6) {
-
-        throw 'userName or password not correct';
+    // check whether userName and password are provided or not
+    if(!userName || !password) {
+        throw 'userName or password not provided';
     }
-
+    
+    // check whether userName and password are valid or not
     isValidName(userName);
     isValidPassword(password);
+    
     const userCollection = await users();
     userName = userName.toLowerCase();
     const user = await userCollection.findOne({userName: userName});
@@ -106,7 +104,12 @@ async function updateUserProfile(id, streetAddress, city, state, zip,
 }
 
 async function getUserProfileByName(userName){
+    // check whether userName is provided or not
+    if(!userName)   throw "userName not provided";
+    
+    // check whether userName is valid or not
     isValidName(userName);
+    
     const userCollection = await users();
     const user = await userCollection.findOne({ userName: userName });
     if(user === null) throw `Unable to find user: ${userName}`;
@@ -115,29 +118,36 @@ async function getUserProfileByName(userName){
 }
 
 async function getUserIdByName(userName) {
+    // check whether userName is provided or not
+    if(!userName)   throw "userName not provided";
+    
+    // check whether userName is valid or not
     isValidName(userName);
+    
     const userCollection = await users();
     const user = await userCollection.findOne({ userName: userName });
     if(user === null) throw `Unable to find user: ${userName}`;
     return user._id.toString();
 }
 
-async function changePassword(userId, oldPwd, newPwd) {
-
-    const userCollection = await users();
-    const user = await userCollection.findOne({userName: toObjectId(userId)});
-    if(user === null)   throw `Unable to find user with id: ${userId}`;
-    let result = await bcrypt.compare(oldPwd, user.password);
-    if(!result)    throw "Username and password don't mactch";
-    user.password = await bcrypt.hash(newPwd, saltRounds);
-    const updatedInfo = await userCollection.updateOne({_id: toObjectId(id)}, {$push: {password: user.password}});
-    if(updatedInfo.modifiedCount === 0) {
-        throw "could not change password successfully";
-    }
-    return { updatePwd: true };
-}
+// async function changePassword(userId, oldPwd, newPwd) {
+//     const userCollection = await users();
+//     const user = await userCollection.findOne({userName: toObjectId(userId)});
+//     if(user === null)   throw `Unable to find user with id: ${userId}`;
+//     let result = await bcrypt.compare(oldPwd, user.password);
+//     if(!result)    throw "Username and password don't mactch";
+//     user.password = await bcrypt.hash(newPwd, saltRounds);
+//     const updatedInfo = await userCollection.updateOne({_id: toObjectId(id)}, {$push: {password: user.password}});
+//     if(updatedInfo.modifiedCount === 0) {
+//         throw "could not change password successfully";
+//     }
+//     return { updatePwd: true };
+// }
 
 async function addOrderToFavorites(order_id, user_id){
+    if(!order_id || !user_id) {
+        throw "order_id or user_id not provided";
+    }
     user_id = validateObjectId(user_id)
     order_id = validateObjectId(order_id)
     const userCollection = await users()
@@ -148,6 +158,9 @@ async function addOrderToFavorites(order_id, user_id){
 }
 
 async function removeOrderFromFavorites(order_id, user_id){
+    if(!order_id || !user_id) {
+        throw "order_id or user_id not provided";
+    }
     user_id = validateObjectId(user_id)
     order_id = validateObjectId(order_id)
     const userCollection = await users()
@@ -157,4 +170,4 @@ async function removeOrderFromFavorites(order_id, user_id){
     return true
 }
 
-module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, changePassword, addOrderToFavorites, removeOrderFromFavorites}
+module.exports = {createUser, checkUser, updateUserProfile, getUserProfileByName, getUserIdByName, addOrderToFavorites, removeOrderFromFavorites}
