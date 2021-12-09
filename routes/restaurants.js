@@ -169,7 +169,7 @@ router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
   }
 
   //Filter empty, undefined, non string values 
-  req.body.customOptionArray = req.body.customOptionArray.filter(x => {
+  req.body.customOptionArray = req.body.customOptionArray?.filter(x => {
     return x !== undefined || typeof x !== 'string' || x.trim().length === 0
   })
   
