@@ -273,6 +273,8 @@ router.post('/menu/modify/:restid/:foodid', upload.single("photo"), async (req, 
     //It's ok for custom items to not be provided
     form.customOptionArray = []
   }
+  //For some reason an extra null element is added at index 0, so remove it here
+  form.customOptionArray = (form.customOptionArray).slice(1);
 
   try{
       isBurger = form.customType === "superburger"
