@@ -6,22 +6,22 @@
   <form method="POST" id="signup-form" action="/signup">
     <div class="">
     <label id="username" class="">Username
-      <input type = "text" name="username" placeholder="Username" class="username_input"/>
+      <input type = "text" pattern="[0-9A-Za-z_]{4,}" required name="username" placeholder="Username" class="username_input"/>
     </label>
     </div>
     <div class="">
     <label id="password">Password
-      <input type = "password" name="password" placeholder="Password" class="password_input"/>
+      <input type = "password" pattern="[^' ']{8,}" required name="password" placeholder="Password" class="password_input"/>
     </label>
     </div>
     <div class="">
     <label id="streetAddress">Street Address
-      <input type = "text" name="streetAddress" placeholder="Street Address" class="streetAddress_input"/>
+      <input type = "text" required name="streetAddress" placeholder="Street Address" class="streetAddress_input"/>
     </label>
     </div>
     <div class="">
     <label id="city">City
-      <input type = "text" name="city" placeholder="City" class="city_input"/>
+      <input type = "text" required name="city" placeholder="City" class="city_input"/>
     </label>
     </div>
     <div class="">
@@ -86,17 +86,17 @@
     </div>
     <div class="">
     <label id="zip">Zip
-      <input type = "text" name="zip" placeholder="Zip" class="zip_input"/>
+      <input type = "text" pattern="[0-9]{5}" required name="zip" placeholder="Zip" class="zip_input"/>
     </label>
     </div>
     <div class="">
     <label id="email">Email
-      <input type = "text" name="email" placeholder="Email" class="email_input"/>
+      <input type = "text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required name="email" placeholder="Email" class="email_input"/>
     </label>
     </div>
     <div class="">
     <label id="phone">Phone
-      <input type = "text" name="phone" placeholder="123-456-7890" class="phone_input"/>
+      <input type = "text" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required name="phone" placeholder="123-456-7890" class="phone_input"/>
     </label>
     </div>
     <div class="">
