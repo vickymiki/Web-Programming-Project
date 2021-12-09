@@ -11,7 +11,7 @@ const fs = require('fs');
 const multer = require('multer');
 const ObjectId = require('mongodb').ObjectId;
 
-const upload = multer({ dest: '/uploads/'});
+const upload = multer({ dest: '../uploads/'});
 
 router.get('/placed/:restid', async (req, res) => {
     const id = req.params.restid
