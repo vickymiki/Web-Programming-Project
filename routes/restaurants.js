@@ -204,6 +204,15 @@ router.post('/menu/add/:id', upload.single("photo"), async (req, res) => {
     return
   }
 
+  if (form.customType === 'superburger') {
+    for (let i = 0; i < restaurant.menuItems.length; i++) {
+      if (restaurant.menuItems[i].isBurger) {
+        res.render('restaurant/MenuEditPage', { title: "Edit Menu", page_function: `Edit menu for "${restaurant.restaurantName}"`, restaurant: restaurant, error: "Each restaurant may only have 1 superburger!" })
+        return
+      }
+    }
+  }
+
   if(!form.customOptionArray){
     //It's ok for custom items to not be provided
     form.customOptionArray = []
