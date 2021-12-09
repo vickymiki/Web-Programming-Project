@@ -9,6 +9,7 @@ const path = require('path');
 const e = require('express');
 const fs = require('fs');
 const multer = require('multer');
+const xss = require('xss');
 
 const upload = multer({ dest: '../uploads/'});
 
@@ -151,28 +152,64 @@ router.get('/', async (req, res) => {
     
 });
 
+async function currentUserMatchesReview(reviewId, userSession){
+    if (userSession.accountType === "user" ){
+        let currentUser = await user_DAL.getUserProfileByName(userSession.username)
+        let currentReview = await reviews_DAL.getReviewById(reviewId)
+        if(currentUser._id !== currentReview.userId) throw `Unable to delete review!`
+    }
+    if (userSession.accountType === "manager" ){
+        let currentUser = await manager_DAL.getManagerByName(userSession.username)
+        let currentReview = await reviews_DAL.getReviewById(reviewId)
+        if(currentUser._id !== currentReview.userId) throw `Unable to delete review!`
+    }
+}
+
 router.post('/reviews/:restId/remove', async (req, res) => {
-  if (!req.session.user){
+    if (!req.session.user){
         return res.redirect('/login')
     }
-  let reviewId = req.body.reviewId;
-  let restaurantId = req.body.restaurantId
+    let reviewId = req.body.reviewId;
+    let restaurantId = req.body.restaurantId
+  
+    //Make sure current user or manager is working with their own review
+    try{
+        currentUserMatchesReview(reviewId, req.session.user)
+    } catch(e){
+        return res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
 
-  try {
-    await reviews_DAL.remove(reviewId);
-  } catch (e) {
-     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
-  }
+    try {
+        await reviews_DAL.remove(reviewId);
+    } catch (e) {
+        return res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
 
-  res.redirect(`/profile/reviews/${restaurantId}`);
+    res.redirect(`/profile/reviews/${restaurantId}`);
 });
 
 router.post('/reviews/:restId/edit', upload.single("photo"), async (req, res) => {
-  if (!req.session.user){
+    if (!req.session.user){
         return res.redirect('/login')
     }
-  let imgname = new Date().getTime().toString();
-  let restaurantId = req.params.restId;
+
+    if(req.body){
+        //Protect against xss
+        for (const iterator in req.body) {
+          req.body[iterator] = xss(req.body[iterator])
+        }
+    }
+
+    let imgname = new Date().getTime().toString();
+    let restaurantId = req.params.restId;
+    let reviewId = req.body.reviewId
+
+    //Make sure current user or manager is working with their own review
+    try{
+        currentUserMatchesReview(reviewId, req.session.user)
+    } catch(e){
+        return res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
 
   try {
     if (!req.file) imgname = "no_image.jpeg";
@@ -201,38 +238,50 @@ router.post('/reviews/:restId/edit', upload.single("photo"), async (req, res) =>
 });
 
 router.post('/replies/:restId/remove', async (req, res) => {
-  if (!req.session.user){
+    if (!req.session.user){
         return res.redirect('/login')
     }
-  let replyId = req.body.replyId;
-  let restaurantId = req.body.restaurantId
-  let reviewId = req.body.reviewId
+    let replyId = req.body.replyId;
+    let restaurantId = req.body.restaurantId
+    let reviewId = req.body.reviewId
 
-  try {
-    await replies_DAL.remove(reviewId, replyId);
-  } catch (e) {
-     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
-  }
+    //Make sure current user or manager is working with their own review
+    try{
+        currentUserMatchesReview(reviewId, req.session.user)
+    } catch(e){
+        return res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
 
-  res.redirect(`/profile/replies/${restaurantId}`);
+    try {
+        await replies_DAL.remove(reviewId, replyId);
+    } catch (e) {
+        res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
+
+    res.redirect(`/profile/replies/${restaurantId}`);
 });
 
 router.post('/replies/:restId/edit', async (req, res) => {
-  if (!req.session.user){
+    if (!req.session.user){
         return res.redirect('/login')
     }
-  let replyId = req.body.replyId;
-  let restaurantId = req.body.restaurantId;
-  let reviewId = req.body.reviewId;
-  let reply = req.body.reply;
+    let replyId = req.body.replyId;
+    let restaurantId = req.body.restaurantId;
+    let reviewId = req.body.reviewId;
+    let reply = req.body.reply;
 
-  try {
-    await replies_DAL.editReply(reviewId, replyId, reply);
-  } catch (e) {
-     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
-  }
+    try{
+        currentUserMatchesReview(reviewId, req.session.user)
+    } catch(e){
+        return res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
+    try {
+        await replies_DAL.editReply(reviewId, replyId, reply);
+    } catch (e) {
+        res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
+    }
 
-  res.redirect(`/profile/replies/${restaurantId}`);
+    res.redirect(`/profile/replies/${restaurantId}`);
 });
 
 router.post('/', async (req, res) => {
