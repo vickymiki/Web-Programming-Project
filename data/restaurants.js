@@ -13,6 +13,22 @@ function isValidRestaurantName (restName) {
         throw 'Restaurant name is not a valid string';
     }
 }
+function validateFoodObject(foodItem) {
+    if(!foodItem) throw "foodItem not supplied";
+    const { itemName, price, isBurgur, imageName } = foodItem;
+    if(!itemName || !price || !isBurgur || !imageName) {
+        throw 'All fields need to be provided';
+    }
+    isValidString(itemName);
+    var priceRegex = /^(?!0\d)\d*(\.\d+)?$/;
+    if(!priceRegex.test(price)) {
+        throw 'Price is not valid';
+    }
+    if(typeof isBurgur !== 'boolean') {
+        throw 'isBurgur is not a boolean value';
+    }
+    isValidString(imageName);
+}
 
 async function validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
     //TODO add validation
@@ -105,6 +121,7 @@ async function getRestaurantIdFromName(name){
 }
 
 async function getRestaurantFromId(id){
+    if(!id) throw 'id not supplied';
     id = validateObjectId(id)
     const restaurantCollection = await restaurants()
     const restQuery = await restaurantCollection.findOne({_id: id})
@@ -142,6 +159,7 @@ async function getRestaurantsManagedByUser(username){
 }
 
 async function removeRestaurant(restaurant_id){
+    if(!restaurant_id)  throw 'restaurant_id not supplied';
     restaurant_id = validateObjectId(restaurant_id)
     const restaurantCollection = await restaurants()
     let deleteRest = await restaurantCollection.deleteOne({_id: restaurant_id})
@@ -150,8 +168,10 @@ async function removeRestaurant(restaurant_id){
 }
 
 async function addFood_Item(restaurant_id, foodItem){
-    // TODO
-    //foodObj = validateFoodObject(foodItems)
+    if(!restaurant_id || !foodItem) {
+        throw 'restaurant_id or foodItem not supplied';
+    }
+    foodObj = validateFoodObject(foodItems)
     restaurant_id = validateObjectId(restaurant_id)
     const restaurantCollection = await restaurants()
     foodItem._id = ObjectId()
@@ -162,6 +182,9 @@ async function addFood_Item(restaurant_id, foodItem){
 }
 
 async function removeFood_Item(restaurant_id, foodItem_id){
+    if(!restaurant_id || !foodItem_id) {
+        throw 'restaurant_id or foodItem_id not supplied';
+    }
     restaurant_id = validateObjectId(restaurant_id)
     foodItem_id = validateObjectId(foodItem_id)
     const restaurantCollection = await restaurants()
@@ -172,6 +195,9 @@ async function removeFood_Item(restaurant_id, foodItem_id){
 }
 
 async function getFood_Item(restaurant_id, foodItem_id){
+    if(!restaurant_id || !foodItem_id) {
+        throw 'restaurant_id or foodItem_id not supplied';
+    }
     restaurant_id = validateObjectId(restaurant_id)
     foodItem_id = validateObjectId(foodItem_id)
     const restaurantCollection = await restaurants()
@@ -185,6 +211,9 @@ async function getFood_Item(restaurant_id, foodItem_id){
 }
 
 async function replaceFood_Item(restaurant_id, foodItem_id, foodItem){
+    if(!restaurant_id || !foodItem_id || !foodItem) {
+        throw 'restaurant_id, foodItem_id or foodItem not supplied';
+    }
     restaurant_id = validateObjectId(restaurant_id)
     foodItem_id = validateObjectId(foodItem_id)
     const restaurantCollection = await restaurants()
@@ -201,6 +230,9 @@ async function replaceFood_Item(restaurant_id, foodItem_id, foodItem){
 }
 
 async function addOrderToRestaurant(order_id, restaurant_id){
+    if(!order_id || !restaurant_id) {
+        throw 'order_id or restaurant_id not supplied';
+    }
     restaurant_id = validateObjectId(restaurant_id)
     order_id = validateObjectId(order_id)
     const restaurantCollection = await restaurants()
@@ -211,6 +243,9 @@ async function addOrderToRestaurant(order_id, restaurant_id){
 }
 
 async function removeOrderFromRestaurant(order_id, restaurant_id){
+    if(!order_id || !restaurant_id) {
+        throw 'order_id or restaurant_id not supplied';
+    }
     restaurant_id = validateObjectId(restaurant_id)
     order_id = validateObjectId(order_id)
     const restaurantCollection = await restaurants()
@@ -221,7 +256,7 @@ async function removeOrderFromRestaurant(order_id, restaurant_id){
     return true
 }
 
-module.exports = {addRestaurant, getRestaurantIdFromName, addFood_Item, 
+module.exports = {addRestaurant, getRestaurantIdFromName, removeRestaurant, addFood_Item, 
     removeFood_Item, getFood_Item, replaceFood_Item, 
     getAllResaurants, getRestaurantFromId, getRestaurantsManagedByUser,
     addOrderToRestaurant, removeOrderFromRestaurant}
