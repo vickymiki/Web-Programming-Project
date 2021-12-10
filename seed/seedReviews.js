@@ -21,7 +21,6 @@ async function seed() {
   await reviews_DAL.create(r_id4, u_id3, "Service could be better", 3, false, "no_image.jpeg");
 
   console.log("Reviews have been created...");
-  console.log("Seeding completed!");
 }
 
 if (require.main === module) {

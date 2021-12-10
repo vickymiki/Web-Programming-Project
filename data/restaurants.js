@@ -15,8 +15,8 @@ function isValidRestaurantName (restName) {
 }
 function validateFoodObject(foodItem) {
     if(!foodItem) throw "foodItem not supplied";
-    const { itemName, price, isBurgur, imageName } = foodItem;
-    if(!itemName || !price || !isBurgur || !imageName) {
+    const { itemName, price, isBurger, imageName } = foodItem;
+    if(!itemName || !price || !((isBurger == false) || (isBurger == true)) || !imageName) {
         throw 'All fields need to be provided';
     }
     isValidString(itemName);
@@ -24,8 +24,8 @@ function validateFoodObject(foodItem) {
     if(!priceRegex.test(price)) {
         throw 'Price is not valid';
     }
-    if(typeof isBurgur !== 'boolean') {
-        throw 'isBurgur is not a boolean value';
+    if(typeof isBurger !== 'boolean') {
+        throw 'isBurger is not a boolean value';
     }
     isValidString(imageName);
 }
@@ -173,7 +173,7 @@ async function addFood_Item(restaurant_id, foodItem){
     if(!restaurant_id || !foodItem) {
         throw 'restaurant_id or foodItem not supplied';
     }
-    foodObj = validateFoodObject(foodItems)
+    foodObj = validateFoodObject(foodItem)
     restaurant_id = validateObjectId(restaurant_id)
     const restaurantCollection = await restaurants()
     foodItem._id = ObjectId()
