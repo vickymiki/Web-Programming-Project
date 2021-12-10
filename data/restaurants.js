@@ -30,6 +30,19 @@ function validateFoodObject(foodItem) {
     isValidString(imageName);
 }
 
+async function checkIfRestNameExists(restName) {
+    restName = restName.trim().toLowerCase();
+    const restaurantCollection = await restaurants();
+    const restQuery = await getAllResaurants();
+    let flag = false;
+    restQuery.forEach(x =>{
+        if(x.restaurantName.toLowerCase() === restName) {
+            flag = true;
+        }
+    });
+    return flag;
+}
+
 async function validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
     //TODO add validation
     if(!name || !address || !city || !state || !zip || !priceRange 
@@ -49,6 +62,7 @@ async function validateParameters(name, address, city, state, zip, priceRange, f
 
     //There is allowed to be multiple restaurants with the same name, but not with the same address
     if(await checkIfAddressExists(address, city, state, zip)) throw 'A restaurant with that address already exists'
+    if(await checkIfRestNameExists(name))   throw `A restaurant with that name already exists`;
 
     return ({restaurantName: name, 
         streetAddress: address,
