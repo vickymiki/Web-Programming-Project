@@ -38,6 +38,7 @@ body {
 .bottom_link {
   border: 1px dashed black;
     padding: 0px 5px 2px 5px;
+    color: #0063d1 !important;
 }
 
 .bottom_message {
@@ -46,6 +47,13 @@ body {
     width: fit-content;
 }
 
+.heading_font {
+  font-size: 28px;
+}
+
+.nav_color {
+  color: #0063d1;
+}
 
 /* Login Page */
 
@@ -131,7 +139,7 @@ body {
 
   /* Restaurants Page */
 .user_color {
-  color: #009c9c;
+  color: #007373;
 }
 .rest {
     border: 1px dashed black;
@@ -147,7 +155,8 @@ body {
     padding: 0px 11px 3px 11px;
     border-radius: 7px;
     background-color: #d1e189;
-    margin: 0px 0px 0px 12px !important
+    margin: 0px 0px 0px 12px !important;
+    color: #005bc1 !important;
 }
 
 .restName_link {
@@ -155,6 +164,11 @@ body {
     padding: 3px 11px 7px 11px;
     border-radius: 7px;
     background-color: #d1e189;
+    color: #005bc1 !important;
+}
+
+.restName_link_color {
+  color: #005bc1 !important;
 }
 
 .restaurantsPage_heading {
@@ -229,7 +243,7 @@ width: 35% !important;
 /* Profile Page */
 
 .ord_color {
-    color: #cc05cc !important;
+    color: #b800b8!important;
 }
 
 .prof {
@@ -351,4 +365,18 @@ width: 35% !important;
   width: 282px;
   padding: 7px 0px 6px 12px;
   background-color: #c2e083;
+}
+
+.comp_order_heading {
+  width: fit-content;
+  border: 1px dashed;
+  padding: 3px 9px 6px 10px;
+  background-color: #dee9af;
+}
+
+.btm_no_orders {
+  margin-left: 23px;
+  width: fit-content;
+  border: 1px dashed black;
+  padding: 0px 5px 2px 5px;
 }

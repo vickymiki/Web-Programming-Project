@@ -1,14 +1,14 @@
-<div class="ml-4 inProg_order_heading mb-3"><h3 class="mb-0">{{page_function}}</h3></div>
+<div class="ml-4 inProg_order_heading mb-3 heading_font"><div class="mb-0">{{page_function}}</div></div>
 
 
 {{#if error}}
 <div class="error_div" id="error">{{error}}</div>
 {{/if}}
 
-<h2 class="ml-4">Placed Orders:</h2>
+<h4 class="ml-4">Placed Orders:</h4>
 {{#if orders.length}}
 {{#each orders}}
-<div class="incomp_order_box ml-4 pl-3">
+<div class="incomp_order_box mb-3 ml-4 pl-3">
     <div class="row mb-2">
         <div class="col-4 pr-0 font-weight-bold">Delivery Address:</div><div class="col-8 pl-0 texxt_overflow">{{deliveryAddress}}</div>
     </div>

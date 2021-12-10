@@ -1,4 +1,5 @@
-<h1>{{page_function}}</h1>
+<div class="ml-4 comp_order_heading heading_font mb-3"><div class="mb-0">{{page_function}}</div></div>
+
 {{#if error}}
 <h2 id="error">{{error}}</h2>
 {{/if}}
@@ -6,28 +7,43 @@
 <h2>Placed Orders</h2>
 {{#if orders.length}}
 {{#each orders}}
-    <p>User: {{userName}}</p>
-    <p>Delivery Address: {{deliveryAddress}}</p>
-    <p>Ordered Items:</p>
-    <ul>
-        {{#each itemsOrdered}}
-            <li>{{itemName}}</li>
-            {{#if customizableComponents.length}}
-            <li>
-              <ul>
-                {{#each customizableComponents}}
-                    <li>{{this}}</li>
+<div class="incomp_order_box mb-3 ml-4 pl-3">
+    <div  class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">User:</div><div class="col-8 pl-0"> {{userName}}</div>
+    </div>
+    
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Delivery Address:</div> <div class="col-8 pl-0 texxt_overflow">{{deliveryAddress}}</div>
+    </div>
+    
+    <div class="row mb-2">
+        <div class="col-4 pr-0 font-weight-bold">Ordered Items:</div>
+        <div class="col-8 pl-0">
+            <ul>
+                {{#each itemsOrdered}}
+                    <li>{{itemName}}</li>
+                    {{#if customizableComponents.length}}
+                    <li>
+                    <ul>
+                        {{#each customizableComponents}}
+                            <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    </li>
+                    {{/if}}
                 {{/each}}
-              </ul>
-            </li>
-            {{/if}}
-        {{/each}}
-    </ul>
-    <form method="POST" id="complete-form-{{_id}}" action="/orders/complete/{{restaurant_id}}/{{_id}}">
-    <label id="submit-{{_id}}">
-        <input type="submit" value="Order Completed"/>
-    </label>
-    </form>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <form class="col-6" method="POST" id="complete-form-{{_id}}" action="/orders/complete/{{restaurant_id}}/{{_id}}">
+            <label id="submit-{{_id}}">
+                <input type="submit" value="Order Completed"/>
+            </label>
+        </form>
+    </div>
+</div>
 {{/each}}
 {{else}}
 <h3>There are currently no orders placed!</h3>

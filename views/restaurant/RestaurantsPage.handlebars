@@ -11,9 +11,9 @@
       <div class="rest">
         <div class="m-0 row">        
           {{#if ../isManager}}
-            <div class="col-6 restName_link"><p>{{restaurantName}}</p></div>
+            <div class="col-6 restName_link"><p class="restName_link_color">{{restaurantName}}</p></div>
           {{else}}
-            <div class="col-6 restName_link"><a href="/restaurants/{{_id}}" class="">{{restaurantName}}</a></div>
+            <div class="col-6 restName_link"><a href="/restaurants/{{_id}}" class="restName_link_color">{{restaurantName}}</a></div>
           {{/if}}
         
           <div class="col-3"><a href="/restaurants/{{_id}}/reviews" class="reviews_link">Reviews</a></div>
