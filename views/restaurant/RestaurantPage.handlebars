@@ -1,13 +1,18 @@
 <div class="ml-4 comp_order_heading heading_font mb-3"><div class="mb-0">{{page_function}}</div></div>
 
-<a href="/restaurants">Back to Restaurants List</a>
-<br>
-<a href="/restaurants/{{restaurant._id}}/cart">View my cart</a>
+<div class="ml-4"><a class="link_color" href="/restaurants">Back to Restaurants List</a></div>
+
+<div class="ml-4"><a class="link_color" href="/restaurants/{{restaurant._id}}/cart">View my cart</a></div>
 {{#if restaurant.menuItems.length}}
   {{#each restaurant.menuItems}}
 {{#if this.isBurger}}
-<h3>{{this.itemName}}</h3>
-<h4>Price: {{this.price}}</h4>
+<div class="ml-4 mb-3 pl-3 pr-3 mt-2 food_item_box">
+<div class="heading_font food_item_head_color">{{this.itemName}}</div>
+<div class="row mb-2 fs_20">
+  <div class="col-1 font-weight-bold">Price:</div>
+  <div class="col-10">{{this.price}}</div>
+</div>
+
 <img src="/public/images/{{imageName}}" alt="Menu Item Image">
 <form method="POST" id={{this._id}}>
   <div class="box">
@@ -36,9 +41,15 @@
   <label><input type="number" name="quantity" step="1" min="1">Quantity</label>
   <button type="submit" id="btn-id_{{this._id}}">Submit</button>
 </form>
+</div>
+
  {{else}}
-  <h3>{{this.itemName}}</h3>
-  <h4>Price: {{this.price}}</h4>
+<div class="ml-4 mb-3 pl-3 pr-3 food_item_box">
+  <div class="heading_font food_item_head_color">{{this.itemName}}</div>
+  <div class="row mb-2 fs_20">
+    <div class="col-2 font-weight-bold">Price:</div>
+    <div class="col-10">{{this.price}}</div>
+</div>
   <img src="/public/images/{{imageName}}" alt="Menu Item Image">
   <form method="POST" id={{this._id}}>
     <input type="hidden" name="id" value={{this._id}}>
@@ -50,6 +61,7 @@
     <label><input type="number" name="quantity" step="1" min="1">Quantity</label>
     <button type="submit" id="btn-id_{{_id}}">Submit</button>
     </form>
+</div>
   {{/if}}
   {{/each}}
   {{!-- <button class="cart" onclick="getValue_item()">Add to cart</button> --}}

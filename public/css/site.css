@@ -55,6 +55,11 @@ body {
   color: #0063d1;
 }
 
+.link_color {
+  color: #0063d1 !important;
+
+}
+
 /* Login Page */
 
 .login_form {
@@ -379,4 +384,16 @@ width: 35% !important;
   width: fit-content;
   border: 1px dashed black;
   padding: 0px 5px 2px 5px;
+}
+
+
+.food_item_box {
+  width: fit-content;
+  border: 1px dashed;
+  padding: 0px 0px 0px 0px;
+  background-color: #dee9af;
+}
+
+.food_item_head_color {
+  color: brown;
 }

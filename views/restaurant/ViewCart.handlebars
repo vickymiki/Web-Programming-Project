@@ -1,9 +1,19 @@
-<h1>{{page_function}}</h1>
-<a href="/restaurants/{{restaurantId}}">Add more items to cart</a>
+<div class="ml-4 comp_order_heading heading_font mb-3"><div class="mb-0">{{page_function}}</div></div>
+
+
+<a class="link_color ml-4 mb-3" href="/restaurants/{{restaurantId}}">Add more items to cart</a>
 {{#if orderData.itemsOrdered.length}}
-<h2>Total Price: {{orderData.totalPrice}}</h2>
-<h2>Current Discount: {{orderData.discount}}% off</h2>
+<div class="row">
+  <div class="mt-2 ml-4 col-1 font-weight-bold fs_20">Total Price :</div>
+  <div class="col-10 mt-2">{{orderData.totalPrice}}</div>
+</div>
+<div class="row">
+  <div class="mt-2 ml-4 col-auto font-weight-bold fs_20">Current Discount : </div>
+  <div class="col-9 mt-2 ">{{orderData.discount}}</div>
+</div>
+
   {{#each orderData.itemsOrdered}}
+  <div class="ml-4 mb-3 mt-2 pl-3 pr-3 food_item_box">
     <h3>{{itemName}}</h3>
     <p>{{price}}</p>
     <ul>
@@ -17,10 +27,12 @@
     <input type="hidden" name="restaurantId" value={{../orderData.restaurant_id}}>
     <button type="submit">Remove Item</button>
   </form>
+</div>
   {{/each}}
   {{#if couponResult}}
-    <h3 id="couponResult">{{couponResult}}</h3>
+    <div class="ml-4 fs+20" id="couponResult">{{couponResult}}</div>
   {{/if}}
+<div class="ml-4">
   <form method="POST" action="/restaurants/orders/applyDiscount" id="applyDiscount">
     <input type="hidden" name="orderId" value={{orderData._id}}>
     <input type="hidden" name="restaurantId" value={{orderData.restaurant_id}}>
@@ -32,8 +44,9 @@
     <input type="hidden" name="orderId" value={{orderData._id}}>
     <button type="submit">Submit Order</button>
   </form>
+</div>
 {{else}}
-<p>No items have been added to your order yet</p>
+<p class="btm_no_orders mt-3">No items have been added to your order yet</p>
 {{/if}}
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script src="/public/js/applyDiscount_jq.js"></script>
