@@ -218,13 +218,16 @@ async function replaceFood_Item(restaurant_id, foodItem_id, foodItem){
     }
     restaurant_id = validateObjectId(restaurant_id)
     foodItem_id = validateObjectId(foodItem_id)
-    const restaurantCollection = await restaurants()
+    const restaurantCollection = await restaurants();
+    const customizableComponents = foodItem.customizableComponents.split(",");
+  
+
 
     let restaurant = await restaurantCollection.updateOne({_id: restaurant_id, "menuItems._id": foodItem_id}, 
         {$set: {"menuItems.$.itemName": foodItem.itemName,
                 "menuItems.$.price": foodItem.price,
                 "menuItems.$.isBurger": foodItem.isBurger,
-                "menuItems.$.customizableComponents": foodItem.customizableComponents,
+                "menuItems.$.customizableComponents": customizableComponents,
                 "menuItems.$.imageName": foodItem.imageName}
       })
     if(restaurant.matchedCount === 0) throw `Failed to update food item: ${foodItem_id}`    
