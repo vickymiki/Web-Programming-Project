@@ -91,6 +91,11 @@ function isValidPassword(password) {
         throw 'password not valid';
     }
 }
+function isValidString(param) {
+    if(typeof param !== 'string' || param.trim().length() === 0) {
+        throw `${param} is not a valid string`;
+    }
+}
 function isStringParam(param){
     if(typeof param !== 'string') {
         return false;
@@ -100,7 +105,27 @@ function isStringParam(param){
     }
     return true;
 }
-
+function isValidFoodType(foodType) {
+    if(foodType instanceof Array) {
+        for(let key of foodType) {
+            if(typeof key !== 'string' || key.trim().length() === 0) {
+                throw "foodType is not a valid array of string";
+            }
+        }
+    } else {
+        throw "foodType is not an array";
+    }
+}
+function isValidPriceRange(priceRange) {
+    if(typeof priceRange !== 'string') {
+        throw 'priceRange is not a string';
+    }
+    var rangeRegex = /\${1,5}$/;
+    const valid = rangeRegex.test(priceRange);
+    if(!valid) {
+        throw 'priceRange not valid';
+    }
+}
 function isArrayOfStr(param) {
     if(param instanceof Array) {
         for(let key of param) {
@@ -161,12 +186,29 @@ function managerFieldChecker(params) {
     isValidPassword(params.password);
 }
 
+//Returns ObjectId if given id is already an ObjectId or a valid string of ObjectId, otherwise throws
+function validateObjectId(id){
+    if( typeof id !== 'string' && !ObjectId.isValid(id) ) throw `id must be of type string or ObjectId: ${id}`
+    if( typeof id === 'string' && id.length === id.split(' ').length - 1) throw `id as string must not be empty: ${id}`
+    if( typeof id === 'string' ){
+        try{
+            id = ObjectId(id)    
+        }catch(e){
+            throw `Provided id not a valid ObjectId: ${id}`
+        }
+    }
+    return id
+}
+
 module.exports = {
     toObjectId,
     isValidName,
     isValidZip,
     isValidEmail,
     isValidPhone,
+    isValidString,
+    isValidPriceRange,
+    isValidFoodType,
     isValidPassword, 
     isValidReviewFeedback,
     isStringParam,
@@ -174,4 +216,5 @@ module.exports = {
     isFieldExistChecker,
     userFieldChecker,
     managerFieldChecker,
+    validateObjectId
 }

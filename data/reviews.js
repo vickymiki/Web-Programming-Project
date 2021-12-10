@@ -5,6 +5,7 @@ const users = mongoCollections.users;
 const managers = mongoCollections.managers;
 const restaurants = mongoCollections.restaurants;
 const repliesData = require('./replies');
+const dataUtils = require('../dataUtils')
 
 //Function to check if input is only spaces 
 const isSpaces = function isSpaces(input) {
@@ -245,6 +246,16 @@ async function getAllByUser(userId, isManager) {
 
   if (userReviews.length == 0) throw 'Something went wrong'; //This really should never be triggered
   return userReviews;
+}
+
+async function getReviewById(reviewId) {
+  reviewId = dataUtils.validateObjectId(reviewId)
+
+  const reviewCollection = await reviews();
+  let result = await reviewCollection.findOne({_id: reviewId})
+  if(result === null) throw `Unable to find review: ${reviewId}`
+  result._id = result._id.toString()
+  return result
 }
 
 async function remove(reviewId) {
@@ -612,6 +623,7 @@ module.exports = {
   getAll,
   getAllByRestaurant,
   getAllByUser,
+  getReviewById,
   remove,
   addLike,
   addDislike,
