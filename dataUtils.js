@@ -188,6 +188,8 @@ function managerFieldChecker(params) {
 
 //Returns ObjectId if given id is already an ObjectId or a valid string of ObjectId, otherwise throws
 function validateObjectId(id){
+    if(!id)     throw "id need to be supplied";
+
     if( typeof id !== 'string' && !ObjectId.isValid(id) ) throw `id must be of type string or ObjectId: ${id}`
     if( typeof id === 'string' && id.length === id.split(' ').length - 1) throw `id as string must not be empty: ${id}`
     if( typeof id === 'string' ){
