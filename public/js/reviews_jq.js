@@ -10,8 +10,9 @@
     //Pulls the context of this object, grabs the form html and parses the id out of it 
     var mydata = currentLink.context.outerHTML.toString().split(" ")[2];
     var formId = mydata.substring(4, 32);
+    var checkReply = formId.substring(0, 8);
     
-    if (formId.length == 28) {
+    if (formId.length == 28 && checkReply !== 'NewReply') {
       event.preventDefault();
       //now we can pull the specific form with the proper ID
       var postId = formId.substring(0, 3);
@@ -70,7 +71,7 @@
           alert(msg)
         });
       }
-    } else if (formId.length !== 0){
+    } else if (formId.length !== 0 && checkReply !== 'NewReply'){
       var reviewForm = document.getElementById("New_Review");
       reviewForm.submit(function() {
         var myFile = document.getElementById("photo").files[0].name;
