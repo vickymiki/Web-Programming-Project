@@ -45,6 +45,8 @@ async function validateParameters(name, address, city, state, zip, priceRange, f
         ordersPlaced: [],
         rating: 0,
         reviews: [],
+        phone: phone,
+        email: email,
         managerUsername})
 }
 

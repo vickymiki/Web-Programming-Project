@@ -43,7 +43,7 @@ function isValidEmail(email) {
         throw "email must be a string";
     }
 
-    var emailRegex = /[a-zA-Z0-9_]{6,}@[a-z0-9]{2,}\.com$/;
+    var emailRegex = /[a-zA-Z0-9_]{3,}@[a-z0-9]{3,}\.com$/;
     const valid = emailRegex.test(email);
     if(!valid) {
         throw `${email} is not vlaid for email`;
@@ -92,7 +92,7 @@ function isValidPassword(password) {
     }
 }
 function isValidString(param) {
-    if(typeof param !== 'string' || param.trim().length() === 0) {
+    if(typeof param !== 'string' || param.trim().length === 0) {
         throw `${param} is not a valid string`;
     }
 }
@@ -108,7 +108,7 @@ function isStringParam(param){
 function isValidFoodType(foodType) {
     if(foodType instanceof Array) {
         for(let key of foodType) {
-            if(typeof key !== 'string' || key.trim().length() === 0) {
+            if(typeof key !== 'string' || key.trim().length === 0) {
                 throw "foodType is not a valid array of string";
             }
         }

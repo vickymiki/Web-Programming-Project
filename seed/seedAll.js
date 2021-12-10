@@ -1,8 +1,12 @@
-const foodSeed = require('./seedFoodItems')
-const restaurantSeed = require('./seedRestaurants')
-console.log("Seeding all collections...")
+const managerSeed = require('./seedManagers');
+const userSeed = require('./seedUsers');
+const restaurantSeed = require('./seedRestaurants');
+const foodSeed = require('./seedFoodItems');
+const reviewSeed = require('./seedReviews');
 
-const allCollections = [restaurantSeed, foodSeed]
+console.log("Working on seeding your database...");
+
+const allCollections = [managerSeed, userSeed, restaurantSeed, foodSeed, reviewSeed];
 
 async function main(){
     
@@ -12,5 +16,3 @@ async function main(){
     }
 }
 main()
-
-console.log("Finished seeding all collections...")

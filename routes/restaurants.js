@@ -563,7 +563,7 @@ router.post('/create', async (req, res) => {
       return
   }
 
-  if(!(form.asian || form.american || form.italian)){
+  if(!(form.asian || form.american || form.italian || form.mexican || form.other)){
     res.status(400).render('restaurant/CreateRestaurantPage', {title: "Create Restaurant", page_function: "Create Restaurant", error: "Food category invalid!"})    
     return
   }
@@ -571,7 +571,10 @@ router.post('/create', async (req, res) => {
   foodTypes = []
   if(form.asian) foodTypes.push("Asian")
   if(form.american) foodTypes.push("American")
-  if(form.italian) foodTypes.push("Italian")
+  if (form.italian) foodTypes.push("Italian")
+  if (form.mexican) foodTypes.push("Mexican")
+  if (form.other) foodTypes.push("Other")
+  
 
   try{
       await restaurants_DAL.addRestaurant(form.name,
