@@ -28,7 +28,7 @@ To run our application, complete the following steps:
 * Ordering Page
   * Choose which restaurant to order from
   * Users can view menu items at a particular restaurant
-  * Select menu items to order 
+  * Select menu items to order
   * Customize those items while ordering
 * Cart/Checkout Page
   * Users can view/modify items in their current cart
@@ -36,8 +36,8 @@ To run our application, complete the following steps:
 * Order Status Page
   * Users can view the status of their order (In progress/Completed)
 * Admin User Page
-  * List all orders that have been placed/completed and their associated information 
-  * Edit the status of orders at their own restaurants 
+  * List all orders that have been placed/completed and their associated information
+  * Edit the status of orders at their own restaurants
   * Edit menu items at their restaurant
   * Create new items and/or new restaurants to manage and disply
   * View all of their current restaurants
