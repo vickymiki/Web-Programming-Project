@@ -285,7 +285,6 @@ router.post('/replies/:restId/edit', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    //TODO process login form
     const loginForm = req.body
     if (!loginForm.username 
         || loginForm.username.includes(' ') 

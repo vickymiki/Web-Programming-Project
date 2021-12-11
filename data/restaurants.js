@@ -44,7 +44,6 @@ async function checkIfRestNameExists(restName) {
 }
 
 async function validateParameters(name, address, city, state, zip, priceRange, foodTypes, email, phone, managerUsername){
-    //TODO add validation
     if(!name || !address || !city || !state || !zip || !priceRange 
         || !foodTypes || !email || !phone || !managerUsername) {
             throw "All fields need to be supplied";
@@ -123,7 +122,6 @@ async function checkIfAddressExists(address, city, state, zip){
     }
 }
 
-//TODO restaurant names aren't guarenteed to be unique, might want to remove as it's misleading
 async function getRestaurantIdFromName(name){
     if(!name) {
         throw 'restaurant name not supplied';

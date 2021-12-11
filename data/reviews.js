@@ -89,10 +89,6 @@ async function create(restaurantId, userId, review, rating, isManager, imgname) 
     if (!myUser) throw 'User not found';
   }
 
-  //TODO
-  //here we are going to first upload the photo it its own collection - photos, and then store its id as "photoId" in the reviews collection
-
-
   const userName = myUser.userName;
 
   const reviewsCollection = await reviews();
@@ -195,11 +191,6 @@ async function getAllByRestaurant(restaurantId) {
 }
 
 //Function to return array of all reviews from a particular user
-//If we want managers to also comment, we will need to add an argument here like this:
-// getAllByUser(userId, isManager), where isManager would be a boolean value. 
-// We would have to check cookies to determine if user is mnager or not, then search the correct collection (users/managers)
-// Would also need to add reviews array to managers collection 
-//This will be needed when we display a user profile page 
 async function getAllByUser(userId, isManager) {
   if (!userId || userId == null) throw 'Must provide a user id';
   if (isManager == null) throw 'Must provide a user id';
@@ -215,7 +206,6 @@ async function getAllByUser(userId, isManager) {
     //First get that manager object
     const managerCollection = await managers();
     const manager = await managerCollection.findOne(ObjectId(userId));
-    //onst manager = await managerFuncs.get(userId);
     //Now pull the review ids
     reviewIds = manager.review_id;
     if (reviewIds.length == 0) throw "No reviews found for manager";
@@ -224,7 +214,6 @@ async function getAllByUser(userId, isManager) {
     //First get that user object
     const userCollection = await users()
     const user = await userCollection.findOne(ObjectId(userId));
-    //const user = await userFuncs.get(userId);
     //Now pull the review ids
     reviewIds = user.review_id;
     if (reviewIds.length == 0) throw "No reviews found for user";
@@ -263,8 +252,6 @@ async function remove(reviewId) {
   if (typeof reviewId !== 'string') throw 'Review id must be a string';
   if (isSpaces(reviewId)) throw 'Review id can not be only spaces';
   if (!validId(reviewId)) throw "Review Id must be a string of 24 hex characters";
-
-  //TODO will need to remove photo from photo collection once thats done
 
   const reviewCollection = await reviews();
 
@@ -375,7 +362,6 @@ async function addLike(reviewId, user_id, managerStatus) {
   }
 
   //Add one to the total likes of that review
-  //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { likes: 1 } });
   const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
@@ -388,7 +374,6 @@ async function addLike(reviewId, user_id, managerStatus) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $push: { "review_feedback.likes": reviewId } } );
   }
 
-  //return {"reviewId": reviewId, "liked": true}
   return action.likes;
 }
 
@@ -427,7 +412,6 @@ async function addDislike(reviewId, user_id, managerStatus) {
   }
 
   //Add one to the total dislikes of that review
-  //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { dislikes: 1 } });
   const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
@@ -440,7 +424,6 @@ async function addDislike(reviewId, user_id, managerStatus) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $push: { "review_feedback.dislikes": reviewId } } );
   }
 
-  //return {"reviewId": reviewId, "disliked": true}
   return action.dislikes;
 }
 
@@ -473,7 +456,6 @@ async function removeLike(reviewId, user_id, managerStatus) {
   }
 
   //Remove one from the total dlikes of that review
-  //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { likes: -1 } });
   const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
@@ -486,7 +468,6 @@ async function removeLike(reviewId, user_id, managerStatus) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $pull: { "review_feedback.likes": reviewId } } );
   }
 
-  //return {"reviewId": reviewId, "liked": false}
   return action.likes;
 }
 
@@ -519,7 +500,6 @@ async function removeDislike(reviewId, user_id, managerStatus) {
   }
 
   //Remove one from the total dislikes of that review
-  //const reviewCollection = await reviews();
   await reviewCollection.updateOne({ _id: ObjectId(reviewId) }, { $inc: { dislikes: -1 } });
   const action = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
 
@@ -532,7 +512,6 @@ async function removeDislike(reviewId, user_id, managerStatus) {
     await userCollection.updateOne({ _id: ObjectId(user_id) }, { $pull: { "review_feedback.dislikes": reviewId } } );
   }
 
-  //return {"reviewId": reviewId, "disliked": false}
   return action.dislikes;
 }
 

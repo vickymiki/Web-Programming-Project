@@ -79,7 +79,6 @@ router.get('/:id/reviews', async (req, res) => {
   }
   
   //Get userId and manager status from session cookie
-  //TODO should make this a middleware function
   let userId = null;
   let isManager = null;
   if (!req.session.user) {
@@ -363,13 +362,11 @@ router.post('/:id/reviews', async (req, res) => {
       else res.redirect(`/login`);
 
       let Data = await reviews_DAL.addLike(req.body.likeId, userId, isManager);
-      //res.redirect(`/restaurants/${req.params.id}/reviews`);
       res.render('partials/likes', { layout: null, _id: req.body.likeId, likes: Data })
       
     } catch (e) {
       res.status(409); //status 409 is for conflict
       res.send(e);
-      //res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
     }
   } else if (req.body.postType == "remove_like") {
     try {
@@ -386,13 +383,11 @@ router.post('/:id/reviews', async (req, res) => {
       else res.redirect(`/login`);
 
       let Data = await reviews_DAL.removeLike(req.body.likeId, userId, isManager);
-      //res.redirect(`/restaurants/${req.params.id}/reviews`);
       res.render('partials/likes', { layout: null, _id: req.body.likeId, likes: Data })
 
     } catch (e) {
       res.status(409); //status 409 is for conflict
       res.send(e);
-      //res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "add_dislike") {
     try {
@@ -409,13 +404,11 @@ router.post('/:id/reviews', async (req, res) => {
       else res.redirect(`/login`);
 
       let Data = await reviews_DAL.addDislike(req.body.likeId, userId, isManager);
-      //res.redirect(`/restaurants/${req.params.id}/reviews`);
       res.render('partials/dislikes', { layout: null, _id: req.body.likeId, dislikes: Data })
 
     } catch (e) {
       res.status(409); //status 409 is for conflict
       res.send(e);
-      //res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   } else if (req.body.postType == "remove_dislike") {
     try {
@@ -438,22 +431,9 @@ router.post('/:id/reviews', async (req, res) => {
     } catch (e) {
       res.status(409); //status 409 is for conflict
       res.send(e);
-      //res.render('error/error', { error: e , title: "Error", page_function: "Error Display"});
     }
   }
-  //No longer needed, but keeping just in case
-    //TODO cleanup before submitting
-  /*else if (req.body.postType == "new_review") {
-    try {
-      let myBool = false;
-      if (req.body.isManager === 'true') myBool = true;
-      await reviews_DAL.create(req.body.restaurantId, req.body.userId, req.body.review, Number(req.body.rating), myBool);
-      res.redirect(`/restaurants/${req.params.id}/reviews`);
-    } catch (e) {
-      res.status(500);
-      res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
-    }
-  } */else if (req.body.postType == "new_reply") {
+  else if (req.body.postType == "new_reply") {
     try {
       let myBool = null;
       let myId = null;
@@ -511,7 +491,6 @@ router.post('/:id/upload', upload.single("photo"), async (req, res) => {
     res.redirect(`/restaurants/${req.params.id}/reviews`);
 
   } catch (e) {
-    //TODO set status code
     res.render('error/error', { error: e, title: "Error", page_function: "Error Display" });
   }
   
@@ -626,7 +605,6 @@ router.post('/:id', async (req, res) => {
   for (let i = 0; i < req.body.quantity; i++) {
     await orders_DAL.addItemToOrder(currentOrderId, menuItem);
   }
-  //Todo redirect to viewcart page
   res.redirect(`/restaurants/${id}`);
 });
 
@@ -651,11 +629,9 @@ router.post('/orders/applyDiscount', async (req, res) => {
   let couponResult = "Discount Code is not Valid";
   if (applyDiscount.addedDiscount) couponResult = "Discount Applied!"
   
-  //const id = req.params.id;
   const restaurant = await restaurants_DAL.getRestaurantFromId(restaurantId);
   let orderData = await orders_DAL.findOrderItems(req.session.user.username, restaurantId);
   res.render('restaurant/ViewCart', { title: "View Cart", page_function: `View ${req.session.user.username}'s cart at ${restaurant.restaurantName}`, orderData: orderData, restaurantId: restaurantId, couponResult: couponResult });
-  //res.redirect(`/restaurants/${restaurantId}/cart`);
 })
 
 

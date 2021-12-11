@@ -79,7 +79,6 @@ async function addItemToOrder(orderId, item) {
   if (typeof item !== 'object') throw 'Item must be an object';
 
   if (!validId(orderId)) throw "Review Id must be a string of 24 hex characters";
-  //TODO may need to check each attribute of item object before pushing to order
 
   //We need to set a new object id before placing in orders collecion.
   //Otherwise each item in itemsOrdered would have the same id and we wouldn't be able to delete one

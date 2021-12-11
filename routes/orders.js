@@ -115,8 +115,6 @@ router.get('/:userid/favorites', async (req, res) => {
         orders = await orders_DAL.getCompletedOrdersFromIds(favorites)
     }
 
-    //TODO: check that the itemNames still exist and if they don't remove the favorite item from the user
-
     res.render('user/OrdersFavoritePage', {title: "Favorites", page_function: "View Your Favorites!", orders: orders, userid: userid})
 });
 
