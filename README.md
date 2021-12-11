@@ -1,16 +1,22 @@
-# CS546_Group1
-## Welcome to our final project for CS546 Web Programming I!
 
-### Intro:
+# CS546_Group1
+
+## Welcome to our final project for CS546 Web Programming I
+
+### Intro
+
 Our group created a restaurant ordering system, where users are able to place orders at their favorite restaurants, leave reviews on their experience, and leave comments and likes on others' reviews! A separate type of user account exists for managers, where they can create restaurants, add food items to their restaurants and complete orders that have been placed by customers.
 
-### Running our Application:
+### Running our Application
+
 To run our application, complete the following steps:
+
 * First, clone our repo
 * Next, you will need to seed your database with information provided in our seedAll.js file. To run this, simply use `npm run seed`. This may take a minute or so.
 * You're now ready to run the application! Start it up with `npm start` and enjoy our social online restaurnt experience!
 
-### Core Features:
+### Core Features
+
 * Guest Landing Page
   * Information about the store
   * Different locations of stores
@@ -48,3 +54,5 @@ To run our application, complete the following steps:
   * Users can comment on others' reviews and like or dislike them
   * Users can view, edit and delete their own reviews
   * (EXTRA) Users can view a page that only lists their own reviews/comments to make editing easier
+
+[Our repo link](https://github.com/mnoga07/CS546_Group1)
