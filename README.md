@@ -1,6 +1,12 @@
 
 # CS546_Group1
 
+Group Members:
+Caleb Elliott
+Matthew Noga
+Vikrant Gajare
+Zhixiang Fu
+
 ## Welcome to our final project for CS546 Web Programming I
 
 ### Intro
